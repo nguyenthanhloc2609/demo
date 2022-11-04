@@ -15,7 +15,7 @@ public class ServiceController {
     IServiceService serviceService;
 
     @PostMapping("")
-    public ResponseEntity<?> createService(Service service) {
+    public ResponseEntity<?> createService(@RequestBody Service service) {
         Service s = serviceService.create(service);
         return ResponseEntity.ok(s);
     }
@@ -24,6 +24,14 @@ public class ServiceController {
     public ResponseEntity<?> findAll() {
         List<Service> list = serviceService.findAll();
         return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findOne(@PathVariable String id) {
+        Service service = serviceService.retrieve(id);
+        if (service == null)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(service);
     }
 
 }

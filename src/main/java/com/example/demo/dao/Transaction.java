@@ -18,7 +18,8 @@ public class Transaction {
     Integer diagFee;
     String medicine;
     Integer medicineFee;
-    String pay;//positive: prepaid, negative postpaid
+    String prepaid;
+    String debt;
     String note;
 
     //chi
@@ -27,6 +28,6 @@ public class Transaction {
     Integer paidMoney;
     String paidNote;
 
-    Date createAt;
+    String date;
 
 }

@@ -1,18 +1,24 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.Customer;
+import com.example.demo.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public class CustomerServiceImpl implements ICustomerService {
+
+    @Autowired
+    CustomerRepository customerRepository;
+
     @Override
     public Customer create(Customer customer) {
-        return null;
+        return customerRepository.save(customer);
     }
 
     @Override
     public List<Customer> findAll() {
-        return null;
+        return customerRepository.findAll();
     }
 
     @Override
@@ -27,6 +33,6 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public Customer retrieve(String id) {
-        return null;
+        return customerRepository.findById(id).orElse(null);
     }
 }

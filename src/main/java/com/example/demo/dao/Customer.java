@@ -11,18 +11,15 @@ public class Customer {
     String id;
 
     String name;
-    Integer total;
-    Integer current;//negative for postpaid
+    String billing;
 
-    public Customer(String name, Integer total, Integer current) {
+    public Customer(String name, String billing) {
         this.name = name;
-        this.total = total;
-        this.current = current;
+        this.billing = billing;
     }
 
     public Customer(String name) {
         this.name = name;
-        this.total = 0;
-        this.current = 0;
+        this.billing = "";
     }
 }

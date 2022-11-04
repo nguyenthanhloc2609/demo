@@ -13,12 +13,12 @@ public class ServiceServiceImpl implements IServiceService {
 
     @Override
     public Service create(Service service) {
-        return null;
+        return serviceRepository.save(service);
     }
 
     @Override
     public List<Service> findAll() {
-        return null;
+        return serviceRepository.findAll();
     }
 
     @Override
@@ -33,6 +33,6 @@ public class ServiceServiceImpl implements IServiceService {
 
     @Override
     public Service retrieve(String id) {
-        return null;
+        return serviceRepository.findById(id).orElse(null);
     }
 }
