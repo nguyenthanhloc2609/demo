@@ -4,13 +4,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class DashboardController {
 
     @RequestMapping(value = "/clinic", method = RequestMethod.GET)
     public String home(Model model) {
-        return "components/calendar/basic";
+        return "index";
+    }
+
+    @RequestMapping(value = "/tran", method = RequestMethod.GET)
+    public String transaction(Model model) {
+        return "transaction/index";
     }
 }

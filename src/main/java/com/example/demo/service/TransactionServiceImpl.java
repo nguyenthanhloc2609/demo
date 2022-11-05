@@ -5,9 +5,6 @@ import com.example.demo.dao.Transaction;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 
 import java.util.List;
 import java.util.stream.Collectors;
