@@ -8,18 +8,26 @@
                 <div class="mdc-card">
                     <h6 class="card-title mb-3">Lịch sử giao dịch</h6>
                     <hr />
-                    <th:block th:replace="detail.html"></th:block>
+<!--                    <th:block th:replace="detail.html"></th:block>-->
 
                     <div class="table-responsive mt-5">
                         <table class="table table-striped table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
-                                    <th class="text-left">ID</th>
-                                    <th>Sự kiện</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Phương thức</th>
-                                    <th>Url</th>
-                                    <th>Trạng thái</th>
+                                    <th class="text-left" rowspan="2">STT</th>
+                                    <th rowspan="2">Họ và tên</th>
+                                    <th rowspan="2">Chẩn đoán bệnh</th>
+                                    <th rowspan="2">Thủ thuật</th>
+                                    <th rowspan="2">Thuốc</th>
+                                    <th colspan="2">Thu</th>
+                                    <th colspan="2">Thanh toán</th>
+                                    <th rowspan="2">Ghi chú</th>
+                                </tr>
+                                <tr>
+                                    <th>Thủ thuật</th>
+                                    <th>Thuốc</th>
+                                    <th>Trước</th>
+                                    <th>Sau</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody-list"></tbody>

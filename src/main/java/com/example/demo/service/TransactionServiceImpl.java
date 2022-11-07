@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dao.Customer;
 import com.example.demo.dao.Transaction;
+import com.example.demo.dto.PagingDTO;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class TransactionServiceImpl implements ITransactionService {
     }
 
     @Override
-    public List<Transaction> findAll() {
+    public PagingDTO<Transaction> findAll(Integer limit, Integer offset) {
         //No need to get all transaction
         return null;
     }
