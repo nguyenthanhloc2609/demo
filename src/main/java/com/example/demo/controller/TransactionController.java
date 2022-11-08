@@ -4,6 +4,7 @@ import com.example.demo.dao.Transaction;
 import com.example.demo.dto.PagingDTO;
 import com.example.demo.service.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,12 +31,15 @@ public class TransactionController {
         return null;
     }
 
-    @PostMapping("/add")
+    @PostMapping("")
     public ResponseEntity<?> addTransaction(@RequestBody Transaction tran) {
-        return null;
+        Transaction transaction = transactionService.create(tran);
+        if(transaction == null)
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        return ResponseEntity.ok(transaction);
     }
 
-    @PostMapping("")
+    @PostMapping("/addList")
     public ResponseEntity<?> addTransactions(@RequestBody List<Transaction> trans) {
         return null;
     }

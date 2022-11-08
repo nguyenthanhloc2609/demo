@@ -43,13 +43,13 @@ var KTCalendarBasic = function () {
                 eventLimit: true, // allow "more" link when too many events
                 navLinks: true,
                 events: [
-                    {
-                        title: 'Click for Google',
-                        url: '/clinic',
-                        start: YM + '-01',
-                        className: "fc-event-solid-info fc-event-light",
-                        description: 'go to home'
-                    }
+                    // {
+                    //     title: 'Click for Google',
+                    //     url: '/clinic',
+                    //     start: YM + '-01',
+                    //     className: "fc-event-solid-info fc-event-light",
+                    //     description: 'go to home'
+                    // }
                 ],
 
                 eventRender: function (info) {

@@ -1,10 +1,20 @@
 package com.example.demo.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 public class CustomerDTO {
+    
+    String name;
+    String billing;
+
+    public CustomerDTO(String name, String billing) {
+        this.name = name;
+        this.billing = billing;
+    }
+
+    public CustomerDTO(String name) {
+        this.name = name;
+        this.billing = "";
+    }
 }

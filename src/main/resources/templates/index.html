@@ -39,10 +39,10 @@ License: You must have a valid license purchased only from themeforest(the above
 		<!--end::Global Theme Styles -->
 
 		<!--begin::Layout Skins(used by all pages) -->
-		<link href="assets/css/skins/header/base/light.css" rel="stylesheet" type="text/css" />
-		<link href="assets/css/skins/header/menu/dark.css" rel="stylesheet" type="text/css" />
-		<link href="assets/css/skins/brand/dark.css" rel="stylesheet" type="text/css" />
-		<link href="assets/css/skins/aside/light.css" rel="stylesheet" type="text/css" />
+		<link href="assets/css/skins/header/base/light.css" rel="stylesheet" type="text/css"/>
+		<link href="assets/css/skins/header/menu/light.css" rel="stylesheet" type="text/css"/>
+		<link href="assets/css/skins/brand/dark.css" rel="stylesheet" type="text/css"/>
+		<link href="assets/css/skins/aside/dark.css" rel="stylesheet" type="text/css"/>
 
 		<!--end::Layout Skins -->
 		<link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
@@ -50,13 +50,22 @@ License: You must have a valid license purchased only from themeforest(the above
 
 	<!-- end::Head -->
 
-	<!-- begin::Body -->
-	<body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading">
+<!-- begin::Body -->
 
+<body class="kt-aside--enabled kt-aside--fixed kt-page--loading">
+	
+	<div class="kt-grid kt-grid--hor kt-grid--root">
+		<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
+	
+	
+				<div data-th-replace="partials/_aside/base"></div>
+				<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+	
 
-		<?php include("layout.php"); ?>
-		<div data-th-replace="layout"></div>
-<!--		<h1>ahmed</h1>-->
+					<div data-th-replace="partials/_footer/base"></div>
+				</div>
+			</div>
+	</div>
 
 		<!-- begin::Global Config(global config for global JS sciprts) -->
 		<script>

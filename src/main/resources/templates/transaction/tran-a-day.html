@@ -19,7 +19,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <head>
     <base href="../../">
     <meta charset="utf-8"/>
-    <title>Giao dịch trong tháng</title>
+    <title>Giao dịch trong ngày</title>
     <meta name="description" content="Basic calendar examples">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -62,8 +62,6 @@ License: You must have a valid license purchased only from themeforest(the above
 
         <!-- begin:: Aside -->
 
-        <!-- Uncomment this to display the close button of the panel-->
-        <!-- <button class="kt-aside-close " id="kt_aside_close_btn"><i class="la la-close"></i></button> -->
         <div data-th-replace="partials/_aside/base"></div>
 
         <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
@@ -83,7 +81,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                                     </div>
                                     <button type="button" class="btn btn-success" data-toggle="modal"
-                                            data-target="#kt_modal_6" data-backdrop="static" data-keyboard="false">Thêm
+                                            data-target="#kt_select2_modal" data-backdrop="static" data-keyboard="false">Thêm
                                         mới
                                     </button>
                                 </div>
@@ -167,7 +165,7 @@ License: You must have a valid license purchased only from themeforest(the above
                 <!-- end:: Content -->
             </div>
             <!-- Modal -->
-            <div class="modal fade" id="kt_modal_6" tabindex="-1" role="dialog"
+            <div class="modal fade" id="kt_select2_modal" tabindex="-1" role="dialog"
                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
@@ -181,7 +179,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <div class="col-lg-6">
                                     <label>Tên bệnh nhân</label>
                                     <input type="text" class="form-control material-input"
-                                           placeholder="Nhập họ và tên nhân viên" id="name">
+                                           placeholder="Nhập họ và tên bệnh nhân" id="name">
                                 </div>
                                 <div class="col-lg-6">
                                     <label>Chẩn đoán</label>
@@ -192,11 +190,35 @@ License: You must have a valid license purchased only from themeforest(the above
                             <div class="row">
                                 <div class="col-lg-6">
                                     <label>Thủ thuật</label>
-                                    <input type="text" class="form-control material-input" id="procedure">
+                                    <select class="form-control kt-select2" id="kt_select2_3_modal" name="param" multiple="multiple">
+                                            <option value="CT">Điện châm</option>
+                                            <option value="DE">Siêu âm</option>
+                                            <option value="FL">Hồng Ngoại</option>
+                                            <option value="GA">Hơ Ngải</option>
+                                            <option value="IN">Xoa bóp</option>
+                                        </select>
                                 </div>
                                 <div class="col-lg-6">
                                     <label>Thuốc</label>
                                     <input type="text" class="form-control material-input" id="medicine">
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <label>Tiền Thủ thuật</label>
+                                        <input type="number" class="form-control material-input" id="moneyPro">
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label>Tiền Thuốc</label>
+                                        <input type="number" class="form-control material-input" id="moneyMec">
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label>Thanh toán</label>
+                                        <input type="text" class="form-control material-input" id="pay">
+                                    </div>
+                                </div>
+                                <div class="row col-lg-12">
+                                    <label>Ghi chú</label>
+                                    <textarea class="form-control" rows="3"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -263,6 +285,8 @@ License: You must have a valid license purchased only from themeforest(the above
 
 <!--begin::Page Scripts(used by this page) -->
 <script src="assets/js/pages/components/calendar/basic.js" type="text/javascript"></script>
+
+<script src="assets/js/pages/crud/forms/widgets/select2.js" type="text/javascript"></script>
 
 <!--end::Page Scripts -->
 </body>

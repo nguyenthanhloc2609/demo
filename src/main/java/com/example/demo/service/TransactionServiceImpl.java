@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.Customer;
-import com.example.demo.dao.Procedure;
 import com.example.demo.dao.Transaction;
 import com.example.demo.dto.Pagination;
 import com.example.demo.dto.PagingDTO;
@@ -96,10 +95,14 @@ public class TransactionServiceImpl implements ITransactionService {
         String post = transaction.getDebt();
         if (!cusName.contains(transaction.getCustomerName())) {
             Customer c;
-            if (pre != null && pre.length() > 0)
-                c = new Customer(transaction.getCustomerName(), pre);
-            else
-                c = new Customer(transaction.getCustomerName(), post);
+            if (pre != null && pre.length() > 0){
+                String[] val = pre.split("/");
+                c = new Customer(transaction.getCustomerName(), Integer.parseInt(val[0]), Integer.parseInt(val[1]));
+            }
+                
+            else{
+                c = new Customer(transaction.getCustomerName(), Integer.parseInt(post.substring(1).trim()) * -1, 0);
+            }
             customerRepository.save(c);
         }
     }
