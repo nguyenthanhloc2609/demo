@@ -17,37 +17,37 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- begin::Head -->
 
 <head>
-	<base href="../../">
-	<meta charset="utf-8" />
-	<title>Giao dịch trong tháng</title>
-	<meta name="description" content="Basic calendar examples">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <base href="../../">
+    <meta charset="utf-8"/>
+    <title>Giao dịch trong tháng</title>
+    <meta name="description" content="Basic calendar examples">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<!--begin::Fonts -->
-	<link rel="stylesheet"
-		href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700">
+    <!--begin::Fonts -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700">
 
-	<!--end::Fonts -->
+    <!--end::Fonts -->
 
-	<!--begin::Page Vendors Styles(used by this page) -->
-	<link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+    <!--begin::Page Vendors Styles(used by this page) -->
+    <link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css"/>
 
-	<!--end::Page Vendors Styles -->
+    <!--end::Page Vendors Styles -->
 
-	<!--begin::Global Theme Styles(used by all pages) -->
-	<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-	<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <!--begin::Global Theme Styles(used by all pages) -->
+    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
 
-	<!--end::Global Theme Styles -->
+    <!--end::Global Theme Styles -->
 
-	<!--begin::Layout Skins(used by all pages) -->
-	<link href="assets/css/skins/header/base/light.css" rel="stylesheet" type="text/css" />
-	<link href="assets/css/skins/header/menu/light.css" rel="stylesheet" type="text/css" />
-	<link href="assets/css/skins/brand/dark.css" rel="stylesheet" type="text/css" />
-	<link href="assets/css/skins/aside/dark.css" rel="stylesheet" type="text/css" />
+    <!--begin::Layout Skins(used by all pages) -->
+    <link href="assets/css/skins/header/base/light.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/skins/header/menu/light.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/skins/brand/dark.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/skins/aside/dark.css" rel="stylesheet" type="text/css"/>
 
-	<!--end::Layout Skins -->
-	<link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+    <!--end::Layout Skins -->
+    <link rel="shortcut icon" href="assets/media/logos/favicon.ico"/>
 </head>
 
 <!-- end::Head -->
@@ -55,98 +55,98 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- begin::Body -->
 
 <body
-	class="kt-aside--enabled kt-aside--fixed kt-page--loading">
+        class="kt-aside--enabled kt-aside--fixed kt-page--loading">
 
-	<!-- begin:: Page -->
+<!-- begin:: Page -->
 
-	<div class="kt-grid kt-grid--hor kt-grid--root">
-		<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
+<div class="kt-grid kt-grid--hor kt-grid--root">
+    <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
 
-			<!-- begin:: Aside -->
+        <!-- begin:: Aside -->
 
-			<!-- Uncomment this to display the close button of the panel-->
-			<!-- <button class="kt-aside-close " id="kt_aside_close_btn"><i class="la la-close"></i></button> -->
-			<div data-th-replace="partials/_aside/base"></div>
+        <!-- Uncomment this to display the close button of the panel-->
+        <!-- <button class="kt-aside-close " id="kt_aside_close_btn"><i class="la la-close"></i></button> -->
+        <div data-th-replace="partials/_aside/base"></div>
 
-			<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
-				<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
-					<!-- begin:: Content -->
-					<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
-						<div class="row">
-							<div class="col-lg-12">
+        <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+            <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+                <!-- begin:: Content -->
+                <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
 
-								<!--begin::Portlet-->
-								<div class="kt-portlet" id="kt_portlet">
-									<div class="kt-portlet__body">
-										<div id="kt_calendar"></div>
-									</div>
-								</div>
+                            <!--begin::Portlet-->
+                            <div class="kt-portlet" id="kt_portlet">
+                                <div class="kt-portlet__body">
+                                    <div id="kt_calendar"></div>
+                                </div>
+                            </div>
 
-								<!--end::Portlet-->
-							</div>
-						</div>
-					</div>
+                            <!--end::Portlet-->
+                        </div>
+                    </div>
+                </div>
 
-					<!-- end:: Content -->
-				</div>
+                <!-- end:: Content -->
+            </div>
 
-				<div data-th-replace="partials/_footer/base"></div>
+            <div data-th-replace="partials/_footer/base"></div>
 
-			</div>
-		</div>
-	</div>
+        </div>
+    </div>
+</div>
 
-	<!-- end:: Page -->
+<!-- end:: Page -->
 
-	<!-- begin::Global Config(global config for global JS sciprts) -->
-	<script>
-		var KTAppOptions = {
-			"colors": {
-				"state": {
-					"brand": "#5d78ff",
-					"dark": "#282a3c",
-					"light": "#ffffff",
-					"primary": "#5867dd",
-					"success": "#34bfa3",
-					"info": "#36a3f7",
-					"warning": "#ffb822",
-					"danger": "#fd3995"
-				},
-				"base": {
-					"label": [
-						"#c5cbe3",
-						"#a1a8c3",
-						"#3d4465",
-						"#3e4466"
-					],
-					"shape": [
-						"#f0f3ff",
-						"#d9dffa",
-						"#afb4d4",
-						"#646c9a"
-					]
-				}
-			}
-		};
-	</script>
+<!-- begin::Global Config(global config for global JS sciprts) -->
+<script>
+    var KTAppOptions = {
+        "colors": {
+            "state": {
+                "brand": "#5d78ff",
+                "dark": "#282a3c",
+                "light": "#ffffff",
+                "primary": "#5867dd",
+                "success": "#34bfa3",
+                "info": "#36a3f7",
+                "warning": "#ffb822",
+                "danger": "#fd3995"
+            },
+            "base": {
+                "label": [
+                    "#c5cbe3",
+                    "#a1a8c3",
+                    "#3d4465",
+                    "#3e4466"
+                ],
+                "shape": [
+                    "#f0f3ff",
+                    "#d9dffa",
+                    "#afb4d4",
+                    "#646c9a"
+                ]
+            }
+        }
+    };
+</script>
 
-	<!-- end::Global Config -->
+<!-- end::Global Config -->
 
-	<!--begin::Global Theme Bundle(used by all pages) -->
-	<script src="assets/plugins/global/plugins.bundle.js" type="text/javascript"></script>
-	<script src="assets/js/scripts.bundle.js" type="text/javascript"></script>
+<!--begin::Global Theme Bundle(used by all pages) -->
+<script src="assets/plugins/global/plugins.bundle.js" type="text/javascript"></script>
+<script src="assets/js/scripts.bundle.js" type="text/javascript"></script>
 
-	<!--end::Global Theme Bundle -->
+<!--end::Global Theme Bundle -->
 
-	<!--begin::Page Vendors(used by this page) -->
-	<script src="assets/plugins/custom/fullcalendar/fullcalendar.bundle.js" type="text/javascript"></script>
+<!--begin::Page Vendors(used by this page) -->
+<script src="assets/plugins/custom/fullcalendar/fullcalendar.bundle.js" type="text/javascript"></script>
 
-	<!--end::Page Vendors -->
+<!--end::Page Vendors -->
 
-	<!--begin::Page Scripts(used by this page) -->
-	<script src="assets/js/pages/components/calendar/basic.js" type="text/javascript"></script>
+<!--begin::Page Scripts(used by this page) -->
+<script src="assets/js/pages/components/calendar/basic.js" type="text/javascript"></script>
 
-	<!--end::Page Scripts -->
+<!--end::Page Scripts -->
 </body>
 
 <!-- end::Body -->

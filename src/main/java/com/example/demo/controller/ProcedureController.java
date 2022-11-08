@@ -21,7 +21,8 @@ public class ProcedureController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> findAll(@Param("limit") Integer limit, @Param("offset") Integer offset) {
+    public ResponseEntity<?> findAll(@RequestParam(value = "limit", required = false, defaultValue = "20")  Integer limit,
+                                     @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
         PagingDTO<Procedure> list = serviceService.findAll(limit, offset);
         return ResponseEntity.ok(list);
     }

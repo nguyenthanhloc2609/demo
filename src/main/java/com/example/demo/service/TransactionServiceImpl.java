@@ -1,15 +1,22 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.Customer;
+import com.example.demo.dao.Procedure;
 import com.example.demo.dao.Transaction;
+import com.example.demo.dto.Pagination;
 import com.example.demo.dto.PagingDTO;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class TransactionServiceImpl implements ITransactionService {
     @Autowired
     TransactionRepository transactionRepository;
@@ -27,6 +34,7 @@ public class TransactionServiceImpl implements ITransactionService {
     @Override
     public PagingDTO<Transaction> findAll(Integer limit, Integer offset) {
         //No need to get all transaction
+
         return null;
     }
 
@@ -67,6 +75,18 @@ public class TransactionServiceImpl implements ITransactionService {
     public void saveAll(List<Transaction> transactions) {
         transactions.forEach(this::createCustomer);
         transactionRepository.saveAll(transactions);
+    }
+
+    @Override
+    public PagingDTO<Transaction> findTranADay(String date, Integer limit, Integer offset) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        Page<Transaction> trans = transactionRepository.getTransactionByDate(date, pageable);
+
+        Pagination pagination = new Pagination();
+        pagination.setTotal(transactionRepository.count());
+        pagination.setLimit(limit);
+        pagination.setOffset(offset);
+        return PagingDTO.<Transaction>builder().pagination(pagination).list(trans.getContent()).count(trans.getNumberOfElements()).build();
     }
 
     private void createCustomer(Transaction transaction) {
