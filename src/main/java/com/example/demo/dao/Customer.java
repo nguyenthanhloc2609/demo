@@ -1,6 +1,5 @@
 package com.example.demo.dao;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,12 +14,18 @@ public class Customer {
     String id;
 
     String name;
-    Integer current;
-    Integer max;
+    String billing;
+    // Integer current;
+    // Integer max;
 
-    public Customer(String name, Integer current, Integer max){
+    // public Customer(String name, Integer current, Integer max){
+    // this.name = name;
+    // this.current = current;
+    // this.max = max;
+    // }
+
+    public Customer(String name, String billing) {
         this.name = name;
-        this.current = current;
-        this.max = max;
+        this.billing = billing;
     }
 }

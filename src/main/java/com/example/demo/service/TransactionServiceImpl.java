@@ -96,12 +96,11 @@ public class TransactionServiceImpl implements ITransactionService {
         if (!cusName.contains(transaction.getCustomerName())) {
             Customer c;
             if (pre != null && pre.length() > 0){
-                String[] val = pre.split("/");
-                c = new Customer(transaction.getCustomerName(), Integer.parseInt(val[0]), Integer.parseInt(val[1]));
+                c = new Customer(transaction.getCustomerName(), pre);
             }
                 
             else{
-                c = new Customer(transaction.getCustomerName(), Integer.parseInt(post.substring(1).trim()) * -1, 0);
+                c = new Customer(transaction.getCustomerName(), post);
             }
             customerRepository.save(c);
         }
