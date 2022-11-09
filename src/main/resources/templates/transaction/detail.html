@@ -1,10 +1,12 @@
 <script type="text/javascript" th:inline="javascript">
     $(function () {
         const pagination = new Pagination();
-
+        var date = window.localStorage.getItem("date")
+        $("#head-title").html("Bảng thu chi trong ngày " + date)
         initTransactionsList();
 
         function initTransactionsList() {
+            console.log("initTransactionsList")
             pagination.reset();
             loadTransactionsList();
         }
@@ -13,12 +15,8 @@
             var projectId = localStorage.getItem('project_id');
             var offset = pagination.offset() || 0;
             var limit = pagination.limit() || 20;
-            var startDate = getStartDate();
-            var endDate = getEndDate();
-            var filterDate = startDate + '|' + endDate;
-            var searchParams = encodeURIComponent(filterDate);
             getRequest({
-                url: "/statistics/" + projectId + "/transactions_paging?searchParams=" + searchParams + "&limit=" + limit + "&offset=" + offset,
+                url: "/statistics/" + projectId + "/transactions_paging?" + "&limit=" + limit + "&offset=" + offset,
                 success: function (data) {
                     onLoadedTransactionsList(data);
                 },
@@ -43,13 +41,13 @@
                 var convertedDateTime = formatDateTime(time);
                 var countNumber = Number.parseInt(paginData['offset']) + i;
                 html += '<tr>'
-                        + '<td class="text-left">' + countNumber + '</td>'
-                        + '<td>' + encodeHtmlEntity(item['action']) + '</td>'
-                        + '<td>' + convertedDateTime + '</td>'
-                        + '<td>' + encodeHtmlEntity(item['method']) + '</td>'
-                        + '<td>' + encodeHtmlEntity(item['url']) + '</td>'
-                        + '<td>' + encodeHtmlEntity(item['result']) + '</td>'
-                        + '</tr>';
+                    + '<td class="text-left">' + countNumber + '</td>'
+                    + '<td>' + encodeHtmlEntity(item['action']) + '</td>'
+                    + '<td>' + convertedDateTime + '</td>'
+                    + '<td>' + encodeHtmlEntity(item['method']) + '</td>'
+                    + '<td>' + encodeHtmlEntity(item['url']) + '</td>'
+                    + '<td>' + encodeHtmlEntity(item['result']) + '</td>'
+                    + '</tr>';
             }
             $('#tbody-list').html(html);
         }

@@ -78,8 +78,10 @@ var KTCalendarBasic = function () {
                 select: function (dates) {
                     console.log(dates);
                     var diff = (dates.end - dates.start) / 86400000;
-                    if (diff === 1)
+                    if (diff === 1) {
                         window.location = '/tran-a-day'
+                        window.localStorage.setItem("date", formatDate(dates.start));
+                   }
                 }
             });
 
@@ -91,3 +93,17 @@ var KTCalendarBasic = function () {
 jQuery(document).ready(function () {
     KTCalendarBasic.init();
 });
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [day, month, year].join('/');
+}
