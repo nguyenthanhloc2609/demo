@@ -15,9 +15,9 @@ public class Transaction {
     String customerName;
     String listService;
     String diagnostic;
-    Integer diagFee;
+    Integer diagMoney;
     String medicine;
-    Integer medicineFee;
+    Integer medicineMoney;
     String prepaid;
     String debt;
     String note;

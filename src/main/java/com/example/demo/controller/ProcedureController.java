@@ -8,27 +8,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/service")
+@RequestMapping("/procedure")
 public class ProcedureController {
     @Autowired
-    IProcedureService serviceService;
+    IProcedureService procedureService;
 
     @PostMapping("")
-    public ResponseEntity<?> createService(@RequestBody Procedure procedure) {
-        Procedure s = serviceService.create(procedure);
+    public ResponseEntity<?> create(@RequestBody Procedure procedure) {
+        Procedure s = procedureService.create(procedure);
         return ResponseEntity.ok(s);
     }
 
-    @GetMapping("")
+    @GetMapping("/list")
     public ResponseEntity<?> findAll(@RequestParam(value = "limit", required = false, defaultValue = "20")  Integer limit,
                                      @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
-        PagingDTO<Procedure> list = serviceService.findAll(limit, offset);
+        PagingDTO<Procedure> list = procedureService.findAll(limit, offset);
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findOne(@PathVariable String id) {
-        Procedure procedure = serviceService.retrieve(id);
+        Procedure procedure = procedureService.retrieve(id);
         if (procedure == null)
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok(procedure);
