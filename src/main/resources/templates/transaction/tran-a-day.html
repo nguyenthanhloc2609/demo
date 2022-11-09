@@ -18,36 +18,36 @@ License: You must have a valid license purchased only from themeforest(the above
 
 <head>
     <base href="../../">
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>Giao dịch trong ngày</title>
     <meta name="description" content="Basic calendar examples">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!--begin::Fonts -->
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700">
+          href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700">
 
     <!--end::Fonts -->
 
     <!--begin::Page Vendors Styles(used by this page) -->
-    <link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css"/>
 
     <!--end::Page Vendors Styles -->
 
     <!--begin::Global Theme Styles(used by all pages) -->
-    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
 
     <!--end::Global Theme Styles -->
 
     <!--begin::Layout Skins(used by all pages) -->
-    <link href="assets/css/skins/header/base/light.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/skins/header/menu/light.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/skins/brand/dark.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/skins/aside/dark.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/skins/header/base/light.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/skins/header/menu/light.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/skins/brand/dark.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/skins/aside/dark.css" rel="stylesheet" type="text/css"/>
 
     <!--end::Layout Skins -->
-    <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+    <link rel="shortcut icon" href="assets/media/logos/favicon.ico"/>
 </head>
 
 <!-- end::Head -->
@@ -55,308 +55,323 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- begin::Body -->
 
 <body class="kt-aside--enabled kt-aside--fixed kt-page--loading">
-    <!-- begin:: Page -->
+<!-- begin:: Page -->
 
-    <div class="kt-grid kt-grid--hor kt-grid--root">
-        <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
+<div class="kt-grid kt-grid--hor kt-grid--root">
+    <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
 
-            <!-- begin:: Aside -->
+        <!-- begin:: Aside -->
 
-            <div data-th-replace="partials/_aside/base"></div>
+        <div data-th-replace="partials/_aside/base"></div>
 
-            <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
-                <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
-                    <!-- begin:: Content -->
-                    <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
-                        <div class="row">
-                            <div class="col-lg-12">
+        <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+            <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+                <!-- begin:: Content -->
+                <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
 
-                                <!--begin::Portlet-->
-                                <div class="kt-portlet">
-                                    <div class="kt-portlet__head">
-                                        <div class="kt-portlet__head-label">
-                                            <h3 class="kt-portlet__head-title">
-                                                Bảng thu chi trong ngày
-                                            </h3>
+                            <!--begin::Portlet-->
+                            <div class="kt-portlet">
+                                <div class="kt-portlet__head">
+                                    <div class="kt-portlet__head-label">
+                                        <h3 class="kt-portlet__head-title">
+                                            Bảng thu chi trong ngày
+                                        </h3>
 
-                                        </div>
-                                        <div>
-                                            <button type="button" class="btn btn-success" data-toggle="modal"
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-success" data-toggle="modal"
                                                 data-target="#kt_select2_modal" data-backdrop="static"
                                                 data-keyboard="false">Thêm
-                                                mới
-                                            </button>
-                                            <button type="button" class="btn btn-warning" data-toggle="modal"
+                                            mới
+                                        </button>
+                                        <button type="button" class="btn btn-warning" data-toggle="modal"
                                                 data-target="#kt_modal_3" data-backdrop="static"
                                                 data-keyboard="false">Chi tiền
-                                            </button>
-                                        </div>
-
+                                        </button>
                                     </div>
-                                    <div class="kt-portlet__body">
-                                        <!--begin::Section-->
-                                        <div class="kt-section">
-                                            <div class="kt-section__content">
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-left" rowspan="2">STT
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center" rowspan="2">Họ
-                                                                    và tên
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center" rowspan="2">Chẩn
-                                                                    đoán bệnh
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center" rowspan="2">Thủ
-                                                                    thuật
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center" rowspan="2">
-                                                                    Thuốc
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center" colspan="2">
-                                                                    Thu
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center" colspan="2">
-                                                                    Thanh toán
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center" rowspan="2">Ghi
-                                                                    chú
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center" rowspan="2">Hành
-                                                                    động
-                                                                </th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center">Thủ thuật
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center">Thuốc
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center">Trước
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center">Sau
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="tbody-list">
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered" id="tbl_spend">
-                                                        <thead>
-                                                            <tr>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center">STT
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center">Họ tên người nhận
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center">Diễn giải chi
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center">Số tiền
-                                                                </th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center">Ghi chú</th>
-                                                                <th style="text-align: center; vertical-align: middle;"
-                                                                    class="text-center"></th>
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="tbody-spend">
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div id="list-pagination"></div>
+
+                                </div>
+                                <div class="kt-portlet__body">
+                                    <!--begin::Section-->
+                                    <div class="kt-section">
+                                        <div class="kt-section__content">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-left" rowspan="2">STT
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center" rowspan="2">Họ
+                                                            và tên
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center" rowspan="2">Chẩn
+                                                            đoán bệnh
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center" rowspan="2">Thủ
+                                                            thuật
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center" rowspan="2">
+                                                            Thuốc
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center" colspan="2">
+                                                            Thu
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center" colspan="2">
+                                                            Thanh toán
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center" rowspan="2">Ghi
+                                                            chú
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center" rowspan="2">Hành
+                                                            động
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center">Thủ thuật
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center">Thuốc
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center">Trước
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center">Sau
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="tbody-list">
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                        </div>
 
-                                        <!--end::Section-->
+                                            <div id="list-pagination"></div>
+
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="tbl_spend">
+                                                    <thead>
+                                                    <tr>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center">STT
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center">Họ tên người nhận
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center">Diễn giải chi
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center">Số tiền
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center">Ghi chú
+                                                        </th>
+                                                        <th style="text-align: center; vertical-align: middle;"
+                                                            class="text-center"></th>
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="tbody-spend">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
                                     </div>
 
-                                    <!--end::Form-->
+                                    <!--end::Section-->
                                 </div>
-                                <!--end::Portlet-->
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- end:: Content -->
-                </div>
-                <!-- Modal -->
-                <div class="modal fade" id="kt_select2_modal" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Thêm mới giao dịch</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                </button>
+                                <!--end::Form-->
                             </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <label>Tên bệnh nhân</label>
-                                        <input type="text" class="form-control material-input"
-                                            placeholder="Nhập họ và tên bệnh nhân" id="name">
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <label>Chẩn đoán</label>
-                                        <input type="text" class="form-control material-input" placeholder="Chẩn đoán"
-                                            id="exam">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-8">
-                                        <label>Thủ thuật</label>
-                                        <select class="form-control kt-select2" id="kt_select2_3_modal" name="param"
-                                            multiple="multiple">
-                                            <option value="CT">Điện châm</option>
-                                            <option value="DE">Siêu âm</option>
-                                            <option value="FL">Hồng Ngoại</option>
-                                            <option value="GA">Hơ Ngải</option>
-                                            <option value="IN">Xoa bóp</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <label>Thuốc</label>
-                                        <input type="text" class="form-control material-input" id="medicine">
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <label>Tiền Thủ thuật</label>
-                                            <input type="number" class="form-control material-input" id="moneyPro">
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <label>Tiền Thuốc</label>
-                                            <input type="number" class="form-control material-input" id="moneyMec">
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <label>Thanh toán</label>
-                                            <input type="text" class="form-control material-input" id="pay">
-                                        </div>
-                                    </div>
-                                    <div class="row col-lg-12">
-                                        <label>Ghi chú</label>
-                                        <textarea class="form-control" rows="3"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                <button type="button" class="btn btn-primary">Lưu thông tin</button>
-                            </div>
+                            <!--end::Portlet-->
                         </div>
                     </div>
                 </div>
 
-                <!--begin::Modal-->
-                <div class="modal fade" id="kt_modal_3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <h5>Popover in a modal</h5>
-                                <p>This <a href="#" role="button" data-toggle="kt-popover"
-                                        class="btn btn-secondary popover-test" title="Popover title"
-                                        data-content="Popover body content is set in this attribute.">button</a>
-                                    triggers a popover on click.</p>
-                                <hr>
-                                <h5>Tooltips in a modal</h5>
-                                <p><a href="#" class="tooltip-test" data-toggle="kt-tooltip" title="Tooltip">This
-                                        link</a> and <a href="#" data-toggle="kt-tooltip" class="tooltip-test"
-                                        title="Tooltip">that link</a> have tooltips on hover.</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--end::Modal-->
-                <div data-th-replace="partials/_footer/base"></div>
-
+                <!-- end:: Content -->
             </div>
+            <!-- Modal -->
+            <div class="modal fade" id="kt_select2_modal" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Thêm mới giao dịch</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label>Tên bệnh nhân</label>
+                                    <input type="text" class="form-control material-input"
+                                           placeholder="Nhập họ và tên bệnh nhân" id="name">
+                                </div>
+                                <div class="col-lg-6">
+                                    <label>Chẩn đoán</label>
+                                    <input type="text" class="form-control material-input" placeholder="Chẩn đoán"
+                                           id="exam">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <label>Thủ thuật</label>
+                                    <select class="form-control kt-select2" id="kt_select2_3_modal" name="param"
+                                            multiple="multiple">
+                                        <option value="CT">Điện châm</option>
+                                        <option value="DE">Siêu âm</option>
+                                        <option value="FL">Hồng Ngoại</option>
+                                        <option value="GA">Hơ Ngải</option>
+                                        <option value="IN">Xoa bóp</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>Thuốc</label>
+                                    <input type="text" class="form-control material-input" id="medicine">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <label>Tiền Thủ thuật</label>
+                                    <input type="number" class="form-control material-input" id="moneyPro">
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>Tiền Thuốc</label>
+                                    <input type="number" class="form-control material-input" id="moneyMec">
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>Thanh toán</label>
+                                    <input type="text" class="form-control material-input" id="pay">
+                                </div>
+                            </div>
+                            <div class="row col-lg-12">
+                                <label>Ghi chú</label>
+                                <textarea class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-primary">Lưu thông tin</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--begin::Modal spend-->
+            <div class="modal fade" id="kt_modal_3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thông tin chi tiền</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label>Tên người nhận</label>
+                                    <input type="text" class="form-control material-input"
+                                           placeholder="Họ và tên người nhận tiền" id="spend_name">
+                                </div>
+                                <div class="col-lg-6">
+                                    <label>Số tiền</label>
+                                    <input type="number" class="form-control material-input"
+                                           id="spend_money">
+                                </div>
+                            </div>
+                            <div class="row col-lg-12">
+                                <label>Diễn giải chi</label>
+                                <input type="text" class="form-control material-input"
+                                       id="spend_detail">
+                            </div>
+                            <div class="row col-lg-12">
+                                <label>Ghi chú</label>
+                                <textarea class="form-control" rows="3" id="spend_note"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-primary">Lưu thông tin</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--end::Modal-->
+            <div data-th-replace="partials/_footer/base"></div>
+
         </div>
     </div>
+</div>
 
-    <th:block th:replace="transaction/detail.html"></th:block>
-    <!-- end:: Page -->
+<th:block th:replace="transaction/detail.html"></th:block>
+<!-- end:: Page -->
 
-    <!-- begin::Global Config(global config for global JS sciprts) -->
-    <script>
-        var KTAppOptions = {
-            "colors": {
-                "state": {
-                    "brand": "#5d78ff",
-                    "dark": "#282a3c",
-                    "light": "#ffffff",
-                    "primary": "#5867dd",
-                    "success": "#34bfa3",
-                    "info": "#36a3f7",
-                    "warning": "#ffb822",
-                    "danger": "#fd3995"
-                },
-                "base": {
-                    "label": [
-                        "#c5cbe3",
-                        "#a1a8c3",
-                        "#3d4465",
-                        "#3e4466"
-                    ],
-                    "shape": [
-                        "#f0f3ff",
-                        "#d9dffa",
-                        "#afb4d4",
-                        "#646c9a"
-                    ]
-                }
+<!-- begin::Global Config(global config for global JS sciprts) -->
+<script>
+    var KTAppOptions = {
+        "colors": {
+            "state": {
+                "brand": "#5d78ff",
+                "dark": "#282a3c",
+                "light": "#ffffff",
+                "primary": "#5867dd",
+                "success": "#34bfa3",
+                "info": "#36a3f7",
+                "warning": "#ffb822",
+                "danger": "#fd3995"
+            },
+            "base": {
+                "label": [
+                    "#c5cbe3",
+                    "#a1a8c3",
+                    "#3d4465",
+                    "#3e4466"
+                ],
+                "shape": [
+                    "#f0f3ff",
+                    "#d9dffa",
+                    "#afb4d4",
+                    "#646c9a"
+                ]
             }
-        };
-    </script>
+        }
+    };
+</script>
 
-    <!-- end::Global Config -->
+<!-- end::Global Config -->
 
-    <!--begin::Global Theme Bundle(used by all pages) -->
-    <script src="assets/plugins/global/plugins.bundle.js" type="text/javascript"></script>
-    <script src="assets/js/scripts.bundle.js" type="text/javascript"></script>
+<!--begin::Global Theme Bundle(used by all pages) -->
+<script src="assets/plugins/global/plugins.bundle.js" type="text/javascript"></script>
+<script src="assets/js/scripts.bundle.js" type="text/javascript"></script>
 
-    <!--end::Global Theme Bundle -->
+<!--end::Global Theme Bundle -->
 
-    <!--begin::Page Vendors(used by this page) -->
-    <script src="assets/plugins/custom/fullcalendar/fullcalendar.bundle.js" type="text/javascript"></script>
+<!--begin::Page Vendors(used by this page) -->
+<script src="assets/plugins/custom/fullcalendar/fullcalendar.bundle.js" type="text/javascript"></script>
 
-    <!--end::Page Vendors -->
+<!--end::Page Vendors -->
 
-    <!--begin::Page Scripts(used by this page) -->
-    <script src="assets/js/pages/components/calendar/basic.js" type="text/javascript"></script>
+<!--begin::Page Scripts(used by this page) -->
+<script src="assets/js/pages/components/calendar/basic.js" type="text/javascript"></script>
 
-    <script src="assets/js/pages/crud/forms/widgets/select2.js" type="text/javascript"></script>
+<script src="assets/js/pages/crud/forms/widgets/select2.js" type="text/javascript"></script>
 
-    <!--end::Page Scripts -->
+<!--end::Page Scripts -->
 </body>
 
 <!-- end::Body -->

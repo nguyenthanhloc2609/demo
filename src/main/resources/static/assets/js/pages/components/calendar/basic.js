@@ -13,13 +13,21 @@ var KTCalendarBasic = function () {
 
             var calendarEl = document.getElementById('kt_calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
+                plugins: ['interaction', 'dayGrid'],
 
                 isRTL: KTUtil.isRTL(),
+                customButtons: {
+                    btnExcel: {
+                        text: 'Xuất excel',
+                        click: function () {
+                            alert('Loading...');
+                        }
+                    }
+                },
                 header: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: ''
+                    right: 'btnExcel'
                 },
 
                 height: 800,
@@ -67,14 +75,16 @@ var KTCalendarBasic = function () {
                         }
                     }
                 },
-                select: function(dates){
+                select: function (dates) {
                     console.log(dates);
-                    window.location = '/tran-a-day'
+                    var diff = (dates.end - dates.start) / 86400000;
+                    if (diff === 1)
+                        window.location = '/tran-a-day'
                 }
-    });
+            });
 
-    calendar.render();
-}
+            calendar.render();
+        }
     };
 }();
 
