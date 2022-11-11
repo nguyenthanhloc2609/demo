@@ -78,6 +78,13 @@ License: You must have a valid license purchased only from themeforest(the above
         .spend {
             height: 15%;
         }
+
+        .vertical-center {
+            margin-left: 25%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
     </style>
 </head>
 
@@ -111,17 +118,16 @@ License: You must have a valid license purchased only from themeforest(the above
                                     Bảng thu chi trong ngày
                                 </h3>
                             </div>
-<!--                            <div>-->
-<!--                                <button type="button" class="btn btn-success " data-toggle="modal"-->
-<!--                                        data-target="#kt_select2_modal" data-backdrop="static"-->
-<!--                                        data-keyboard="false">Thêm-->
-<!--                                    mới-->
-<!--                                </button>-->
-<!--                                <button type="button" class="btn btn-warning" data-toggle="modal"-->
-<!--                                        data-target="#kt_modal_3" data-backdrop="static"-->
-<!--                                        data-keyboard="false">Chi tiền-->
-<!--                                </button>-->
-<!--                            </div>-->
+                            <div class="row kt-portlet__head--right vertical-center" style="width:70%; justify-content: right">
+                                <label class="col-sm-1 text-center"><b>Thu</b></label>
+                                <input type="number" readonly id="earnMoney" class="col-sm-2" style="color:green;" value="0">
+
+                                <label  class="col-sm-1 text-center"><b>Chi</b></label>
+                                <input type="number" readonly id="payMoney" class="col-sm-2" value="0" style="color:orange;">
+
+                                <label  class="col-sm-1 text-center" ><b>Tồn quỹ</b></label>
+                                <input type="number" readonly id="moneyDay" class="col-sm-2" value="0" style="color:blue;">
+                            </div>
 
                         </div>
                         <div class="kt-portlet__body body1">
@@ -131,7 +137,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <table class="table table-bordered">
                                             <thead>
                                             <tr>
-                                                <th style="text-align: center; vertical-align: middle;"
+                                                <th style="text-align: center; vertical-align: middle;;width: 5%"
                                                     class="text-left" rowspan="2">STT
                                                 </th>
                                                 <th style="text-align: center; vertical-align: middle;"
@@ -162,7 +168,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                     class="text-center" rowspan="2">Ghi
                                                     chú
                                                 </th>
-                                                <th style="text-align: center; vertical-align: middle;"
+                                                <th style="text-align: center; vertical-align: middle;width: 10%"
                                                     class="text-center" rowspan="2">
                                                     <button type="button" class="btn btn-success " data-toggle="modal"
                                                             data-target="#kt_select2_modal" data-backdrop="static"
@@ -196,7 +202,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <table class="table table-bordered" id="tbl_spend">
                                             <thead>
                                             <tr>
-                                                <th style="text-align: center; vertical-align: middle;"
+                                                <th style="text-align: center; vertical-align: middle;;width: 5%"
                                                     class="text-center">STT
                                                 </th>
                                                 <th style="text-align: center; vertical-align: middle;"
@@ -211,7 +217,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 <th style="text-align: center; vertical-align: middle;"
                                                     class="text-center">Ghi chú
                                                 </th>
-                                                <th style="text-align: center; vertical-align: middle;"
+                                                <th style="text-align: center; vertical-align: middle;width: 10%"
                                                     class="text-center">
                                                     <button type="button" class="btn btn-warning" data-toggle="modal"
                                                             data-target="#kt_modal_3" data-backdrop="static"
@@ -230,8 +236,6 @@ License: You must have a valid license purchased only from themeforest(the above
                             </div>
                         </div>
                     </div>
-                    <!--                        </div>-->
-                    <!--                    </div>-->
                 </div>
 
                 <!-- end:: Content -->
@@ -250,8 +254,15 @@ License: You must have a valid license purchased only from themeforest(the above
                             <div class="row">
                                 <div class="col-lg-6">
                                     <label>Tên bệnh nhân</label>
-                                    <input type="text" class="form-control material-input"
+                                    <input type="text" list="lst_name" class="form-control material-input"
                                            placeholder="Nhập họ và tên bệnh nhân" id="name">
+                                    <datalist id="lst_name">
+                                        <option value="Edge">
+                                        <option value="Firefox">
+                                        <option value="Chrome">
+                                        <option value="Opera">
+                                        <option value="Safari">
+                                    </datalist>
                                 </div>
                                 <div class="col-lg-6">
                                     <label>Chẩn đoán</label>
