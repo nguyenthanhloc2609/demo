@@ -3,22 +3,43 @@
         const pagination = new Pagination();
         var date = window.localStorage.getItem("date")
         $("#head-title").html("Bảng thu chi trong ngày " + date)
+
+        getListProcedure();
+
+        function getListProcedure() {
+            console.log("getListProcedure")
+            getRequest({
+                url: "/procedure/list?limit=99999&offset=0",
+                success: function (data) {
+                    var listProcedure = data['list'];
+                    var html = '';
+                    for (idx in listProcedure) {
+                        html += '<option value="' + listProcedure[idx].code + '">' + listProcedure[idx].name + '</option > '
+                    }
+                    $('#kt_select2_3_modal').html(html);
+
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
+
         initTransactionsList();
 
         function initTransactionsList() {
-            console.log("initTransactionsList")
             pagination.reset();
             loadTransactionsList();
         }
 
         function loadTransactionsList() {
-            var projectId = localStorage.getItem('project_id');
             var offset = pagination.offset() || 0;
-            var limit = pagination.limit() || 20;
+            var limit = pagination.limit() || 5;
             getRequest({
-                url: "/statistics/" + projectId + "/transactions_paging?" + "&limit=" + limit + "&offset=" + offset,
+                url: "/transaction/getByDate?limit=" + limit + "&offset=" + offset +"&date="+date,
                 success: function (data) {
                     onLoadedTransactionsList(data);
+                    // console.log(data);
                 },
                 error: function (e) {
                 }
@@ -27,6 +48,7 @@
 
         function onLoadedTransactionsList(data) {
             var paginData = data['pagination'] || {};
+            console.log(paginData);
             pagination.render('list-pagination', loadTransactionsList, {
                 count: data['count'],
                 limit: paginData['limit'],
@@ -37,16 +59,19 @@
             var html = '';
             for (var i = 1; i <= list.length; i++) {
                 var item = list[i - 1];
-                var time = new Date(Date.parse(item['createdAt']));
-                var convertedDateTime = formatDateTime(time);
-                var countNumber = Number.parseInt(paginData['offset']) + i;
+                var countNumber = Number.parseInt(paginData['offset'] * paginData['limit']) + i;
                 html += '<tr>'
                     + '<td class="text-left">' + countNumber + '</td>'
-                    + '<td>' + encodeHtmlEntity(item['action']) + '</td>'
-                    + '<td>' + convertedDateTime + '</td>'
-                    + '<td>' + encodeHtmlEntity(item['method']) + '</td>'
-                    + '<td>' + encodeHtmlEntity(item['url']) + '</td>'
-                    + '<td>' + encodeHtmlEntity(item['result']) + '</td>'
+                    + '<td>' + 'aaa' + '</td>'
+                    + '<td>' + 'aaa' + '</td>'
+                    + '<td>' + 'aaa' + '</td>'
+                    + '<td>' + 'aaa' + '</td>'
+                    + '<td>' + 'aaa' + '</td>'
+                    + '<td>' +'aaa' + '</td>'
+                    + '<td>' + 'aaa' + '</td>'
+                    + '<td>' + 'aaa' + '</td>'
+                    + '<td>' + 'aaa' + '</td>'
+                    + '<td>' + 'aaa' + '</td>'
                     + '</tr>';
             }
             $('#tbody-list').html(html);
