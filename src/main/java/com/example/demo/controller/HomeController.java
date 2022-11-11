@@ -21,4 +21,9 @@ public class HomeController {
     public String tranADay(Model model) {
         return "transaction/tran-a-day";
     }
+
+    @RequestMapping(value = "/customer", method = RequestMethod.GET)
+    public String listCustomer(Model model) {
+        return "customer/index";
+    }
 }
