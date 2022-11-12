@@ -31,4 +31,11 @@ public class CustomerController {
         return ResponseEntity.ok(customers);
     }
 
+    @GetMapping("/name")
+    public ResponseEntity<?> getByName(@RequestParam(value = "limit", required = false, defaultValue = "20") Integer limit,
+            @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
+                PagingDTO<Customer> customers =  customerService.findAll(limit, offset);
+        return ResponseEntity.ok(customers);
+    }
+
 }

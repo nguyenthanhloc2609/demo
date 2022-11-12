@@ -5,6 +5,22 @@
         $("#head-title").html("Bảng thu chi trong ngày " + date)
 
         getListProcedure();
+        getListCustomer();
+
+        function getListCustomer() {
+            console.log("getListCustomer")
+            getRequest({
+                url: "/customer/list?limit=99999&offset=0",
+                success: function (data) {
+                    var listCustomer = data['list'];
+
+                    console.log(listCustomer);
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
 
         function getListProcedure() {
             console.log("getListProcedure")
@@ -57,6 +73,7 @@
             });
             var list = data['list'] || [];
             var html = '';
+
             for (var i = 1; i <= list.length; i++) {
                 var item = list[i - 1];
                 var countNumber = Number.parseInt(paginData['offset'] * paginData['limit']) + i;

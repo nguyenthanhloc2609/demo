@@ -93,8 +93,9 @@ public class TransactionServiceImpl implements ITransactionService {
         List<String> cusName = customers.stream().map(Customer::getName).collect(Collectors.toList());
         String pre = transaction.getPrepaid();
         String post = transaction.getDebt();
+        Customer c;
         if (!cusName.contains(transaction.getCustomerName())) {
-            Customer c;
+            
             if (pre != null && pre.length() > 0){
                 c = new Customer(transaction.getCustomerName(), pre);
             }
@@ -103,6 +104,10 @@ public class TransactionServiceImpl implements ITransactionService {
                 c = new Customer(transaction.getCustomerName(), post);
             }
             customerRepository.save(c);
+        } else {
+            c = customers.get(cusName.indexOf(transaction.getCustomerName()));
+            //update thong tin benh nhan
+            
         }
     }
 }
