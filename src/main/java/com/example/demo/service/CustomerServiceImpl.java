@@ -58,9 +58,10 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public List<Customer> searchByName(String name) {
-        System.out.println("searchByName: "+name);
-        TextQuery textQuery = TextQuery.queryText(new TextCriteria().matchingAny(name)).sortByScore();
-        List<Customer> result = mongoTemplate.find(textQuery, Customer.class, "customer");
+        // System.out.println("searchByName: "+name);
+        // TextQuery textQuery = TextQuery.queryText(new TextCriteria().matchingAny(name)).sortByScore();
+        // List<Customer> result = mongoTemplate.find(textQuery, Customer.class, "customer");
+        List<Customer> result = customerRepository.findByNameLike(name);
         return result;
     }
 }

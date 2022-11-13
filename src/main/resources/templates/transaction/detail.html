@@ -52,7 +52,7 @@
             var offset = pagination.offset() || 0;
             var limit = pagination.limit() || 5;
             getRequest({
-                url: "/transaction/getByDate?limit=" + limit + "&offset=" + offset + "&date=" + date,
+                url: "/transaction/getByDate?limit=" + limit + "&offset=" + offset + "&date=" + current_date,
                 success: function (data) {
                     onLoadedTransactionsList(data);
                     // console.log(data);
@@ -69,7 +69,7 @@
                 count: data['count'],
                 limit: paginData['limit'],
                 total: paginData['total'],
-                offset: paginData['offset']
+                offset: paginData['offset'] * paginData['limit']
             });
             var list = data['list'] || [];
             var html = '';
@@ -79,33 +79,83 @@
                 var countNumber = Number.parseInt(paginData['offset'] * paginData['limit']) + i;
                 html += '<tr>'
                     + '<td class="text-left">' + countNumber + '</td>'
-                    + '<td>' + 'aaa' + '</td>'
-                    + '<td>' + 'aaa' + '</td>'
-                    + '<td>' + 'aaa' + '</td>'
-                    + '<td>' + 'aaa' + '</td>'
-                    + '<td>' + 'aaa' + '</td>'
-                    + '<td>' + 'aaa' + '</td>'
-                    + '<td>' + 'aaa' + '</td>'
-                    + '<td>' + 'aaa' + '</td>'
-                    + '<td>' + 'aaa' + '</td>'
-                    + '<td>' + 'aaa' + '</td>'
+                    + '<td>' + list[i-1].customerName + '</td>'
+                    + '<td>' + list[i-1].diagnostic + '</td>'
+                    + '<td>' + list[i-1].listProcedure + '</td>'
+                    + '<td>' + list[i-1].medicine + '</td>'
+                    + '<td>' + list[i-1].proceMoney + '</td>'
+                    + '<td>' + list[i-1].medicineMoney + '</td>'
+                    + '<td>' + list[i-1].prepaid + '</td>'
+                    + '<td>' + list[i-1].debt + '</td>'
+                    + '<td>' + list[i-1].note + '</td>'
+                    + '<td>' +  'button sua' + '</td>'
                     + '</tr>';
             }
             $('#tbody-list').html(html);
         }
 
+        document.getElementById("saveTran").addEventListener("click", createTransaction);
+        // document.getElementById("closeTran").addEventListener("click", (event) => {
+        //     event.preventDefault();
+
+        // });
+
         function createTransaction() {
-            var cusName = $('#cusName').val().trim();
-            var proce = $('#kt_select2_3_modal').val();
+            var customerName = $('#cusName').val().trim();
+            var listProcedure = $('#kt_select2_3_modal').val().join(" + ");
             var diagnostic = $('#diagnostic').val().trim();
-            var proceMoney = $('#moneyPro').val().trim();
+            var proceMoney = $('#moneyPro').val()?$('#moneyPro').val().trim():0;
             var medicine = $('#medicine').val().trim();
-            var medicineMoney= $('#moneyMec').val().trim();
+            var medicineMoney = $('#moneyMec').val()?$('#moneyMec').val().trim():0;
             var pay = $('#pay').val().trim();
-            var prepaid= pay.includes("/")?pay:'';
-            var debt= pay.includes("N")?pay:'';
-            var note= $('#note1').val().trim();
+            var prepaid = pay.includes("/") ? pay : '';
+            var debt = pay.includes("N") ? pay : '';
+            var note = $('#note1').val().trim();
             var date = current_date;
+
+            let body = {
+                customerName,
+                listProcedure,
+                diagnostic,
+                proceMoney,
+                medicine,
+                medicineMoney,
+                prepaid,
+                debt,
+                note,
+                date
+            }
+
+            console.log("createTransaction ", body);
+
+            postRequest({
+                url: "/transaction",
+                data: body,
+                success: (data) => {
+                    console.log(data);
+                    $('#cusName').val("");
+                    $('#kt_select2_3_modal').val('');
+                    $('#diagnostic').val('');
+                    $('#moneyPro').val('');
+                    $('#medicine').val('');
+                    $('#moneyMec').val('');
+                    $('#pay').val('');
+
+                    $('#note1').val();
+                },
+                error: (e) => {
+                    console.log(e);
+                    var error = e['error'];
+                    if (error != null) {
+                        let content = JSON.parse(error);
+                        if (content['code'] === 702) {
+                            $("#error-log").html(content['message'] + ".<br/>")
+                        }
+                    } else
+                        $("#error-log").html("Lỗi hệ thống. Vui lòng liên hệ tới bộ phân kỹ thuật để kiểm tra yêu cầu.<br/>")
+
+                }
+            })
         }
     });
 </script>

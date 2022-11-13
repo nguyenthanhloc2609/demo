@@ -4,7 +4,7 @@ var Pagination = function() {
 	var extend = function(options) {
 		_this.viewTotalRecords = options['viewTotalRecords']||false;
 		_this.offset = options['offset']||0;
-		_this.limit = options['limit']||20;
+		_this.limit = options['limit']||10;
 		_this.count = options['count']||0;
 		_this.currentPage = 1+(_this.offset/_this.limit);
 		_this.totalRecords = options['total']||0;
@@ -42,7 +42,7 @@ var Pagination = function() {
 		$('#'+_this.id).show();
 		var html = '<div class="row ml-1">'; 
 		html += '<div class="pull-left form-inline"><span style="margin: 5px;">Hiển thị</span><lable class="select"><select id="'+_this.id+'_cblimit" class="form-control" style="border: 1px solid #ccc;vertical-align:top;padding: 1px 1px 1px 9px;height: 30px;">';
-		var limits = [10, 20, 50, 100];
+		var limits = [3, 10, 15, 20];
 		for(i = 0; i < limits.length; i++) {
 			if(limits[i] == _this.limit) {
 				html += '<option value="'+limits[i]+'" selected>'+limits[i]+'</option>';
@@ -139,7 +139,7 @@ var Pagination = function() {
 
 	var reset = function() {
 		_this.offset = 0;
-		_this.limit = 20;
+		_this.limit = 10;
 		_this.totalPages = 0;
 		_this.count = 0;
 		_this.currentPage = 1;

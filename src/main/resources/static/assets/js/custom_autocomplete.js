@@ -33,7 +33,7 @@ var KTTypeahead = function() {
         $('#cusName').typeahead({
                 hint: true,
                 highlight: true,
-                minLength: 1
+                minLength: 3
             },
             {
                 // name: 'name',
