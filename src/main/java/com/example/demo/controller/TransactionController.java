@@ -34,7 +34,7 @@ public class TransactionController {
     @PostMapping("")
     public ResponseEntity<?> addTransaction(@RequestBody Transaction tran) {
         Transaction transaction = transactionService.create(tran);
-        if(transaction == null)
+        if (transaction == null)
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
         return ResponseEntity.ok(transaction);
     }
@@ -47,5 +47,20 @@ public class TransactionController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getTransactionById(Integer month) {
         return null;
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTransactionById(@PathVariable String id, @RequestBody Transaction tran) {
+        Transaction updated = transactionService.update(tran, id);
+        if (updated != null)
+            return ResponseEntity.ok(tran);
+        else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTransactionById(@PathVariable String id) {
+        transactionService.delete(id);
+        return ResponseEntity.ok("Delete successfully");
     }
 }

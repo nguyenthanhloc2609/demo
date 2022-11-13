@@ -3,7 +3,7 @@
         const pagination = new Pagination();
         var current_date = window.localStorage.getItem("date")
         var list_tran = [];
-        var edit_mode = 0;
+        var edit_mode = undefined;
         $("#head-title").html("Bảng thu chi trong ngày " + current_date)
 
         getListProcedure();
@@ -93,9 +93,9 @@
                     + '<td>' + item.note + '</td>'
                     + '<td>' + '<div style="text-align: center; vertical-align: middle;">' +
                     '<button type="button" data-toggle="modal" class="btn btn-circle btn-icon edit-tran" style="margin-right: 0.5rem;"' +
-                    ' href="#kt_select2_modal" data-index="'+(i-1)+'"><i class="flaticon-edit"></i></button>' +
-                    '<button type="button" class="btn btn-circle btn-icon" style="margin-left: 0.5rem"' +
-                    '  ><i class="flaticon-delete" id=""></i></button></div>' + '</td>'
+                    ' href="#kt_select2_modal" data-index="' + (i - 1) + '"><i class="flaticon-edit"></i></button>' +
+                    '<button type="button" class="btn btn-circle btn-icon delete-tran" data-index="' + (i - 1) + '" style="margin-left: 0.5rem"' +
+                    '  ><i class="flaticon-delete"></i></button></div>' + '</td>'
                     + '</tr>';
             }
             $('#tbody-list').html(html);
@@ -107,40 +107,43 @@
 
         $(document).on("click", ".edit-tran", editTransaction);
 
+        $(document).on("click", ".delete-tran", deleteTransaction);
+
         function createTransaction() {
-            if (edit_mode === 0){
-                var customerName = $('#cusName').val().trim();
-                var listProcedure = $('#kt_select2_3_modal').val().join(" + ");
-                var diagnostic = $('#diagnostic').val().trim();
-                var proceMoney = $('#moneyPro').val() ? $('#moneyPro').val().trim() : 0;
-                var medicine = $('#medicine').val().trim();
-                var medicineMoney = $('#moneyMec').val() ? $('#moneyMec').val().trim() : 0;
-                var pay = $('#pay').val().trim();
-                var prepaid = pay.includes("/") ? pay : '';
-                var debt = pay.includes("N") ? pay : '';
-                var note = $('#note1').val().trim();
-                var date = current_date;
+            var customerName = $('#cusName').val().trim();
+            var listProcedure = $('#kt_select2_3_modal').val().join(" + ");
+            var diagnostic = $('#diagnostic').val().trim();
+            var proceMoney = $('#moneyPro').val() ? $('#moneyPro').val().trim() : 0;
+            var medicine = $('#medicine').val().trim();
+            var medicineMoney = $('#moneyMec').val() ? $('#moneyMec').val().trim() : 0;
+            var pay = $('#pay').val().trim();
+            var prepaid = pay.includes("/") ? pay : '';
+            var debt = pay.includes("N") ? pay : '';
+            var note = $('#note1').val().trim();
+            var date = current_date;
 
-                let body = {
-                    customerName,
-                    listProcedure,
-                    diagnostic,
-                    proceMoney,
-                    medicine,
-                    medicineMoney,
-                    prepaid,
-                    debt,
-                    note,
-                    date
-                }
-
-                console.log("createTransaction ", body);
+            let body = {
+                customerName,
+                listProcedure,
+                diagnostic,
+                proceMoney,
+                medicine,
+                medicineMoney,
+                prepaid,
+                debt,
+                note,
+                date
+            }
+            console.log(edit_mode);
+            // console.log("createTransaction ", body);
+            if (!edit_mode) {
+                //createTransaction
 
                 postRequest({
                     url: "/transaction",
                     data: body,
                     success: (data) => {
-                        console.log(data);
+                        // console.log(data);
                         $("#error-log").html("Thêm mới thành công!<br/>")
                         $('#cusName').val('');
                         $('#kt_select2_3_modal').val(null);
@@ -167,6 +170,28 @@
                 })
             } else {
                 //edit transaction
+                var id = edit_mode;
+                body.id = edit_mode;
+                putRequest({
+                    url: '/transaction/' + edit_mode,
+                    data: body,
+                    success: function (data) {
+                        window.location = "/tran-a-day";
+                        $('#kt_select2_modal').modal('hide');
+                    },
+                    error: function (e) {
+                        console.log(e);
+                        var error = e['error'];
+                        if (error != null) {
+                            let content = JSON.parse(error);
+                            // if (content['code'] === 702) {
+                            $("#error-log").html(content['message'] + ".<br/>")
+                            // }
+                        } else
+                            $("#error-log").html("Lỗi hệ thống!<br/>")
+
+                    }
+                });
             }
 
         }
@@ -175,16 +200,50 @@
             var index = $(this).data('index');
             var tran = list_tran[index];
             console.log('editTransaction', tran)
-            edit_mode = 1;
+            edit_mode = tran.id;
             $('#cusName').val(tran.customerName);
             $('#kt_select2_3_modal').val(tran.listProcedure.split(' + '));
             $('#diagnostic').val(tran.diagnostic);
-            $('#moneyPro').val(tran.proceMoney||0);
+            $('#moneyPro').val(tran.proceMoney || 0);
             $('#medicine').val(tran.medicine);
-            $('#moneyMec').val(tran.medicineMoney||0);
-            $('#pay').val(tran.prepaid||tran.debt);
+            $('#moneyMec').val(tran.medicineMoney || 0);
+            $('#pay').val(tran.prepaid || tran.debt);
 
             $('#note1').val(tran.note);
+        }
+
+        function deleteTransaction() {
+            var index = $(this).data('index');
+            var tran = list_tran[index];
+            console.log('deleteTransaction', tran)
+
+            Swal.fire({
+                title: 'Xóa thông tin này đi nhé',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Xóa đi',
+                cancelButtonText: 'Thôi không xóa nữa',
+            }).then((result) => {
+                if (result.value) {
+                    console.log("deleting...");
+                    deleteRequest({
+                        url: '/transaction/' + tran.id,
+                        success: function (data) {
+                            window.location = "/tran-a-day";
+                        },
+                        error: function (e) {
+                            console.log(e);
+                            var error = e['error'];
+                            if (error != null) {
+                                let content = JSON.parse(error);
+                                $("#error-log").html(content['message'] + ".<br/>")
+                            } else
+                                $("#error-log").html("Lỗi hệ thống!<br/>")
+
+                        }
+                    });
+                }
+            });
         }
     });
 </script>

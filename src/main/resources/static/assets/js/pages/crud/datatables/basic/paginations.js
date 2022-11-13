@@ -43,7 +43,7 @@ var Pagination = function() {
 		$('#'+_this.id).show();
 		var html = '<div class="row ml-1">'; 
 		html += '<div class="pull-left form-inline"><span style="margin: 5px;">Hiển thị</span><lable class="select"><select id="'+_this.id+'_cblimit" class="form-control" style="border: 1px solid #ccc;vertical-align:top;padding: 1px 1px 1px 9px;height: 30px;">';
-		var limits = [5, 10, 20, 50];
+		var limits = [5, 10, 15, 20];
 		for(i = 0; i < limits.length; i++) {
 			if(limits[i] == _this.limit) {
 				html += '<option value="'+limits[i]+'" selected>'+limits[i]+'</option>';
