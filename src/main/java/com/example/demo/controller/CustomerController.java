@@ -4,6 +4,8 @@ import com.example.demo.dao.Customer;
 import com.example.demo.dto.PagingDTO;
 import com.example.demo.service.ICustomerService;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,14 +29,13 @@ public class CustomerController {
     @GetMapping("/list")
     public ResponseEntity<?> getAll(@RequestParam(value = "limit", required = false, defaultValue = "20") Integer limit,
             @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
-                PagingDTO<Customer> customers =  customerService.findAll(limit, offset);
+        PagingDTO<Customer> customers = customerService.findAll(limit, offset);
         return ResponseEntity.ok(customers);
     }
 
     @GetMapping("/name")
-    public ResponseEntity<?> getByName(@RequestParam(value = "limit", required = false, defaultValue = "20") Integer limit,
-            @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
-                PagingDTO<Customer> customers =  customerService.findAll(limit, offset);
+    public ResponseEntity<?> getByName(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
+        List<Customer> customers = customerService.searchByName(name);
         return ResponseEntity.ok(customers);
     }
 

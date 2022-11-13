@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -13,16 +14,10 @@ public class Customer {
     @Id
     String id;
 
+    @TextIndexed(weight=5)
     String name;
     String billing;
-    // Integer current;
-    // Integer max;
-
-    // public Customer(String name, Integer current, Integer max){
-    // this.name = name;
-    // this.current = current;
-    // this.max = max;
-    // }
+    String note;
 
     public Customer(String name, String billing) {
         this.name = name;

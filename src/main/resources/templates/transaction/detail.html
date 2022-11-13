@@ -52,7 +52,7 @@
             var offset = pagination.offset() || 0;
             var limit = pagination.limit() || 5;
             getRequest({
-                url: "/transaction/getByDate?limit=" + limit + "&offset=" + offset +"&date="+date,
+                url: "/transaction/getByDate?limit=" + limit + "&offset=" + offset + "&date=" + date,
                 success: function (data) {
                     onLoadedTransactionsList(data);
                     // console.log(data);
@@ -84,7 +84,7 @@
                     + '<td>' + 'aaa' + '</td>'
                     + '<td>' + 'aaa' + '</td>'
                     + '<td>' + 'aaa' + '</td>'
-                    + '<td>' +'aaa' + '</td>'
+                    + '<td>' + 'aaa' + '</td>'
                     + '<td>' + 'aaa' + '</td>'
                     + '<td>' + 'aaa' + '</td>'
                     + '<td>' + 'aaa' + '</td>'
@@ -94,5 +94,17 @@
             $('#tbody-list').html(html);
         }
 
+        function createTransaction() {
+            var cusName =('#name').val();
+            var proce;
+            var diagnostic;
+            var diagMoney;
+            var medicine;
+            var medicineMoney;
+            var prepaid;
+            var debt;
+            var note;
+            // var date = date;
+        }
     });
 </script>

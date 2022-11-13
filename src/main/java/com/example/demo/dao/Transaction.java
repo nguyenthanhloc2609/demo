@@ -13,7 +13,7 @@ public class Transaction {
     String id;
 
     String customerName;
-    String listService;
+    String listProcedure;
     String diagnostic;
     Integer diagMoney;
     String medicine;
@@ -21,12 +21,6 @@ public class Transaction {
     String prepaid;
     String debt;
     String note;
-
-    //chi
-    String receivedName;
-    String paidMessage;
-    Integer paidMoney;
-    String paidNote;
 
     String date;
 
