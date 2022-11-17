@@ -6,7 +6,8 @@ var Pagination = function() {
 		_this.offset = options['offset']||0;
 		_this.limit = options['limit']||10;
 		_this.count = options['count']||0;
-		_this.currentPage = 1+(_this.offset/_this.limit);
+		// _this.currentPage = 1+(_this.offset/_this.limit);
+		_this.currentPage = 1+_this.offset;
 		_this.totalRecords = options['total']||0;
 		_this.step = 5;
 		_this.totalPages = parseInt(_this.totalRecords/_this.limit);
@@ -42,7 +43,7 @@ var Pagination = function() {
 		$('#'+_this.id).show();
 		var html = '<div class="row ml-1">'; 
 		html += '<div class="pull-left form-inline"><span style="margin: 5px;">Hiển thị</span><lable class="select"><select id="'+_this.id+'_cblimit" class="form-control" style="border: 1px solid #ccc;vertical-align:top;padding: 1px 1px 1px 9px;height: 30px;">';
-		var limits = [3, 10, 15, 20];
+		var limits = [5, 10, 20, 50];
 		for(i = 0; i < limits.length; i++) {
 			if(limits[i] == _this.limit) {
 				html += '<option value="'+limits[i]+'" selected>'+limits[i]+'</option>';
@@ -58,26 +59,26 @@ var Pagination = function() {
 			html += '<li style="margin-right: 10px;"><span>Tổng số bản ghi '+_this.totalRecords+'</span><li>';
 		}
 		if(_this.first === false) {
-			html += '<li id="'+_this.id+'-go-first" class="paginate_button page-item previous"><a class="page-link" href="#"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>';
+			html += '<li id="'+_this.id+'-go-first" class="paginate_button page-item previous"><a class="page-link" ><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>';
 		}else {
 			html += '<li id="'+_this.id+'-go-first" class="paginate_button page-item previous disabled"><a class="page-link"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>';
 		}
 		if(_this.currentPage > 1) {
-			html += '<li id="'+_this.id+'-go-prev" class="paginate_button page-item"><a class="page-link" href="#"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>';
+			html += '<li id="'+_this.id+'-go-prev" class="paginate_button page-item"><a class="page-link" ><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>';
 		}
 		for(var i = _this.from; i <= _this.to; i++) {
 			var page = i;
 			if(i == _this.currentPage) {
 				html += '<li class="paginate_button page-item active"><a class="page-link">'+page+'</a></li>';
 			} else {
-				html += '<li class="'+_this.id+'-go-page class="paginate_button page-item"" data-page="'+page+'"><a href="#" class="page-link">'+page+'</a></li>';
+				html += '<li class="'+_this.id+'-go-page class="paginate_button page-item"" data-page="'+page+'"><a  class="page-link">'+page+'</a></li>';
 			}
 		}
 		if(_this.currentPage >= 1 && _this.currentPage < _this.totalPages) {
-			html += '<li id="'+_this.id+'-go-next" class="paginate_button page-item"><a class="page-link" href="#"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>';
+			html += '<li id="'+_this.id+'-go-next" class="paginate_button page-item"><a class="page-link" ><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>';
 		}
 		if(_this.last === false) {
-			html += '<li id="'+_this.id+'-go-last" class="paginate_button page-item"><a class="page-link" href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>';
+			html += '<li id="'+_this.id+'-go-last" class="paginate_button page-item"><a class="page-link" ><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>';
 		}else {
 			html += '<li id="'+_this.id+'-go-last" class="paginate_button page-item disabled"><a class="page-link"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>';
 		}
@@ -127,7 +128,8 @@ var Pagination = function() {
 	};
 
 	var buildOffset = function() {
-	   _this.offset = (_this.currentPage-1)*_this.limit;
+	   // _this.offset = (_this.currentPage-1)*_this.limit;
+		_this.offset = _this.currentPage-1;
 	}
 	
 	var changeNumberLimit = function() {

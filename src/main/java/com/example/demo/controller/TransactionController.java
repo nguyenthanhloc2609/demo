@@ -20,7 +20,7 @@ public class TransactionController {
     @GetMapping("/getByDate")
     public ResponseEntity<?> getTransactionByDate(
             @RequestParam(value = "date", required = true, defaultValue = "") String date,
-            @RequestParam(value = "limit", required = false, defaultValue = "20") Integer limit,
+            @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
             @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
         PagingDTO<Transaction> trans = transactionService.findTranADay(date, limit, offset);
         return ResponseEntity.ok(trans);

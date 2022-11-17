@@ -69,7 +69,7 @@
                 count: data['count'],
                 limit: paginData['limit'],
                 total: paginData['total'],
-                offset: paginData['offset'] * paginData['limit']
+                offset: paginData['offset']
             });
             var list = data['list'] || [];
             var html = '';
@@ -88,17 +88,16 @@
                     + '<td>' + list[i-1].prepaid + '</td>'
                     + '<td>' + list[i-1].debt + '</td>'
                     + '<td>' + list[i-1].note + '</td>'
-                    + '<td>' +  'button sua' + '</td>'
+                    + '<td>' +  '<div style="text-align: center; vertical-align: middle;"><button type="button" class="btn btn-circle btn-icon" style="margin-right: 0.5rem;"' +
+                    '  ><i class="flaticon-edit" id=""></i></button>' +
+                    '<button type="button" class="btn btn-circle btn-icon" style="margin-left: 0.5rem"' +
+                    '  ><i class="flaticon-delete" id=""></i></button></div>' + '</td>'
                     + '</tr>';
             }
             $('#tbody-list').html(html);
         }
 
         document.getElementById("saveTran").addEventListener("click", createTransaction);
-        // document.getElementById("closeTran").addEventListener("click", (event) => {
-        //     event.preventDefault();
-
-        // });
 
         function createTransaction() {
             var customerName = $('#cusName').val().trim();
@@ -133,8 +132,9 @@
                 data: body,
                 success: (data) => {
                     console.log(data);
-                    $('#cusName').val("");
-                    $('#kt_select2_3_modal').val('');
+                    $("#error-log").html("Thêm mới thành công!<br/>")
+                    $('#cusName').val('');
+                    $('#kt_select2_3_modal').val(null);
                     $('#diagnostic').val('');
                     $('#moneyPro').val('');
                     $('#medicine').val('');
@@ -148,14 +148,18 @@
                     var error = e['error'];
                     if (error != null) {
                         let content = JSON.parse(error);
-                        if (content['code'] === 702) {
+                        // if (content['code'] === 702) {
                             $("#error-log").html(content['message'] + ".<br/>")
-                        }
+                        // }
                     } else
-                        $("#error-log").html("Lỗi hệ thống. Vui lòng liên hệ tới bộ phân kỹ thuật để kiểm tra yêu cầu.<br/>")
+                        $("#error-log").html("Lỗi hệ thống!<br/>")
 
                 }
             })
+        }
+
+        function editTransaction(tran){
+
         }
     });
 </script>

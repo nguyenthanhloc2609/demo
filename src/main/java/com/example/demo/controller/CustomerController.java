@@ -7,6 +7,7 @@ import com.example.demo.service.ICustomerService;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,12 +24,16 @@ public class CustomerController {
 
     @PostMapping(value = "")
     public ResponseEntity<?> create(@RequestBody Customer customer) {
-        return ResponseEntity.ok(customerService.create(customer));
+        Customer cu = customerService.create(customer);
+        if (cu != null)
+            return ResponseEntity.ok(cu);
+        else
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Khách hàng đã tồn tại");
     }
 
     @GetMapping("/list")
     public ResponseEntity<?> getAll(@RequestParam(value = "limit", required = false, defaultValue = "20") Integer limit,
-            @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
+                                    @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
         PagingDTO<Customer> customers = customerService.findAll(limit, offset);
         return ResponseEntity.ok(customers);
     }

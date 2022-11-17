@@ -9,4 +9,6 @@ import org.springframework.data.mongodb.repository.Query;
 public interface CustomerRepository extends MongoRepository<Customer, String> {
     @Query("{'name':{'$regex':'?0','$options':'i'}}")  
     List<Customer> findByNameLike(String name);
+
+    Long countAllByName(String name);
 }

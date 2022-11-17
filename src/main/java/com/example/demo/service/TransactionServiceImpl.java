@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,9 @@ public class TransactionServiceImpl implements ITransactionService {
 
     @Autowired
     CustomerRepository customerRepository;
+
+    @Autowired
+    ICustomerService customerService;
 
     @Override
     public Transaction create(Transaction transaction) {
@@ -85,7 +89,18 @@ public class TransactionServiceImpl implements ITransactionService {
         pagination.setTotal(transactionRepository.count());
         pagination.setLimit(limit);
         pagination.setOffset(offset);
+
+        //demo
+//        List<Transaction> trans = new ArrayList<>();
+//        for (int i = 0; i < limit; i++)
+//            trans.add(Transaction.builder().build());
+//
+//        Pagination pagination = new Pagination();
+//        pagination.setTotal(100);
+//        pagination.setLimit(limit);
+//        pagination.setOffset(offset);
         return PagingDTO.<Transaction>builder().pagination(pagination).list(trans.getContent()).count(trans.getNumberOfElements()).build();
+
     }
 
     private void createCustomer(Transaction transaction) {
@@ -95,19 +110,24 @@ public class TransactionServiceImpl implements ITransactionService {
         String post = transaction.getDebt();
         Customer c;
         if (!cusName.contains(transaction.getCustomerName())) {
-            
-            if (pre != null && pre.length() > 0){
+
+            if (pre != null && pre.length() > 0) {
                 c = new Customer(transaction.getCustomerName(), pre);
-            }
-                
-            else{
+            } else {
                 c = new Customer(transaction.getCustomerName(), post);
             }
+            c.setNote("Ngày điều trị trước đó: " + transaction.getDate());
             customerRepository.save(c);
         } else {
             c = customers.get(cusName.indexOf(transaction.getCustomerName()));
             //update thong tin benh nhan
-            
+            if (pre != null && pre.length() > 0) {
+                c.setBilling(pre);
+            } else {
+                c.setBilling(post);
+            }
+            c.setNote("Ngày điều trị trước đó: " + transaction.getDate());
+            customerService.update(c, c.getId());
         }
     }
 }

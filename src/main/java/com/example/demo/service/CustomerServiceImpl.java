@@ -6,7 +6,9 @@ import com.example.demo.dto.Pagination;
 import com.example.demo.repository.CustomerRepository;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +19,7 @@ import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class CustomerServiceImpl implements ICustomerService {
 
     @Autowired
@@ -25,9 +28,17 @@ public class CustomerServiceImpl implements ICustomerService {
     @Autowired
     MongoTemplate mongoTemplate;
 
+    Logger logger = Logger.getLogger(CustomerServiceImpl.class.getName());
+
     @Override
     public Customer create(Customer customer) {
-        return customerRepository.save(customer);
+        long count = customerRepository.countAllByName(customer.getName());
+        if (count == 0)
+            return customerRepository.save(customer);
+        else {
+            log.error("Khách hàng có tên " + customer.getName() + " đã tồn tại!");
+            return null;
+        }
     }
 
     @Override
