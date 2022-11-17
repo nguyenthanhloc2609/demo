@@ -2,9 +2,12 @@
     $(function () {
         const pagination = new Pagination();
         var current_date = window.localStorage.getItem("date")
+        var list_tran = [];
+        var edit_mode = 0;
         $("#head-title").html("Bảng thu chi trong ngày " + current_date)
 
         getListProcedure();
+
         // getListCustomer();
 
         function getListCustomer() {
@@ -71,25 +74,26 @@
                 total: paginData['total'],
                 offset: paginData['offset']
             });
-            var list = data['list'] || [];
+            list_tran = data['list'] || [];
             var html = '';
 
-            for (var i = 1; i <= list.length; i++) {
-                var item = list[i - 1];
+            for (var i = 1; i <= list_tran.length; i++) {
+                var item = list_tran[i - 1];
                 var countNumber = Number.parseInt(paginData['offset'] * paginData['limit']) + i;
                 html += '<tr>'
                     + '<td class="text-left">' + countNumber + '</td>'
-                    + '<td>' + list[i-1].customerName + '</td>'
-                    + '<td>' + list[i-1].diagnostic + '</td>'
-                    + '<td>' + list[i-1].listProcedure + '</td>'
-                    + '<td>' + list[i-1].medicine + '</td>'
-                    + '<td>' + list[i-1].proceMoney + '</td>'
-                    + '<td>' + list[i-1].medicineMoney + '</td>'
-                    + '<td>' + list[i-1].prepaid + '</td>'
-                    + '<td>' + list[i-1].debt + '</td>'
-                    + '<td>' + list[i-1].note + '</td>'
-                    + '<td>' +  '<div style="text-align: center; vertical-align: middle;"><button type="button" class="btn btn-circle btn-icon" style="margin-right: 0.5rem;"' +
-                    '  ><i class="flaticon-edit" id=""></i></button>' +
+                    + '<td>' + item.customerName + '</td>'
+                    + '<td>' + item.diagnostic + '</td>'
+                    + '<td>' + item.listProcedure + '</td>'
+                    + '<td>' + item.medicine + '</td>'
+                    + '<td>' + item.proceMoney + '</td>'
+                    + '<td>' + item.medicineMoney + '</td>'
+                    + '<td>' + item.prepaid + '</td>'
+                    + '<td>' + item.debt + '</td>'
+                    + '<td>' + item.note + '</td>'
+                    + '<td>' + '<div style="text-align: center; vertical-align: middle;">' +
+                    '<button type="button" data-toggle="modal" class="btn btn-circle btn-icon edit-tran" style="margin-right: 0.5rem;"' +
+                    ' href="#kt_select2_modal" data-index="'+(i-1)+'"><i class="flaticon-edit"></i></button>' +
                     '<button type="button" class="btn btn-circle btn-icon" style="margin-left: 0.5rem"' +
                     '  ><i class="flaticon-delete" id=""></i></button></div>' + '</td>'
                     + '</tr>';
@@ -99,67 +103,88 @@
 
         document.getElementById("saveTran").addEventListener("click", createTransaction);
 
-        function createTransaction() {
-            var customerName = $('#cusName').val().trim();
-            var listProcedure = $('#kt_select2_3_modal').val().join(" + ");
-            var diagnostic = $('#diagnostic').val().trim();
-            var proceMoney = $('#moneyPro').val()?$('#moneyPro').val().trim():0;
-            var medicine = $('#medicine').val().trim();
-            var medicineMoney = $('#moneyMec').val()?$('#moneyMec').val().trim():0;
-            var pay = $('#pay').val().trim();
-            var prepaid = pay.includes("/") ? pay : '';
-            var debt = pay.includes("N") ? pay : '';
-            var note = $('#note1').val().trim();
-            var date = current_date;
+        // document.getElementById("edit-tran").addEventListener("click", editTransaction);
 
-            let body = {
-                customerName,
-                listProcedure,
-                diagnostic,
-                proceMoney,
-                medicine,
-                medicineMoney,
-                prepaid,
-                debt,
-                note,
-                date
+        $(document).on("click", ".edit-tran", editTransaction);
+
+        function createTransaction() {
+            if (edit_mode === 0){
+                var customerName = $('#cusName').val().trim();
+                var listProcedure = $('#kt_select2_3_modal').val().join(" + ");
+                var diagnostic = $('#diagnostic').val().trim();
+                var proceMoney = $('#moneyPro').val() ? $('#moneyPro').val().trim() : 0;
+                var medicine = $('#medicine').val().trim();
+                var medicineMoney = $('#moneyMec').val() ? $('#moneyMec').val().trim() : 0;
+                var pay = $('#pay').val().trim();
+                var prepaid = pay.includes("/") ? pay : '';
+                var debt = pay.includes("N") ? pay : '';
+                var note = $('#note1').val().trim();
+                var date = current_date;
+
+                let body = {
+                    customerName,
+                    listProcedure,
+                    diagnostic,
+                    proceMoney,
+                    medicine,
+                    medicineMoney,
+                    prepaid,
+                    debt,
+                    note,
+                    date
+                }
+
+                console.log("createTransaction ", body);
+
+                postRequest({
+                    url: "/transaction",
+                    data: body,
+                    success: (data) => {
+                        console.log(data);
+                        $("#error-log").html("Thêm mới thành công!<br/>")
+                        $('#cusName').val('');
+                        $('#kt_select2_3_modal').val(null);
+                        $('#diagnostic').val('');
+                        $('#moneyPro').val('');
+                        $('#medicine').val('');
+                        $('#moneyMec').val('');
+                        $('#pay').val('');
+
+                        $('#note1').val();
+                    },
+                    error: (e) => {
+                        console.log(e);
+                        var error = e['error'];
+                        if (error != null) {
+                            let content = JSON.parse(error);
+                            // if (content['code'] === 702) {
+                            $("#error-log").html(content['message'] + ".<br/>")
+                            // }
+                        } else
+                            $("#error-log").html("Lỗi hệ thống!<br/>")
+
+                    }
+                })
+            } else {
+                //edit transaction
             }
 
-            console.log("createTransaction ", body);
-
-            postRequest({
-                url: "/transaction",
-                data: body,
-                success: (data) => {
-                    console.log(data);
-                    $("#error-log").html("Thêm mới thành công!<br/>")
-                    $('#cusName').val('');
-                    $('#kt_select2_3_modal').val(null);
-                    $('#diagnostic').val('');
-                    $('#moneyPro').val('');
-                    $('#medicine').val('');
-                    $('#moneyMec').val('');
-                    $('#pay').val('');
-
-                    $('#note1').val();
-                },
-                error: (e) => {
-                    console.log(e);
-                    var error = e['error'];
-                    if (error != null) {
-                        let content = JSON.parse(error);
-                        // if (content['code'] === 702) {
-                            $("#error-log").html(content['message'] + ".<br/>")
-                        // }
-                    } else
-                        $("#error-log").html("Lỗi hệ thống!<br/>")
-
-                }
-            })
         }
 
-        function editTransaction(tran){
+        function editTransaction() {
+            var index = $(this).data('index');
+            var tran = list_tran[index];
+            console.log('editTransaction', tran)
+            edit_mode = 1;
+            $('#cusName').val(tran.customerName);
+            $('#kt_select2_3_modal').val(tran.listProcedure.split(' + '));
+            $('#diagnostic').val(tran.diagnostic);
+            $('#moneyPro').val(tran.proceMoney||0);
+            $('#medicine').val(tran.medicine);
+            $('#moneyMec').val(tran.medicineMoney||0);
+            $('#pay').val(tran.prepaid||tran.debt);
 
+            $('#note1').val(tran.note);
         }
     });
 </script>
