@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.dao.Finance;
 import com.example.demo.dao.Spend;
-import com.example.demo.dao.Transaction;
 import com.example.demo.dto.PagingDTO;
 import com.example.demo.repository.SpendRepository;
 import com.example.demo.dto.Pagination;
@@ -18,9 +18,14 @@ public class SpendServiceImpl implements ISpendService {
     @Autowired
     SpendRepository spendRepository;
 
+    @Autowired
+    IFinanceService financeService;
+
     @Override
     public Spend create(Spend t) {
-        // TODO Auto-generated method stub
+        Finance finance = financeService.getFinanceOnDay(t.getDate());
+        finance.setSpend((long) t.getMoney());
+        financeService.update(finance, finance.getId());
         return spendRepository.save(t);
     }
 
@@ -32,7 +37,8 @@ public class SpendServiceImpl implements ISpendService {
         pagination.setTotal(spendRepository.count());
         pagination.setLimit(limit);
         pagination.setOffset(offset);
-        return PagingDTO.<Spend>builder().pagination(pagination).list(list.getContent()).count(list.getNumberOfElements()).build();
+        return PagingDTO.<Spend>builder().pagination(pagination).list(list.getContent())
+                .count(list.getNumberOfElements()).build();
     }
 
     @Override
@@ -40,16 +46,28 @@ public class SpendServiceImpl implements ISpendService {
         // TODO Auto-generated method stub
         if (t.getId().equals(id)) {
             Spend s = spendRepository.findById(id).orElse(null);
-            if (s != null)
+            if (s != null) {
+                if (t.getMoney() != s.getMoney()) {
+                    // update Finance
+                    Finance finance = financeService.getFinanceOnDay(t.getDate());
+                    finance.setSpend((long) t.getMoney() - s.getMoney());
+                    financeService.update(finance, finance.getId());
+                }
                 return spendRepository.save(t);
+            }
         }
         return null;
     }
 
     @Override
     public void delete(String id) {
-        // TODO Auto-generated method stub
-        spendRepository.findById(id).ifPresent(tran -> spendRepository.delete(tran));
+        spendRepository.findById(id).ifPresent(tran -> {
+            //update span
+            Finance finance = financeService.getFinanceOnDay(tran.getDate());
+            finance.setSpend(0L - tran.getMoney());
+            financeService.update(finance, finance.getId());
+            spendRepository.delete(tran);
+        });
     }
 
     @Override
@@ -60,8 +78,16 @@ public class SpendServiceImpl implements ISpendService {
 
     @Override
     public PagingDTO<Spend> findSpendADay(String date, Integer limit, Integer offset) {
-        // TODO Auto-generated method stub
-        return null;
+        Pageable pageable = PageRequest.of(offset, limit);
+        Page<Spend> spends = spendRepository.getSpendByDate(date, pageable);
+
+        Pagination pagination = new Pagination();
+        pagination.setTotal(spendRepository.count());
+        pagination.setLimit(limit);
+        pagination.setOffset(offset);
+
+        return PagingDTO.<Spend>builder().pagination(pagination).list(spends.getContent())
+                .count(spends.getNumberOfElements()).build();
     }
 
 }

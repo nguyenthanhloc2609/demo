@@ -49,7 +49,8 @@ public class CustomerServiceImpl implements ICustomerService {
         pagination.setTotal(customerRepository.count());
         pagination.setLimit(limit);
         pagination.setOffset(offset);
-        return PagingDTO.<Customer>builder().pagination(pagination).list(list.getContent()).count(list.getNumberOfElements()).build();
+        return PagingDTO.<Customer>builder().pagination(pagination).list(list.getContent())
+                .count(list.getNumberOfElements()).build();
     }
 
     @Override
@@ -69,10 +70,28 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public List<Customer> searchByName(String name) {
-        // System.out.println("searchByName: "+name);
-        // TextQuery textQuery = TextQuery.queryText(new TextCriteria().matchingAny(name)).sortByScore();
-        // List<Customer> result = mongoTemplate.find(textQuery, Customer.class, "customer");
-        List<Customer> result = customerRepository.findByNameLike(name);
-        return result;
+        Pageable pageable = PageRequest.of(0, 999999);
+        Page<Customer> result = customerRepository.findByNameLike(name, pageable);
+        return result.getContent();
+    }
+
+    @Override
+    public PagingDTO<Customer> searchCustomer(String name, Integer type, Integer limit, Integer offset) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        Page<Customer> list;
+        if (type == 0){
+            list = customerRepository.findByNameLike(name, pageable);
+        } else {
+            list = customerRepository.searchCustomer(name, type == 2, pageable);
+
+        }
+
+        Pagination pagination = new Pagination();
+        pagination.setTotal(list.getTotalElements());
+        pagination.setLimit(limit);
+        pagination.setOffset(offset);
+
+        return PagingDTO.<Customer>builder().pagination(pagination).list(list.getContent())
+                .count(list.getNumberOfElements()).build();
     }
 }

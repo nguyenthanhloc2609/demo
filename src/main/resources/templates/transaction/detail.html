@@ -8,26 +8,11 @@
         var spendId = undefined;
 
         $("#head-title").html("Bảng thu chi trong ngày " + current_date)
-
+        loadFinance();
         getListProcedure();
         loadSpendList();
 
         initTransactionsList();
-
-        function getListCustomer() {
-            console.log("getListCustomer")
-            getRequest({
-                url: "/customer/list?limit=99999&offset=0",
-                success: function (data) {
-                    var listCustomer = data['list'];
-
-                    console.log(listCustomer);
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
-        }
 
         function getListProcedure() {
             console.log("getListProcedure")
@@ -61,7 +46,6 @@
                 url: "/transaction/getByDate?limit=" + limit + "&offset=" + offset + "&date=" + current_date,
                 success: function (data) {
                     onLoadedTransactionsList(data);
-                    // console.log(data);
                 },
                 error: function (e) {
                 }
@@ -70,7 +54,6 @@
 
         function onLoadedTransactionsList(data) {
             var paginData = data['pagination'] || {};
-            console.log(paginData);
             pagination.render('list-pagination', loadTransactionsList, {
                 count: data['count'],
                 limit: paginData['limit'],
@@ -140,6 +123,22 @@
             $('#tbody-spend').html(html);
         }
 
+        function loadFinance() {
+            getRequest({
+                url: "/dashboard/finance/date?date=" + current_date,
+                success: function (data) {
+                    console.log(data);
+                    // onLoadedSpendList(data);
+                    $('#earnMoney').val(data.income);
+                    $('#payMoney').val(data.spend);
+                    $('#profit').val(data.profit);
+
+                },
+                error: function (e) {
+                }
+            });
+        }
+
         document.getElementById("saveTran").addEventListener("click", createTransaction);
 
         $(document).on("click", ".edit-tran", editTransaction);
@@ -178,7 +177,6 @@
                 date
             }
             console.log(tranId);
-            // console.log("createTransaction ", body);
             if (!tranId) {
                 //createTransaction
 
@@ -187,25 +185,23 @@
                     data: body,
                     success: (data) => {
                         // console.log(data);
-                        $("#error-log").html("Thêm mới thành công!<br/>")
+                        // $("#error-log").html("Thêm mới thành công!<br/>")
                         $('#cusName').val('');
-                        $('#kt_select2_3_modal').val(null);
+                        $('#kt_select2_3_modal').val([]).trigger('change');
                         $('#diagnostic').val('');
                         $('#moneyPro').val('');
                         $('#medicine').val('');
                         $('#moneyMec').val('');
                         $('#pay').val('');
 
-                        $('#note1').val();
+                        $('#note1').val('');
                     },
                     error: (e) => {
                         console.log(e);
                         var error = e['error'];
                         if (error != null) {
                             let content = JSON.parse(error);
-                            // if (content['code'] === 702) {
                             $("#error-log").html(content['message'] + ".<br/>")
-                            // }
                         } else
                             $("#error-log").html("Lỗi hệ thống!<br/>")
 
@@ -227,9 +223,7 @@
                         var error = e['error'];
                         if (error != null) {
                             let content = JSON.parse(error);
-                            // if (content['code'] === 702) {
                             $("#error-log").html(content['message'] + ".<br/>")
-                            // }
                         } else
                             $("#error-log").html("Lỗi hệ thống!<br/>")
 
@@ -268,9 +262,7 @@
                         var error = e['error'];
                         if (error != null) {
                             let content = JSON.parse(error);
-                            // if (content['code'] === 702) {
                             $("#error-log").html(content['message'] + ".<br/>")
-                            // }
                         } else
                             $("#error-log").html("Lỗi hệ thống!<br/>")
 
@@ -306,7 +298,8 @@
             var tran = list_tran[index];
             console.log('editTransaction', tran)
             tranId = tran.id;
-            $('#cusName').val(tran.customerName);
+            $('#cusName').val(tran.customerName)
+            $("#cusName").prop('disabled', true);
             $('#kt_select2_3_modal').val(tran.listProcedure.split(' + '));
             $('#diagnostic').val(tran.diagnostic);
             $('#moneyPro').val(tran.proceMoney || 0);
@@ -364,8 +357,8 @@
 
         function deleteSpend() {
             var index = $(this).data('index');
-            var tran = list_tran[index];
-            console.log('deleteTransaction', tran)
+            var spend = list_spend[index];
+            console.log('deleteSpend', spend)
 
             Swal.fire({
                 title: 'Xóa thông tin này đi nhé',
@@ -375,9 +368,9 @@
                 cancelButtonText: 'Thôi không xóa nữa',
             }).then((result) => {
                 if (result.value) {
-                    console.log("deleting...");
+                    // console.log("deleting...");
                     deleteRequest({
-                        url: '/transaction/' + tran.id,
+                        url: '/spend/' + spend.id,
                         success: function (data) {
                             window.location = "/tran-a-day";
                         },

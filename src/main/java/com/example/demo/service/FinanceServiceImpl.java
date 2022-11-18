@@ -1,8 +1,16 @@
 package com.example.demo.service;
 
+import java.io.File;
+import java.util.List;
+
 import com.example.demo.dao.Finance;
+import com.example.demo.dao.Spend;
+import com.example.demo.dao.Transaction;
 import com.example.demo.dto.PagingDTO;
 import com.example.demo.repository.FinanceRepository;
+import com.example.demo.repository.SpendRepository;
+import com.example.demo.repository.TransactionRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +18,12 @@ import org.springframework.stereotype.Service;
 public class FinanceServiceImpl implements IFinanceService {
     @Autowired
     FinanceRepository financeRepository;
+
+    @Autowired
+    TransactionRepository transactionRepository;
+
+    @Autowired
+    SpendRepository spendRepository;
 
     @Override
     public Finance create(Finance finance) {
@@ -47,5 +61,16 @@ public class FinanceServiceImpl implements IFinanceService {
         if (finance == null)
             finance = create(new Finance(date));
         return finance;
+    }
+
+    @Override
+    public File exportExcel(String date) {
+        // get Transaction and Spend
+        List<Transaction> trans = transactionRepository.findTransactionInMonth(date.substring(3));
+
+        List<Spend> spends = spendRepository.findSpendInMonth(date.substring(3));
+
+        
+        return null;
     }
 }

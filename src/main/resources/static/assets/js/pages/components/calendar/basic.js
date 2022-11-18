@@ -20,7 +20,9 @@ var KTCalendarBasic = function () {
                     btnExcel: {
                         text: 'Xuất excel',
                         click: function () {
-                            alert('Loading...');
+                            var date = '01 '+ document.getElementsByClassName('fc-center')[0].innerText;
+                            console.log(formatDate(date));
+                            window.location = "/dashboard/excel?date="+date;
                         }
                     }
                 },
@@ -107,3 +109,9 @@ function formatDate(date) {
 
     return [day, month, year].join('/');
 }
+function getMonth(){
+    var date = $("#calendar").fullCalendar('getDate');
+    var month_int = date.getMonth();
+    console.log(month_int);
+    //you now have the visible month as an integer from 0-11
+  }

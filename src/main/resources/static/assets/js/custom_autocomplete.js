@@ -21,7 +21,7 @@ var KTTypeahead = function() {
             // `states` is an array of state names defined in "The Basics"
             // local: states
             remote: {
-                url: "customer/name?name=%QUERY",
+                url: "customers/name?name=%QUERY",
                 filter: function(data) {
                     // console.log(data)
                     return data;
