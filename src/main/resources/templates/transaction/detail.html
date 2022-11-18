@@ -3,12 +3,16 @@
         const pagination = new Pagination();
         var current_date = window.localStorage.getItem("date")
         var list_tran = [];
-        var edit_mode = undefined;
+        var list_spend = [];
+        var tranId = undefined;
+        var spendId = undefined;
+
         $("#head-title").html("Bảng thu chi trong ngày " + current_date)
 
         getListProcedure();
+        loadSpendList();
 
-        // getListCustomer();
+        initTransactionsList();
 
         function getListCustomer() {
             console.log("getListCustomer")
@@ -44,7 +48,6 @@
             });
         }
 
-        initTransactionsList();
 
         function initTransactionsList() {
             pagination.reset();
@@ -101,13 +104,53 @@
             $('#tbody-list').html(html);
         }
 
-        document.getElementById("saveTran").addEventListener("click", createTransaction);
+        function loadSpendList() {
+            var offset = 0;
+            var limit = 99999;
+            getRequest({
+                url: "/spend/getByDate?limit=" + limit + "&offset=" + offset + "&date=" + current_date,
+                success: function (data) {
+                    console.log(data);
+                    onLoadedSpendList(data);
+                },
+                error: function (e) {
+                }
+            });
+        }
 
-        // document.getElementById("edit-tran").addEventListener("click", editTransaction);
+        function onLoadedSpendList(data) {
+            list_spend = data['list'] || [];
+            var html = '';
+            for (var i = 1; i <= list_spend.length; i++) {
+                var item = list_spend[i - 1];
+                var countNumber = /*Number.parseInt(paginData['offset'] * paginData['limit'])*/ +i;
+                html += '<tr>'
+                    + '<td class="text-left">' + countNumber + '</td>'
+                    + '<td>' + item.name + '</td>'
+                    + '<td>' + item.detail + '</td>'
+                    + '<td>' + item.money + '</td>'
+                    + '<td>' + item.note + '</td>'
+                    + '<td>' + '<div style="text-align: center; vertical-align: middle;">' +
+                    '<button type="button" data-toggle="modal" class="btn btn-circle btn-icon edit-spend" style="margin-right: 0.5rem;"' +
+                    ' href="#kt_select2_modal" data-index="' + (i - 1) + '"><i class="flaticon-edit"></i></button>' +
+                    '<button type="button" class="btn btn-circle btn-icon delete-spend" data-index="' + (i - 1) + '" style="margin-left: 0.5rem"' +
+                    '  ><i class="flaticon-delete"></i></button></div>' + '</td>'
+                    + '</tr>';
+            }
+            $('#tbody-spend').html(html);
+        }
+
+        document.getElementById("saveTran").addEventListener("click", createTransaction);
 
         $(document).on("click", ".edit-tran", editTransaction);
 
         $(document).on("click", ".delete-tran", deleteTransaction);
+
+        document.getElementById("saveSpend").addEventListener("click", createSpend);
+
+        $(document).on("click", ".edit-spend", editSpend);
+
+        $(document).on("click", ".delete-spend", deleteSpend);
 
         function createTransaction() {
             var customerName = $('#cusName').val().trim();
@@ -134,9 +177,9 @@
                 note,
                 date
             }
-            console.log(edit_mode);
+            console.log(tranId);
             // console.log("createTransaction ", body);
-            if (!edit_mode) {
+            if (!tranId) {
                 //createTransaction
 
                 postRequest({
@@ -170,10 +213,10 @@
                 })
             } else {
                 //edit transaction
-                var id = edit_mode;
-                body.id = edit_mode;
+                var id = tranId;
+                body.id = tranId;
                 putRequest({
-                    url: '/transaction/' + edit_mode,
+                    url: '/transaction/' + tranId,
                     data: body,
                     success: function (data) {
                         window.location = "/tran-a-day";
@@ -196,11 +239,73 @@
 
         }
 
+        function createSpend() {
+            var name = $('#spend_name').val().trim();
+            var money = $('#spend_money').val().trim();
+            var detail = $('#spend_detail').val().trim();
+            var note = $('#spend_note').val().trim();
+            var date = current_date;
+
+            let body = {
+                name,
+                money,
+                detail,
+                note,
+                date
+            }
+            console.log(spendId);
+            if (!spendId) {
+                //createSpend
+                postRequest({
+                    url: "/spend",
+                    data: body,
+                    success: (data) => {
+                        // console.log(data);
+                        window.location = "/tran-a-day";
+                    },
+                    error: (e) => {
+                        console.log(e);
+                        var error = e['error'];
+                        if (error != null) {
+                            let content = JSON.parse(error);
+                            // if (content['code'] === 702) {
+                            $("#error-log").html(content['message'] + ".<br/>")
+                            // }
+                        } else
+                            $("#error-log").html("Lỗi hệ thống!<br/>")
+
+                    }
+                })
+            } else {
+                //edit spend
+                body.id = spendId;
+                putRequest({
+                    url: '/spend/' + spendId,
+                    data: body,
+                    success: function (data) {
+                        window.location = "/tran-a-day";
+                        $('#kt_modal_3').modal('hide');
+                    },
+                    error: function (e) {
+                        console.log(e);
+                        var error = e['error'];
+                        if (error != null) {
+                            let content = JSON.parse(error);
+                            $("#error-log").html(content['message'] + ".<br/>")
+                        } else
+                            $("#error-log").html("Lỗi hệ thống!<br/>")
+
+                    }
+                });
+            }
+
+        }
+
         function editTransaction() {
             var index = $(this).data('index');
             var tran = list_tran[index];
             console.log('editTransaction', tran)
-            edit_mode = tran.id;
+            tranId = tran.id;
             $('#cusName').val(tran.customerName);
             $('#kt_select2_3_modal').val(tran.listProcedure.split(' + '));
             $('#diagnostic').val(tran.diagnostic);
@@ -212,7 +317,52 @@
             $('#note1').val(tran.note);
         }
 
+        function editSpend() {
+            var index = $(this).data('index');
+            var spend = list_spend[index];
+            console.log('editSpend', spend)
+            spendId = spend.id;
+            $('#spend_name').val(spend.name);
+            $('#spend_money').val(spend.money);
+            $('#spend_detail').val(spend.detail);
+            $('#spend_note').val(spend.note || '');
+        }
+
         function deleteTransaction() {
+            var index = $(this).data('index');
+            var tran = list_tran[index];
+            console.log('deleteTransaction', tran)
+
+            Swal.fire({
+                title: 'Xóa thông tin này đi nhé',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Xóa đi',
+                cancelButtonText: 'Thôi không xóa nữa',
+            }).then((result) => {
+                if (result.value) {
+                    console.log("deleting...");
+                    deleteRequest({
+                        url: '/transaction/' + tran.id,
+                        success: function (data) {
+                            window.location = "/tran-a-day";
+                        },
+                        error: function (e) {
+                            console.log(e);
+                            var error = e['error'];
+                            if (error != null) {
+                                let content = JSON.parse(error);
+                                $("#error-log").html(content['message'] + ".<br/>")
+                            } else
+                                $("#error-log").html("Lỗi hệ thống!<br/>")
+
+                        }
+                    });
+                }
+            });
+        }
+
+        function deleteSpend() {
             var index = $(this).data('index');
             var tran = list_tran[index];
             console.log('deleteTransaction', tran)

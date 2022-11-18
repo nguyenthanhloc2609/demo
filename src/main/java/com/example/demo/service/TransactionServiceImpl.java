@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.Customer;
+import com.example.demo.dao.Finance;
 import com.example.demo.dao.Transaction;
 import com.example.demo.dto.Pagination;
 import com.example.demo.dto.PagingDTO;
@@ -27,10 +28,16 @@ public class TransactionServiceImpl implements ITransactionService {
     @Autowired
     ICustomerService customerService;
 
+    @Autowired
+    IFinanceService financeService;
+
     @Override
     public Transaction create(Transaction transaction) {
         createCustomer(transaction);
-
+        //update Finance
+        Finance finance = financeService.getFinanceOnDay(transaction.getDate());
+        finance.setIncome((long) transaction.getProceMoney() + transaction.getMedicineMoney());
+        financeService.update(finance, finance.getId());
         return transactionRepository.save(transaction);
     }
 
@@ -45,8 +52,13 @@ public class TransactionServiceImpl implements ITransactionService {
     public Transaction update(Transaction transaction, String id) {
         if (transaction.getId().equals(id)) {
             Transaction tran = transactionRepository.findById(id).orElse(null);
-            if (tran != null)
+            if (tran != null) {
+                //update Finance
+                Finance finance = financeService.getFinanceOnDay(transaction.getDate());
+                finance.setIncome(transaction.getMedicineMoney() + transaction.getProceMoney() - finance.getIncome());
                 return transactionRepository.save(transaction);
+            }
+
         }
 
 //        Query query = new Query();
@@ -82,24 +94,25 @@ public class TransactionServiceImpl implements ITransactionService {
 
     @Override
     public PagingDTO<Transaction> findTranADay(String date, Integer limit, Integer offset) {
-        Pageable pageable = PageRequest.of(offset, limit);
-        Page<Transaction> trans = transactionRepository.getTransactionByDate(date, pageable);
-
-        Pagination pagination = new Pagination();
-        pagination.setTotal(transactionRepository.count());
-        pagination.setLimit(limit);
-        pagination.setOffset(offset);
-
-        //demo
-//        List<Transaction> trans = new ArrayList<>();
-//        for (int i = 0; i < limit; i++)
-//            trans.add(Transaction.builder().build());
+//        Pageable pageable = PageRequest.of(offset, limit);
+//        Page<Transaction> trans = transactionRepository.getTransactionByDate(date, pageable);
 //
 //        Pagination pagination = new Pagination();
-//        pagination.setTotal(100);
+//        pagination.setTotal(transactionRepository.count());
 //        pagination.setLimit(limit);
 //        pagination.setOffset(offset);
-        return PagingDTO.<Transaction>builder().pagination(pagination).list(trans.getContent()).count(trans.getNumberOfElements()).build();
+
+        //demo
+        List<Transaction> trans = new ArrayList<>();
+        for (int i = 0; i < limit; i++)
+            trans.add(Transaction.builder().build());
+
+        Pagination pagination = new Pagination();
+        pagination.setTotal(100);
+        pagination.setLimit(limit);
+        pagination.setOffset(offset);
+//        return PagingDTO.<Transaction>builder().pagination(pagination).list(trans.getContent()).count(trans.getNumberOfElements()).build();
+        return PagingDTO.<Transaction>builder().pagination(pagination).list(trans).count(trans.size()).build();
 
     }
 

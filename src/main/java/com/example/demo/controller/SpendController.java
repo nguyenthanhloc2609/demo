@@ -25,7 +25,7 @@ public class SpendController {
     ISpendService spendService;
 
     @PostMapping("")
-    public ResponseEntity<?> create( @RequestBody Spend spend) {
+    public ResponseEntity<?> create(@RequestBody Spend spend) {
         Spend sp = spendService.create(spend);
         if (sp == null)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -42,12 +42,16 @@ public class SpendController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> updateSpend(@PathVariable String id, @RequestBody Spend spend){
-        return null;
+    public ResponseEntity<?> updateSpend(@PathVariable String id, @RequestBody Spend spend) {
+        Spend updated = spendService.update(spend, id);
+        if (updated != null)
+            return ResponseEntity.ok(spend);
+        else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getById(@PathVariable String id){
+    public ResponseEntity<?> getById(@PathVariable String id) {
         Spend spen = spendService.retrieve(id);
         if (spen == null)
             return ResponseEntity.notFound().build();
@@ -55,10 +59,8 @@ public class SpendController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteById(@PathVariable String id){
-        Spend spen = spendService.retrieve(id);
-        if (spen == null)
-            return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(spen);
+    public ResponseEntity<?> deleteById(@PathVariable String id) {
+        spendService.delete(id);
+        return ResponseEntity.ok("Delete successfully");
     }
 }

@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.Spend;
+import com.example.demo.dao.Transaction;
 import com.example.demo.dto.PagingDTO;
 import com.example.demo.repository.SpendRepository;
 import com.example.demo.dto.Pagination;
@@ -37,13 +38,18 @@ public class SpendServiceImpl implements ISpendService {
     @Override
     public Spend update(Spend t, String id) {
         // TODO Auto-generated method stub
+        if (t.getId().equals(id)) {
+            Spend s = spendRepository.findById(id).orElse(null);
+            if (s != null)
+                return spendRepository.save(t);
+        }
         return null;
     }
 
     @Override
     public void delete(String id) {
         // TODO Auto-generated method stub
-        
+        spendRepository.findById(id).ifPresent(tran -> spendRepository.delete(tran));
     }
 
     @Override
@@ -57,5 +63,5 @@ public class SpendServiceImpl implements ISpendService {
         // TODO Auto-generated method stub
         return null;
     }
-    
+
 }
