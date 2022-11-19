@@ -35,7 +35,7 @@ public class CustomerController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> edit(@RequestBody Customer customer, @PathVariable String id) {
-        Customer cu = customerService.create(customer);
+        Customer cu = customerService.update(customer, id);
         if (cu != null)
             return ResponseEntity.ok(cu);
         else

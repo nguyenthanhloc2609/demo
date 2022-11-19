@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.Customer;
+import com.example.demo.dao.Transaction;
 import com.example.demo.dto.PagingDTO;
 import com.example.demo.dto.Pagination;
 import com.example.demo.repository.CustomerRepository;
+import com.example.demo.repository.TransactionRepository;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -14,8 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.TextCriteria;
-import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,6 +27,9 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Autowired
     MongoTemplate mongoTemplate;
+
+    @Autowired
+    TransactionRepository transactionRepository;
 
     Logger logger = Logger.getLogger(CustomerServiceImpl.class.getName());
 
@@ -55,6 +58,15 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public Customer update(Customer customer, String id) {
+        if (id.equals(customer.getId())) {
+            Customer cus = customerRepository.findById(id).orElse(null);
+            if (cus != null) {
+                if (!cus.getName().equals(customer.getName()))
+                    updateCustomerName(cus.getName(), customer.getName());
+
+                customerRepository.save(customer);
+            }
+        }
         return null;
     }
 
@@ -79,7 +91,7 @@ public class CustomerServiceImpl implements ICustomerService {
     public PagingDTO<Customer> searchCustomer(String name, Integer type, Integer limit, Integer offset) {
         Pageable pageable = PageRequest.of(offset, limit);
         Page<Customer> list;
-        if (type == 0){
+        if (type == 0) {
             list = customerRepository.findByNameLike(name, pageable);
         } else {
             list = customerRepository.searchCustomer(name, type == 2, pageable);
@@ -93,5 +105,12 @@ public class CustomerServiceImpl implements ICustomerService {
 
         return PagingDTO.<Customer>builder().pagination(pagination).list(list.getContent())
                 .count(list.getNumberOfElements()).build();
+    }
+
+    public void updateCustomerName(String name, String update) {
+        List<Transaction> trans = transactionRepository.findByCustomerName(name);
+
+        trans.forEach(tran -> tran.setCustomerName(update));
+        transactionRepository.saveAll(trans);
     }
 }

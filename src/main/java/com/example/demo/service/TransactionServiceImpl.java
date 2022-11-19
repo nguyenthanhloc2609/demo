@@ -12,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,14 +29,13 @@ public class TransactionServiceImpl implements ITransactionService {
     @Autowired
     IFinanceService financeService;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
     @Override
     public Transaction create(Transaction transaction) {
         createCustomer(transaction);
         // update Finance
         Finance finance = financeService.getFinanceOnDay(transaction.getDate());
         finance.setIncome((long) transaction.getProceMoney() + transaction.getMedicineMoney());
+        finance.setCountTran(1);
         financeService.update(finance, finance.getId());
         return transactionRepository.save(transaction);
     }
@@ -78,6 +75,7 @@ public class TransactionServiceImpl implements ITransactionService {
         // update Finance
         Finance finance = financeService.getFinanceOnDay(tran.getDate());
         finance.setIncome((0L - tran.getMedicineMoney() - tran.getProceMoney()));
+        finance.setCountTran(-1);
         financeService.update(finance, finance.getId());
             transactionRepository.delete(tran);
         });
@@ -149,4 +147,5 @@ public class TransactionServiceImpl implements ITransactionService {
             customerService.update(c, c.getId());
         }
     }
+
 }

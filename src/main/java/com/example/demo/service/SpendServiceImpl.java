@@ -25,6 +25,7 @@ public class SpendServiceImpl implements ISpendService {
     public Spend create(Spend t) {
         Finance finance = financeService.getFinanceOnDay(t.getDate());
         finance.setSpend((long) t.getMoney());
+        finance.setCountSpend(1);
         financeService.update(finance, finance.getId());
         return spendRepository.save(t);
     }
@@ -65,6 +66,7 @@ public class SpendServiceImpl implements ISpendService {
             //update span
             Finance finance = financeService.getFinanceOnDay(tran.getDate());
             finance.setSpend(0L - tran.getMoney());
+            finance.setCountSpend(-1);
             financeService.update(finance, finance.getId());
             spendRepository.delete(tran);
         });

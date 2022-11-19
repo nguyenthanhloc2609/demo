@@ -11,11 +11,35 @@ public class Finance {
     String date;
     Long income;
     Long spend;
+    Integer countTran;
+    Integer countSpend;
 
     public Finance(String date) {
         this.date = date;
         this.income = 0L;
         this.spend = 0L;
+        this.countSpend = 0;
+        this.countTran = 0;
+    }
+
+    public Integer getCountSpend() {
+        return countSpend;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public Integer getCountTran() {
+        return countTran;
+    }
+
+    public void setCountSpend(Integer countSpend) {
+        this.countSpend += countSpend;
+    }
+
+    public void setCountTran(Integer countTran) {
+        this.countTran += countTran;
     }
 
     public String getId() {

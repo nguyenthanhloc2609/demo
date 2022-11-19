@@ -11,6 +11,9 @@ import org.springframework.data.mongodb.repository.Query;
 public interface TransactionRepository extends MongoRepository<Transaction, String> {
     Page<Transaction> getTransactionByDate(String date, Pageable pageable);
 
-    @Query("{'date':{'$regex':'?0$'}}")
-    List<Transaction> findTransactionInMonth(String month);
+    // @Query("{'date':{'$regex':'?0$'}}")
+    // List<Transaction> findTransactionInMonth(String month);
+    List<Transaction> getTransactionByDateEndingWithOrderByDateAsc(String date);
+
+    List<Transaction> findByCustomerName(String customerName);
 }
