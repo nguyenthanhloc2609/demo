@@ -335,8 +335,6 @@ public class FinanceServiceImpl implements IFinanceService {
                                     .setCellValue(String.format("%,d", spends.get(i).getMoney()).replace(",", "."));
                             spendTotal += spends.get(i).getMoney();
                             r.createCell(col++).setCellValue(trans.get(i).getNote());
-                            proMoney += trans.get(i).getProceMoney();
-                            mecMoney += trans.get(i).getMedicineMoney();
                         }
 
                         Row rSpendTotal = sheet.createRow(row);
