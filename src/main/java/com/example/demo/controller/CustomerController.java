@@ -39,7 +39,7 @@ public class CustomerController {
         if (cu != null)
             return ResponseEntity.ok(cu);
         else
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Khách hàng đã tồn tại");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Lỗi update");
     }
 
     @GetMapping("/list")

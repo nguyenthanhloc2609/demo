@@ -65,6 +65,8 @@
 
             for (var i = 1; i <= list_tran.length; i++) {
                 var item = list_tran[i - 1];
+                let proceMoney = item.proceMoney.toLocaleString().replaceAll(',', '.');
+                let mecMoney = item.medicineMoney.toLocaleString().replaceAll(',', '.');
                 var countNumber = Number.parseInt(paginData['offset'] * paginData['limit']) + i;
                 html += '<tr>'
                     + '<td class="text-left">' + countNumber + '</td>'
@@ -72,8 +74,8 @@
                     + '<td>' + item.diagnostic + '</td>'
                     + '<td>' + item.listProcedure + '</td>'
                     + '<td>' + item.medicine + '</td>'
-                    + '<td>' + item.proceMoney + '</td>'
-                    + '<td>' + item.medicineMoney + '</td>'
+                    + '<td>' + proceMoney + '</td>'
+                    + '<td>' + mecMoney + '</td>'
                     + '<td>' + item.prepaid + '</td>'
                     + '<td>' + item.debt + '</td>'
                     + '<td>' + item.note + '</td>'
@@ -129,9 +131,12 @@
                 success: function (data) {
                     console.log(data);
                     // onLoadedSpendList(data);
-                    $('#earnMoney').val(data.income);
-                    $('#payMoney').val(data.spend);
-                    $('#profit').val(data.profit);
+                    var mEarn = data.income.toLocaleString().replaceAll(',', '.');
+                    var mPay = data.spend.toLocaleString().replaceAll(',', '.');
+                    var mProfit = data.profit.toLocaleString().replaceAll(',', '.');
+                    $('#earnMoney').val(mEarn);
+                    $('#payMoney').val(mPay);
+                    $('#profit').val(mProfit);
 
                 },
                 error: function (e) {

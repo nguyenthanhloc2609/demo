@@ -18,11 +18,13 @@ public class Customer {
     String name;
     String billing;
     String note;
+    String diag;
     Boolean isDebtor;
 
     public Customer(String name, String billing, Boolean debtor) {
         this.name = name;
         this.billing = billing;
         this.isDebtor = debtor;
+        this.note = "";
     }
 }

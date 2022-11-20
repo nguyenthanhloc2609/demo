@@ -98,24 +98,13 @@ public class TransactionServiceImpl implements ITransactionService {
         Page<Transaction> trans = transactionRepository.getTransactionByDate(date, pageable);
 
         Pagination pagination = new Pagination();
-        pagination.setTotal(transactionRepository.count());
+        pagination.setTotal(transactionRepository.countTransactionByDate(date));
         pagination.setLimit(limit);
         pagination.setOffset(offset);
 
-        // demo
-        // List<Transaction> trans = new ArrayList<>();
-        // for (int i = 0; i < limit; i++)
-        // trans.add(Transaction.builder().build());
 
-        // Pagination pagination = new Pagination();
-        // pagination.setTotal(100);
-        // pagination.setLimit(limit);
-        // pagination.setOffset(offset);
         return PagingDTO.<Transaction>builder().pagination(pagination).list(trans.getContent())
                 .count(trans.getNumberOfElements()).build();
-        // return
-        // PagingDTO.<Transaction>builder().pagination(pagination).list(trans).count(trans.size()).build();
-
     }
 
     private void createCustomer(Transaction transaction) {
@@ -126,24 +115,25 @@ public class TransactionServiceImpl implements ITransactionService {
         Customer c;
         if (!cusName.contains(transaction.getCustomerName())) {
 
-            if (pre != null && pre.length() > 0) {
-                c = new Customer(transaction.getCustomerName(), pre, false);
-            } else {
+            if (post != null && post.length() > 0) {
                 c = new Customer(transaction.getCustomerName(), post, true);
+            } else {
+                c = new Customer(transaction.getCustomerName(), pre, false);
             }
-            // c.setNote("Ngày điều trị trước đó: " + transaction.getDate());
+            c.setDiag(transaction.getDiagnostic());
             customerRepository.save(c);
         } else {
             c = customers.get(cusName.indexOf(transaction.getCustomerName()));
             // update thong tin benh nhan
-            if (pre != null && pre.length() > 0) {
-                c.setBilling(pre);
-                c.setIsDebtor(false);
-            } else {
+            if (post != null && post.length() > 0) {
                 c.setBilling(post);
                 c.setIsDebtor(true);
+            } else {
+
+                c.setBilling(pre);
+                c.setIsDebtor(false);
             }
-            // c.setNote("Ngày điều trị trước đó: " + transaction.getDate());
+            c.setDiag(transaction.getDiagnostic());
             customerService.update(c, c.getId());
         }
     }

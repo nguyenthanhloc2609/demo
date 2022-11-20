@@ -11,6 +11,7 @@ import com.example.demo.service.IFinanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,18 +34,21 @@ public class DashboardController {
     @GetMapping("/excel")
     public ResponseEntity<?> exportExcel(@RequestParam String date, HttpServletResponse response) throws Exception {
         File excel = financeService.exportExcel(date);
+        if (excel != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Disposition",
+                    "attachment; filename=" + excel.getName().substring(0, 10) + ".xlsx");
+            response.addHeader("Content-Disposition",
+                    "attachment; filename=" + excel.getName().substring(0, 10) + ".xlsx");
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(excel));
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Disposition",
-                "attachment; filename=" + excel.getName().substring(0, 10) + ".xlsx");
-        response.addHeader("Content-Disposition",
-                "attachment; filename=" + excel.getName().substring(0, 10) + ".xlsx");
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(excel));
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(excel.length())
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+        } else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(excel.length())
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(resource);
     }
 }

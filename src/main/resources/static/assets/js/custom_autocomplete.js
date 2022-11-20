@@ -45,7 +45,9 @@ var KTTypeahead = function() {
             $('#cusName').typeahead('val', datum.name);
             $('#pay').val(datum.billing);
             $('#note1').val(datum.note);
-            // console.log($('#hidden-input').val());
+            $('#diagnostic').val(datum.diag);
+
+            console.log(datum);
         });
     }
 

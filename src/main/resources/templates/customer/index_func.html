@@ -18,7 +18,7 @@
             getRequest({
                 url: "/customers/list?limit=" + limit + "&offset=" + offset,
                 success: function (data) {
-                    onLoadedCustomersList(data)
+                    onLoadedCustomersList(data, getListCustomer)
                 },
                 error: function (e) {
                     console.log(e);
@@ -26,9 +26,9 @@
             });
         }
 
-        function onLoadedCustomersList(data) {
+        function onLoadedCustomersList(data, func) {
             var paginData = data['pagination'] || {};
-            pagination.render('list-pagination', getListCustomer, {
+            pagination.render('list-pagination', func, {
                 count: data['count'],
                 limit: paginData['limit'],
                 total: paginData['total'],
@@ -56,7 +56,7 @@
             $('#tbody-list').html(html);
         }
 
-        document.getElementById("searchCus").addEventListener("click", searchCustomer);
+        document.getElementById("searchCus").addEventListener("click", initSearchCustomer);
 
         document.getElementById("saveCustomer").addEventListener("click", createCustomer);
 
@@ -66,17 +66,14 @@
             var name = $('#cusName').val().trim();
             var billing = $('#cusBilling').val().trim();
             var note = $('#cusNote').val().trim();
-            var date = current_date;
-            var isDebtor = billing.contains('N') ? true : false;
+            var isDebtor = billing.includes('N') ? true : false;
 
             let body = {
                 name,
                 billing,
                 isDebtor,
-                note,
-                date
+                note
             }
-            // console.log(cusId);
             if (!cusId) {
                 //createCustomer
                 postRequest({
@@ -109,6 +106,7 @@
                     },
                     error: function (e) {
                         console.log(e);
+                        $('#kt_modal_3').modal('hide');
                         var error = e['error'];
                         if (error != null) {
                             let content = JSON.parse(error);
@@ -122,6 +120,11 @@
 
         }
 
+        function initSearchCustomer(){
+            pagination.reset();
+            searchCustomer();
+        }
+
         function searchCustomer() {
             var name = $('#name').val();
             var type = $("#cb_payment").val();
@@ -132,7 +135,7 @@
             getRequest({
                 url: "/customers/search?limit=" + limit + "&offset=" + offset + "&name=" + name + "&type=" + type,
                 success: function (data) {
-                    onLoadedCustomersList(data)
+                    onLoadedCustomersList(data, searchCustomer)
                 },
                 error: function (e) {
                     console.log(e);

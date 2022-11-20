@@ -64,7 +64,7 @@ public class CustomerServiceImpl implements ICustomerService {
                 if (!cus.getName().equals(customer.getName()))
                     updateCustomerName(cus.getName(), customer.getName());
 
-                customerRepository.save(customer);
+                return customerRepository.save(customer);
             }
         }
         return null;

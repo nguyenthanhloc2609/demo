@@ -84,7 +84,7 @@ public class SpendServiceImpl implements ISpendService {
         Page<Spend> spends = spendRepository.getSpendByDate(date, pageable);
 
         Pagination pagination = new Pagination();
-        pagination.setTotal(spendRepository.count());
+        pagination.setTotal(spendRepository.countSpendByDate(date));
         pagination.setLimit(limit);
         pagination.setOffset(offset);
 

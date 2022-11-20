@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.repository.Query;
 
 public interface TransactionRepository extends MongoRepository<Transaction, String> {
     Page<Transaction> getTransactionByDate(String date, Pageable pageable);
+    
+    Long countTransactionByDate(String date);
 
     // @Query("{'date':{'$regex':'?0$'}}")
     // List<Transaction> findTransactionInMonth(String month);
