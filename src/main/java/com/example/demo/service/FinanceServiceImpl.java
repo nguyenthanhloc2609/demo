@@ -325,7 +325,7 @@ public class FinanceServiceImpl implements IFinanceService {
 
                         int spendTotal = 0;
                         int sRow = ++row;
-                        for (int i = indexSpend.get(tmp - 1); i < indexSpend.get(tmp) + fin.getCountSpend(); i++) {
+                        for (int i = indexSpend.get(tmp - 1); i < indexSpend.get(tmp); i++) {
                             Row r = sheet.createRow(row++);
                             col = 0;
                             r.createCell(col++).setCellValue(i + 1 - indexSpend.get(tmp - 1));

@@ -108,12 +108,13 @@
             var html = '';
             for (var i = 1; i <= list_spend.length; i++) {
                 var item = list_spend[i - 1];
+                var mon = item.money.toLocaleString().replaceAll(',', '.');
                 var countNumber = /*Number.parseInt(paginData['offset'] * paginData['limit'])*/ +i;
                 html += '<tr>'
                     + '<td class="text-left">' + countNumber + '</td>'
                     + '<td>' + item.name + '</td>'
                     + '<td>' + item.detail + '</td>'
-                    + '<td>' + item.money + '</td>'
+                    + '<td>' + mon + '</td>'
                     + '<td>' + item.note + '</td>'
                     + '<td>' + '<div style="text-align: center; vertical-align: middle;">' +
                     '<button type="button" data-toggle="modal" class="btn btn-circle btn-icon edit-spend" style="margin-right: 0.5rem;"' +
