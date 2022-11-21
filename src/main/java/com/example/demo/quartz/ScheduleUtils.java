@@ -3,11 +3,15 @@ package com.example.demo.quartz;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 
 public class ScheduleUtils {
 
     public static void startJobDaily() {
+        Logger.getLogger(ScheduleUtils.class.getName()).log(Level.INFO, "create JobDaily");
         SchedulerFactory schedFact = new StdSchedulerFactory();
         try {
             Scheduler sched = schedFact.getScheduler();
@@ -29,6 +33,7 @@ public class ScheduleUtils {
     }
 
     public static void startJobYear() {
+        Logger.getLogger(ScheduleUtils.class.getName()).log(Level.INFO, "create Job on first day of year");
         SchedulerFactory schedFact = new StdSchedulerFactory();
         try {
             Scheduler sched = schedFact.getScheduler();
