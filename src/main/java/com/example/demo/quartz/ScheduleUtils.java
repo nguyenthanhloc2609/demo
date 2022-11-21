@@ -40,7 +40,7 @@ public class ScheduleUtils {
 
             JobDataMap jobDataMap = new JobDataMap();
             jobDataMap.put("type", "year");
-            JobDetail job = JobBuilder.newJob(CreateFinanceJob.class).withIdentity("createDay", "finance")
+            JobDetail job = JobBuilder.newJob(CreateFinanceJob.class).withIdentity("createYear", "finance")
                     .usingJobData(jobDataMap).build();
 
             Trigger trigger = TriggerBuilder.newTrigger().withIdentity("createYear", "finance").startNow()
