@@ -19,7 +19,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <head>
     <base href="../../">
     <meta charset="utf-8"/>
-    <title>Giao dịch trong ngày</title>
+    <title>Lượt khám trong ngày</title>
     <meta name="description" content="Basic calendar examples">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -85,7 +85,8 @@ License: You must have a valid license purchased only from themeforest(the above
             top: 50%;
             transform: translateY(-50%);
         }
-        .twitter-typeahead{
+
+        .twitter-typeahead {
             display: block !important;
         }
     </style>
@@ -94,8 +95,24 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- end::Head -->
 
 <!-- begin::Body -->
+<body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading">
 
-<body class="kt-aside--enabled kt-aside--fixed kt-page--loading">
+<!-- begin:: Page -->
+
+<!-- begin:: Header Mobile -->
+<div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
+    <div class="kt-header-mobile__logo">
+        <a href="index.html">
+            <img alt="Logo" src="assets/media/logos/logo-light.png"/>
+        </a>
+    </div>
+    <div class="kt-header-mobile__toolbar">
+        <button class="kt-header-mobile__toggler kt-header-mobile__toggler--left" id="kt_aside_mobile_toggler">
+            <span></span></button>
+    </div>
+</div>
+
+<!-- end:: Header Mobile -->
 <!-- begin:: Page -->
 
 <div class="kt-grid kt-grid--hor kt-grid--root full-height">
@@ -121,19 +138,37 @@ License: You must have a valid license purchased only from themeforest(the above
                                     Bảng thu chi trong ngày
                                 </h3>
                             </div>
-                            <div class="row kt-portlet__head--right vertical-center" style="width:70%; justify-content: right">
-                                <label class="col-sm-1 text-center"><b>Thu</b></label>
-                                <input readonly id="earnMoney" class="col-sm-2" style="color:green;" value="0">
-
-                                <label  class="col-sm-1 text-center"><b>Chi</b></label>
-                                <input readonly id="payMoney" class="col-sm-2" value="0" style="color:orange;">
-
-                                <label  class="col-sm-1 text-center" ><b>Tồn quỹ</b></label>
-                                <input readonly id="profit" class="col-sm-2" value="0" style="color:blue;">
+                            <div class="form-group row kt-portlet__head--right">
+                                <div class="col-sm-12">
+                                    <div class='input-group'>
+                                        <input type="text" class="form-control" name="date" placeholder="Chọn ngày đê"
+                                               id='kt_datepicker'/>
+                                        <div class="input-group-append">
+														<span class="input-group-text">
+															<i class="la la-calendar-check-o"></i>
+														</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
                         <div id="error-log"></div>
+                        <div class="row text-center">
+                            <div class="col-sm-4">
+                                <label for="earnMoney" class="text-center"><b>Thu</b></label>
+                                <input readonly id="earnMoney" class="col-sm-5" style="color:green;" value="0">
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="payMoney" class="text-center"><b>Chi</b></label>
+                                <input readonly id="payMoney" class="col-sm-5" value="0" style="color:orange;">
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="profit" class="text-center"><b>Tồn quỹ</b></label>
+                                <input readonly id="profit" class="col-sm-5" value="0" style="color:blue;">
+                            </div>
+
+                        </div>
                         <div class="kt-portlet__body body1">
                             <div class="kt-section body1">
                                 <div class="kt-section__content body1">
@@ -169,8 +204,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 <th style="text-align: center; vertical-align: middle; width: 10%;"
 
                                                     class="text-center" rowspan="2">
-                                                    <button type="button" class="btn btn-success btn-circle btn-icon" data-toggle="modal"
-                                                            data-target="#kt_select2_modal" data-backdrop="static" data-keyboard="false">
+                                                    <button type="button" class="btn btn-success btn-circle btn-icon"
+                                                            data-toggle="modal"
+                                                            data-target="#kt_select2_modal" data-backdrop="static"
+                                                            data-keyboard="false">
                                                         <i class="flaticon2-plus"></i>
                                                     </button>
                                                 </th>
@@ -218,8 +255,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 </th>
                                                 <th style="text-align: center; vertical-align: middle; width: 10%;"
                                                     class="text-center">
-                                                    <button type="button" class="btn btn-warning  btn-circle btn-icon" data-toggle="modal"
-                                                            data-target="#kt_modal_3" data-backdrop="static" 
+                                                    <button type="button" class="btn btn-warning  btn-circle btn-icon"
+                                                            data-toggle="modal"
+                                                            data-target="#kt_modal_3" data-backdrop="static"
                                                             data-keyboard="false"><i class="flaticon2-plus"></i>
                                                     </button>
                                                 </th>
@@ -253,8 +291,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <div class="col-lg-6">
                                     <label>Tên bệnh nhân</label>
                                     <div class="typeahead">
-                                    <input type="text" class="form-control" dir="ltr"
-                                           placeholder="Nhập họ và tên bệnh nhân" id="cusName">
+                                        <input type="text" class="form-control" dir="ltr"
+                                               placeholder="Nhập họ và tên bệnh nhân" id="cusName">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -291,12 +329,16 @@ License: You must have a valid license purchased only from themeforest(the above
                             </div>
                             <div class="row col-lg-12">
                                 <label>Ghi chú</label>
-                                <textarea class="form-control" rows="3" id = "note1"></textarea>
+                                <textarea class="form-control" rows="3" id="note1"></textarea>
                             </div>
+                            <input type="checkbox" id="cb_tran" name="cb_tran" value="0">
+                            <label for="cb_tran">Thêm nhiều dữ liệu</label><br>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"  data-dismiss="modal" onclick="window.location = '/tran-a-day'">Đóng</button>
-                            <button type="button" class="btn btn-primary" id = "saveTran">Lưu thông tin</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                    onclick="window.location = '/tran-a-day'">Đóng
+                            </button>
+                            <button type="button" class="btn btn-primary" id="saveTran">Lưu thông tin</button>
                         </div>
                     </div>
                 </div>
@@ -336,7 +378,9 @@ License: You must have a valid license purchased only from themeforest(the above
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="window.location = '/tran-a-day'">Đóng</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                    onclick="window.location = '/tran-a-day'">Đóng
+                            </button>
                             <button type="button" class="btn btn-primary" id="saveSpend">Lưu thông tin</button>
                         </div>
                     </div>
@@ -404,6 +448,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="assets/js/pages/crud/datatables/basic/paginations.js" type="text/javascript"></script>
 <script src="assets/js/common.js" type="text/javascript"></script>
 <script src="assets/js/custom_autocomplete.js" type="text/javascript"></script>
+<script src="assets/js/pages/crud/forms/validation/form-widgets.js" type="text/javascript"></script>
 
 <!--end::Page Scripts -->
 </body>

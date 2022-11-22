@@ -95,7 +95,7 @@
             getRequest({
                 url: "/spend/getByDate?limit=" + limit + "&offset=" + offset + "&date=" + current_date,
                 success: function (data) {
-                    console.log(data);
+                    // console.log(data);
                     onLoadedSpendList(data);
                 },
                 error: function (e) {
@@ -182,10 +182,9 @@
                 note,
                 date
             }
-            console.log(tranId);
+            // console.log(tranId);
             if (!tranId) {
                 //createTransaction
-
                 postRequest({
                     url: "/transaction",
                     data: body,
@@ -215,7 +214,6 @@
                 })
             } else {
                 //edit transaction
-                var id = tranId;
                 body.id = tranId;
                 putRequest({
                     url: '/transaction/' + tranId,
@@ -374,7 +372,6 @@
                 cancelButtonText: 'Thôi không xóa nữa',
             }).then((result) => {
                 if (result.value) {
-                    // console.log("deleting...");
                     deleteRequest({
                         url: '/spend/' + spend.id,
                         success: function (data) {
