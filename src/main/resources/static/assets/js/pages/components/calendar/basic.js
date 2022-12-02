@@ -109,9 +109,9 @@ function formatDate(date) {
 
     return [day, month, year].join('/');
 }
-function getMonth() {
-    var date = $("#calendar").fullCalendar('getDate');
-    var month_int = date.getMonth();
-    console.log(month_int);
-    //you now have the visible month as an integer from 0-11
-}
+// function getMonth() {
+//     var date = $("#calendar").fullCalendar('getDate');
+//     var month_int = date.getMonth();
+//     console.log(month_int);
+//     //you now have the visible month as an integer from 0-11
+// }

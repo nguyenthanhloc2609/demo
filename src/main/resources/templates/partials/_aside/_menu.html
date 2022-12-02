@@ -1,8 +1,25 @@
+<script src="assets/plugins/global/plugins.bundle.js" type="text/javascript"></script>
+<script src="assets/js/scripts.bundle.js" type="text/javascript">
+</script>
 <script>
 	var todayDate = moment().startOf('day');
-	// window.location = ''
-	window.localStorage.setItem("date", formatDate(dates.start));
+	window.localStorage.setItem("date", formatDate(todayDate));
+
+	function formatDate(date) {
+		var d = new Date(date),
+				month = '' + (d.getMonth() + 1),
+				day = '' + d.getDate(),
+				year = d.getFullYear();
+
+		if (month.length < 2)
+			month = '0' + month;
+		if (day.length < 2)
+			day = '0' + day;
+
+		return [day, month, year].join('/');
+	}
 </script>
+
 <!-- begin:: Aside Menu -->
 <div class="kt-aside-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_aside_menu_wrapper">
 	<div id="kt_aside_menu" class="kt-aside-menu " data-ktmenu-vertical="1" data-ktmenu-scroll="1" data-ktmenu-dropdown-timeout="500">
