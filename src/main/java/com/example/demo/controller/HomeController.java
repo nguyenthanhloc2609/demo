@@ -26,4 +26,14 @@ public class HomeController {
     public String listCustomer(Model model) {
         return "customer/index";
     }
+
+    @RequestMapping(value = "/add-customer", method = RequestMethod.GET)
+    public String addCustomer(Model model) {
+        return "customer/add-customer/index";
+    }
+
+    @RequestMapping(value = "/procedure", method = RequestMethod.GET)
+    public String listProcedure(Model model) {
+        return "procedure/index";
+    }
 }
