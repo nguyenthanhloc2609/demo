@@ -41,4 +41,9 @@ public class HomeController {
     public String addTransaction(Model model) {
         return "transaction/create/index";
     }
+
+    @RequestMapping(value = "/excel", method = RequestMethod.GET)
+    public String exportExcel(Model model) {
+        return "export/index";
+    }
 }

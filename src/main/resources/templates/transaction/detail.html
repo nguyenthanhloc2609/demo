@@ -145,7 +145,11 @@
             });
         }
 
-        document.getElementById("saveTran").addEventListener("click", createTransaction);
+        document.getElementById('btnAddTran').onclick = function (){
+            location.href = "/add-tran"
+        }
+
+        // document.getElementById("saveTran").addEventListener("click", createTransaction);
 
         $(document).on("click", ".edit-tran", editTransaction);
 
@@ -157,85 +161,85 @@
 
         $(document).on("click", ".delete-spend", deleteSpend);
 
-        function createTransaction() {
-            var customerName = $('#cusName').val().trim();
-            var listProcedure = $('#kt_select2_3_modal').val().join(" + ");
-            var diagnostic = $('#diagnostic').val().trim();
-            var proceMoney = $('#moneyPro').val() ? $('#moneyPro').val().trim() : 0;
-            var medicine = $('#medicine').val().trim();
-            var medicineMoney = $('#moneyMec').val() ? $('#moneyMec').val().trim() : 0;
-            var pay = $('#pay').val().trim();
-            var prepaid = pay.includes("/") ? pay : '';
-            var debt = pay.includes("N") ? pay : '';
-            var note = $('#note1').val().trim();
-            var date = current_date;
-
-            let body = {
-                customerName,
-                listProcedure,
-                diagnostic,
-                proceMoney,
-                medicine,
-                medicineMoney,
-                prepaid,
-                debt,
-                note,
-                date
-            }
-            // console.log(tranId);
-            if (!tranId) {
-                //createTransaction
-                postRequest({
-                    url: "/transaction",
-                    data: body,
-                    success: (data) => {
-                        // console.log(data);
-                        // $("#error-log").html("Thêm mới thành công!<br/>")
-                        $('#cusName').val('');
-                        $('#kt_select2_3_modal').val([]).trigger('change');
-                        $('#diagnostic').val('');
-                        $('#moneyPro').val('');
-                        $('#medicine').val('');
-                        $('#moneyMec').val('');
-                        $('#pay').val('');
-
-                        $('#note1').val('');
-                    },
-                    error: (e) => {
-                        console.log(e);
-                        var error = e['error'];
-                        if (error != null) {
-                            let content = JSON.parse(error);
-                            $("#error-log").html(content['message'] + ".<br/>")
-                        } else
-                            $("#error-log").html("Lỗi hệ thống!<br/>")
-
-                    }
-                })
-            } else {
-                //edit transaction
-                body.id = tranId;
-                putRequest({
-                    url: '/transaction/' + tranId,
-                    data: body,
-                    success: function (data) {
-                        window.location = "/tran-a-day";
-                        $('#kt_select2_modal').modal('hide');
-                    },
-                    error: function (e) {
-                        console.log(e);
-                        var error = e['error'];
-                        if (error != null) {
-                            let content = JSON.parse(error);
-                            $("#error-log").html(content['message'] + ".<br/>")
-                        } else
-                            $("#error-log").html("Lỗi hệ thống!<br/>")
-
-                    }
-                });
-            }
-
-        }
+        // function createTransaction() {
+        //     var customerName = $('#cusName').val().trim();
+        //     var listProcedure = $('#kt_select2_3_modal').val().join(" + ");
+        //     var diagnostic = $('#diagnostic').val().trim();
+        //     var proceMoney = $('#moneyPro').val() ? $('#moneyPro').val().trim() : 0;
+        //     var medicine = $('#medicine').val().trim();
+        //     var medicineMoney = $('#moneyMec').val() ? $('#moneyMec').val().trim() : 0;
+        //     var pay = $('#pay').val().trim();
+        //     var prepaid = pay.includes("/") ? pay : '';
+        //     var debt = pay.includes("N") ? pay : '';
+        //     var note = $('#note1').val().trim();
+        //     var date = current_date;
+        //
+        //     let body = {
+        //         customerName,
+        //         listProcedure,
+        //         diagnostic,
+        //         proceMoney,
+        //         medicine,
+        //         medicineMoney,
+        //         prepaid,
+        //         debt,
+        //         note,
+        //         date
+        //     }
+        //     // console.log(tranId);
+        //     if (!tranId) {
+        //         //createTransaction
+        //         postRequest({
+        //             url: "/transaction",
+        //             data: body,
+        //             success: (data) => {
+        //                 // console.log(data);
+        //                 // $("#error-log").html("Thêm mới thành công!<br/>")
+        //                 $('#cusName').val('');
+        //                 $('#kt_select2_3_modal').val([]).trigger('change');
+        //                 $('#diagnostic').val('');
+        //                 $('#moneyPro').val('');
+        //                 $('#medicine').val('');
+        //                 $('#moneyMec').val('');
+        //                 $('#pay').val('');
+        //
+        //                 $('#note1').val('');
+        //             },
+        //             error: (e) => {
+        //                 console.log(e);
+        //                 var error = e['error'];
+        //                 if (error != null) {
+        //                     let content = JSON.parse(error);
+        //                     $("#error-log").html(content['message'] + ".<br/>")
+        //                 } else
+        //                     $("#error-log").html("Lỗi hệ thống!<br/>")
+        //
+        //             }
+        //         })
+        //     } else {
+        //         //edit transaction
+        //         body.id = tranId;
+        //         putRequest({
+        //             url: '/transaction/' + tranId,
+        //             data: body,
+        //             success: function (data) {
+        //                 window.location = "/tran-a-day";
+        //                 $('#kt_select2_modal').modal('hide');
+        //             },
+        //             error: function (e) {
+        //                 console.log(e);
+        //                 var error = e['error'];
+        //                 if (error != null) {
+        //                     let content = JSON.parse(error);
+        //                     $("#error-log").html(content['message'] + ".<br/>")
+        //                 } else
+        //                     $("#error-log").html("Lỗi hệ thống!<br/>")
+        //
+        //             }
+        //         });
+        //     }
+        //
+        // }
 
         function createSpend() {
             var name = $('#spend_name').val().trim();
