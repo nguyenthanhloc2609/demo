@@ -14,11 +14,15 @@ public class Customer {
     @Id
     String id;
 
+    String fullName;
     @TextIndexed(weight=5)
     String name;
     String billing;
     String note;
+    String phone;
+    String address;
     String diag;
+    Integer money;
     Boolean isDebtor;
 
     public Customer(String name, String billing, Boolean debtor) {

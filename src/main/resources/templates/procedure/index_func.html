@@ -8,9 +8,9 @@
         function getListProcedure() {
             var offset = pagination.offset() || 0;
             var limit = pagination.limit() || 5;
-            console.log("getListProcedure")
+
             getRequest({
-                url: "/procedure/list?limit" + limit + "&offset=" + offset,
+                url: "/procedures/list?limit" + limit + "&offset=" + offset,
                 success: function (data) {
                     // var listProcedure = data['list'];
                     onLoadedProcedureList(data, getListProcedure)
@@ -37,22 +37,20 @@
                 offset: paginData['offset']
             });
             list_pro = data['list'] || [];
-            console.log(list_pro)
             var html = '';
 
             for (var i = 1; i <= list_pro.length; i++) {
                 var item = list_pro[i - 1];
+                var price = item.price?item.price:0 
                 var countNumber = Number.parseInt(paginData['offset'] * paginData['limit']) + i;
                 html += '<tr>'
                     + '<td class="text-left">' + countNumber + '</td>'
                     + '<td>' + item.name + '</td>'
-                    + '<td>' + item.billing + '</td>'
-                    + '<td>' + item.note + '</td>'
+                    + '<td>' + item.code + '</td>'
+                    + '<td>' + price + '</td>'
                     + '<td>' + '<div style="text-align: center; vertical-align: middle;">' +
-                    '<button type="button" data-toggle="modal" class="btn btn-circle btn-icon edit-cus"' +
-                    ' href="#kt_modal_3" data-index="' + (i - 1) + '"><i class="flaticon-edit"></i></button>' +
-                    '<button type="button" class="btn btn-circle btn-icon delete-cus" data-index="' + (i - 1) + '" ' +
-                    '  ><i class="flaticon-delete"></i></button></div>'
+                    '<button type="button" data-toggle="modal" class="btn btn-circle btn-icon edit-pro"' +
+                    ' href="#kt_modal_3" data-index="' + (i - 1) + '"><i class="flaticon-edit"></i></div>'
                     + '</td>'
                     + '</tr>';
             }
@@ -63,28 +61,26 @@
 
         document.getElementById("savePro").addEventListener("click", createProcedure);
 
-        $(document).on("click", ".edit-cus", editCustomer);
+        $(document).on("click", ".edit-pro", editProcedure);
 
         function createProcedure() {
-            var name = $('#cusName').val().trim();
-            var billing = $('#cusBilling').val().trim();
-            var note = $('#cusNote').val().trim();
-            var isDebtor = billing.includes('N') ? true : false;
+            var name = $('#proName').val().trim();
+            var code = $('#proCode').val().trim();
+            var price = $('#proMoney').val() || 0;
 
             let body = {
                 name,
-                billing,
-                isDebtor,
-                note
+                code,
+                price
             }
             if (!proId) {
                 //createProcedure
                 postRequest({
-                    url: "/customers",
+                    url: "/procedures",
                     data: body,
                     success: (data) => {
                         // console.log(data);
-                        window.location = "/customer";
+                        window.location = "/procedure";
                     },
                     error: (e) => {
                         console.log(e);
@@ -101,10 +97,10 @@
                 //edit customer
                 body.id = proId;
                 putRequest({
-                    url: '/customers/' + proId,
+                    url: '/procedures/' + proId,
                     data: body,
                     success: function (data) {
-                        window.location = "/customer";
+                        window.location = "/procedure";
                         $('#kt_modal_3').modal('hide');
                     },
                     error: function (e) {
@@ -146,14 +142,22 @@
             });
         }
 
-        function editCustomer() {
+        function editProcedure() {
             var index = $(this).data('index');
-            var customer = list_pro[index];
-            console.log('editTransaction', customer)
-            proId = customer.id;
-            $('#cusName').val(customer.name)
-            $('#cusBilling').val(customer.billing);
-            $('#cusNote').val(customer.note);
+            var pro = list_pro[index];
+            console.log('editTransaction', pro)
+            proId = pro.id;
+            $('#proName').val(pro.name)
+            $('#proName').prop('readonly', true)
+            $('#proCode').val(pro.code);
+            $('#proMoney').val(pro.price) || 0;
+            var his = '';
+            pro.histories.forEach(element => {
+                var obj = JSON.parse(element);
+                his+='Ngày: ' + obj.date+" giá: "+obj.price+"\n";
+            });
+            $('#proHistory').val(his);
+
         }
     });
 </script>

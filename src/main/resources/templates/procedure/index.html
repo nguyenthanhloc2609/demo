@@ -163,7 +163,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Thêm mới thủ thuật</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Thông tin thủ thuật</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -182,8 +182,12 @@ License: You must have a valid license purchased only from themeforest(the above
                 </div>
                 <div class="row col-lg-12">
                     <label>Đơn giá</label>
-                    <input type="text" class="form-control material-input"
+                    <input type="number" class="form-control material-input"
                            id="proMoney">
+                </div>
+                <div class="row col-lg-12">
+                    <label>Lịch sử giá</label>
+                    <textarea class="form-control" rows="3" id="proHistory" readonly></textarea>
                 </div>
             </div>
             <div id="error"></div>
@@ -194,7 +198,7 @@ License: You must have a valid license purchased only from themeforest(the above
         </div>
     </div>
 </div>
-<th:block th:replace="customer/index_func.html"></th:block>
+<th:block th:replace="procedure/index_func.html"></th:block>
 <!--end::Modal-->
 
 <!-- end:: Page -->

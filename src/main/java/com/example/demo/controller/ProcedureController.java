@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/procedure")
+@RequestMapping("/procedures")
 public class ProcedureController {
     @Autowired
     IProcedureService procedureService;
@@ -34,4 +34,9 @@ public class ProcedureController {
         return ResponseEntity.ok(procedure);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@RequestBody Procedure procedure, @PathVariable String id) {
+        Procedure s = procedureService.update(procedure, id);
+        return ResponseEntity.ok(s);
+    }
 }
