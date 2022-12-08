@@ -1,10 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        var listProcedure = []
+        var proQuantity = [];
 
-</body>
-</html>
+        getListProcedure()
+
+        function getListProcedure() {
+            console.log("getListProcedure")
+            getRequest({
+                url: "/procedure/list?limit=99999&offset=0",
+                success: function (data) {
+                    listProcedure = data['list'];
+                    var html = '';
+                    for (var i = 0; i < listProcedure.length; i++) {
+                        var item = listProcedure[i];
+                        html += '<tr>'
+                            + '<td>' + item.name + '</td>'
+                            + '<td>' + ' <div class="number-input" style="justify-content: center">' +
+                            ' <button onclick="this.parentNode.querySelector(\'input[type=number]\').stepDown()"></button>' +
+                            ' <input class="quantity" min="0" name="quantity" value="0" type="number">' +
+                            ' <button onclick="this.parentNode.querySelector(\'input[type=number]\').stepUp()"' +
+                            ' class="plus"></button>' +
+                            '' +
+                            ' </div>' + '</td>'
+                            + '</tr>';
+                    }
+                    $('#tbody-pro').html(html);
+
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
+
+        function saveProValue() {
+            const listqua = document.getElementsByName('quantity');
+            proQuantity = Array.from(listqua).map(item => item.valueAsNumber);
+            var pros = [];
+            proQuantity.forEach((value, index, array) => {
+                if (value === 1){
+                    pros.push(listProcedure[index].code)
+                } else if(value > 1){
+                    pros.push(value+''+listProcedure[index].code)
+                }
+            })
+            $('#cusPros').val(pros.join(' + '));
+            $('#kt_select2_modal').modal('hide');
+        }
+
+        document.getElementById("selectPro").addEventListener("click", saveProValue);
+    });
+</script>

@@ -19,8 +19,8 @@ License: You must have a valid license purchased only from themeforest(the above
 <head>
     <base href="../../">
     <meta charset="utf-8"/>
-    <title>Thêm lượt khám</title>
-    <meta name="description" content="Thêm lượt khám mới">
+    <title>Thêm bệnh nhân mới</title>
+    <meta name="description" content="Quản lý bệnh nhân">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!--begin::Fonts -->
@@ -37,7 +37,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <!--begin::Global Theme Styles(used by all pages) -->
     <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
-    <link href="assets/css/custom/number-input.css" rel="stylesheet" type="text/css"/>
+
     <!--end::Global Theme Styles -->
 
     <!--begin::Layout Skins(used by all pages) -->
@@ -49,12 +49,16 @@ License: You must have a valid license purchased only from themeforest(the above
     <link rel="shortcut icon" href="assets/media/logos/favicon.ico"/>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
     <style>
         .vertical-center {
+            margin-left: 25%;
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
+        }
+
+        .twitter-typeahead {
+            display: block !important;
         }
     </style>
 </head>
@@ -100,7 +104,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="kt-portlet__head">
                             <div class="kt-portlet__head-label">
                                 <h3 class="kt-portlet__head-title" id="head-title">
-                                    Thêm lượt khám mới
+                                    Thêm bệnh nhân mới
                                 </h3>
                             </div>
 
@@ -110,64 +114,47 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <div class="kt-section__content">
                                     <div class="row">
                                         <div class="col-lg-6">
-                                            <label>Tên bệnh nhân</label>
-                                            <div class="typeahead">
-                                                <input type="text" class="form-control" dir="ltr"
-                                                       placeholder="Nhập tên gợi nhớ của bệnh nhân" id="cusName">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <label>Chẩn đoán</label>
+                                            <label>Tên bệnh nhân<span style="color: red">*</span></label>
                                             <input type="text" class="form-control material-input"
-                                                   placeholder="Chẩn đoán"
-                                                   id="diagnostic">
+                                                   placeholder="Họ và tên bệnh nhân"
+                                                   id="cusName">
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label>Tên gợi nhớ<span style="color: red">*</span></label>
+                                            <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="Tên gợi nhớ giúp phân biệt các khách hàng cùng tên"></i>
+                                            <input type="text" class="form-control material-input"
+                                                   id="cusNick">
+
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6">
-                                            <label>Thủ thuật</label>
-                                            <div class="row col-lg-12">
-                                                <input type="text" class="form-control material-input col-lg-10"
-                                                       placeholder="Thủ thuật" readonly
-                                                       id="cusPros">
-                                                <div class="col-lg-2" style="text-align: center;">
-                                                    <button type="button" class="btn btn-success btn-circle btn-icon"
-                                                            data-toggle="modal"
-                                                            data-target="#kt_select2_modal" data-backdrop="static"
-                                                            data-keyboard="false">
-                                                        <i class="flaticon2-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-
+                                            <label>Số điện thoại</label>
+                                            <input type="text" class="form-control material-input"
+                                                   id="cusPhone">
                                         </div>
-
-
                                         <div class="col-lg-6">
-                                            <label>Thuốc</label>
-                                            <input type="text" class="form-control material-input" id="medicine">
+                                            <label>Địa chỉ</label>
+                                            <input type="text" class="form-control material-input"
+                                                   id="cusAddr">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-4">
-                                            <label>Tiền Thủ thuật</label>
-                                            <input type="number" class="form-control material-input" id="moneyPro">
+                                        <div class="col-lg-6">
+                                            <label>Số điện thoại</label>
+                                            <input type="text" class="form-control material-input"
+                                                   id="cusBilling">
                                         </div>
-                                        <div class="col-lg-4">
-                                            <label>Tiền Thuốc</label>
-                                            <input type="number" class="form-control material-input" id="moneyMec">
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <label>Thanh toán</label>
-                                            <input type="text" class="form-control material-input" id="pay">
+                                        <div class="col-lg-6">
+                                            <label>Số tiền</label>
+                                            <input type="number" class="form-control material-input"
+                                                   id="cusMoney">
                                         </div>
                                     </div>
                                     <div class="row col-lg-12">
                                         <label>Ghi chú</label>
-                                        <textarea class="form-control" rows="3" id="note1"></textarea>
+                                        <textarea class="form-control" rows="3" id="cusNote"></textarea>
                                     </div>
-                                    <input type="checkbox" id="cb_tran" name="cb_tran" value="0">
-                                    <label for="cb_tran">Thêm nhiều dữ liệu</label><br>
                                     <br>
                                     <div class="row" style="justify-content: center">
                                         <button class="btn btn-brand">Quay lại</button>
@@ -180,45 +167,11 @@ License: You must have a valid license purchased only from themeforest(the above
                     </div>
                 </div>
             </div>
-            <!-- Modal -->
-            <div class="modal fade" id="kt_select2_modal" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Danh sách các thủ thuật</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th style="text-align: center; vertical-align: middle;;width: 80%"
-                                        class="text-left" rowspan="2">Tên thủ thuật
-                                    </th>
-                                    <th style="text-align: center; vertical-align: middle;"
-                                        class="text-center" rowspan="2">Số lượng
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody id="tbody-pro">
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng
-                            </button>
-                            <button type="button" class="btn btn-primary" id="selectPro">Lưu thông tin</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 
-<th:block th:replace="transaction/create/index_func.html"></th:block>
+<th:block th:replace="customer/add-customer/index_func.html"></th:block>
 
 <!-- end:: Page -->
 
@@ -264,7 +217,9 @@ License: You must have a valid license purchased only from themeforest(the above
 
 <!--begin::Page Vendors(used by this page) -->
 
+<script src="assets/js/pages/crud/forms/widgets/select2.js" type="text/javascript"></script>
 
+<script src="assets/js/pages/crud/datatables/basic/paginations.js" type="text/javascript"></script>
 <script src="assets/js/common.js" type="text/javascript"></script>
 <!--end::Page Scripts -->
 </body>

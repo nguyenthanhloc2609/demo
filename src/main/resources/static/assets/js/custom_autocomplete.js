@@ -1,18 +1,6 @@
 // Class definition
 var KTTypeahead = function () {
 
-    // var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-    //     'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-    //     'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-    //     'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-    //     'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-    //     'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-    //     'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-    //     'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-    //     'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-    // ];
-    // var states = [{id: "123", name: "locnt", billing: "1/2", note: ""}];
-
     var demo2 = function () {
         // constructs the suggestion engine
         var bloodhound = new Bloodhound({
@@ -36,7 +24,6 @@ var KTTypeahead = function () {
             minLength: 3
         },
             {
-                // name: 'name',
                 displayKey: 'name',
                 source: bloodhound
             });

@@ -36,4 +36,9 @@ public class HomeController {
     public String listProcedure(Model model) {
         return "procedure/index";
     }
+
+    @RequestMapping(value = "/add-tran", method = RequestMethod.GET)
+    public String addTransaction(Model model) {
+        return "transaction/create/index";
+    }
 }

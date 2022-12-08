@@ -157,42 +157,6 @@ License: You must have a valid license purchased only from themeforest(the above
         </div>
     </div>
 </div>
-<!--begin::Modal spend-->
-<div class="modal fade" id="kt_modal_3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Thêm mới bệnh nhân</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <label>Tên bệnh nhân<span style="color: red">*</span></label>
-                        <input type="text" class="form-control material-input"
-                               placeholder="Họ và tên bệnh nhân" id="cusName">
-                    </div>
-                    <div class="col-lg-6">
-                        <label>Hình thức thanh toán</label>
-                        <input type="text" class="form-control material-input"
-                               id="cusBilling">
-                    </div>
-                </div>
-                <div class="row col-lg-12">
-                    <label>Ghi chú</label>
-                    <textarea class="form-control" rows="3" id="cusNote"></textarea>
-                </div>
-            </div>
-            <div id="error"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="window.location = '/customer'">Đóng</button>
-                <button type="button" class="btn btn-primary" id="saveCustomer">Lưu thông tin</button>
-            </div>
-        </div>
-    </div>
-</div>
 <th:block th:replace="customer/index_func.html"></th:block>
 <!--end::Modal-->
 
