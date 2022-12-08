@@ -19,7 +19,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <head>
     <base href="../../">
     <meta charset="utf-8"/>
-    <title>Thêm bệnh nhân mới</title>
+    <title>Sửa thông tin bệnh nhân</title>
     <meta name="description" content="Quản lý bệnh nhân">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -104,7 +104,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="kt-portlet__head">
                             <div class="kt-portlet__head-label">
                                 <h3 class="kt-portlet__head-title" id="head-title">
-                                    Thêm bệnh nhân mới
+                                    Chỉnh sửa thông tin bệnh nhân
                                 </h3>
                             </div>
 
@@ -140,14 +140,19 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-6">
-                                            <label>Số điện thoại</label>
+                                        <div class="col-lg-4">
+                                            <label>Chẩn đoán bệnh</label>
                                             <input type="text" class="form-control material-input"
-                                                   id="cusBilling">
+                                                   id="cusDiag">
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-4">
+                                            <label>Tình trạng thanh toán</label>
+                                            <input type="text" class="form-control material-input"
+                                                   id="cusBill">
+                                        </div>
+                                        <div class="col-lg-4">
                                             <label>Số tiền</label>
-                                            <input type="number" class="form-control material-input"
+                                            <input type="text" class="form-control material-input"
                                                    id="cusMoney">
                                         </div>
                                     </div>
@@ -156,13 +161,15 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <textarea class="form-control" rows="3" id="cusNote"></textarea>
                                     </div>
                                     <br>
+
                                     <div class="row" style="justify-content: center">
                                         <a class="btn btn-brand" style="color: white;"
-                                           onclick="window.location.href = '/tran-a-day'"><span>Quay lại</span>
+                                           onclick="window.location.href = '/customer'"><span>Quay lại</span>
                                         </a>
-                                        <button class="btn btn-success" style="margin-left: 0.5em;">Thêm mới</button>
+                                        <button class="btn btn-success" style="margin-left: 0.5em;" id="update">Cập nhật</button>
 
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -173,7 +180,7 @@ License: You must have a valid license purchased only from themeforest(the above
     </div>
 </div>
 
-<th:block th:replace="customer/add-customer/index_func.html"></th:block>
+<th:block th:replace="customer/edit-customer/index_func.html"></th:block>
 
 <!-- end:: Page -->
 

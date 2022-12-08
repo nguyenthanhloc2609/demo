@@ -42,6 +42,15 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Lỗi update");
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> getOne(@PathVariable String id) {
+        Customer cu = customerService.retrieve(id);
+        if (cu != null)
+            return ResponseEntity.ok(cu);
+        else
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Lỗi");
+    }
+
     @GetMapping("/list")
     public ResponseEntity<?> getAll(@RequestParam(value = "limit", required = false, defaultValue = "20") Integer limit,
             @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {

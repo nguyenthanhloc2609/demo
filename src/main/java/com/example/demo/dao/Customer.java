@@ -23,12 +23,10 @@ public class Customer {
     String address;
     String diag;
     Integer money;
-    Boolean isDebtor;
 
-    public Customer(String name, String billing, Boolean debtor) {
+    public Customer(String name, String billing) {
         this.name = name;
         this.billing = billing;
-        this.isDebtor = debtor;
         this.note = "";
     }
 }

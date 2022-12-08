@@ -116,9 +116,9 @@ public class TransactionServiceImpl implements ITransactionService {
         if (!cusName.contains(transaction.getCustomerName())) {
 
             if (post != null && post.length() > 0) {
-                c = new Customer(transaction.getCustomerName(), post, true);
+                c = new Customer(transaction.getCustomerName(), post);
             } else {
-                c = new Customer(transaction.getCustomerName(), pre, false);
+                c = new Customer(transaction.getCustomerName(), pre);
             }
             c.setDiag(transaction.getDiagnostic());
             customerRepository.save(c);
@@ -127,11 +127,8 @@ public class TransactionServiceImpl implements ITransactionService {
             // update thong tin benh nhan
             if (post != null && post.length() > 0) {
                 c.setBilling(post);
-                c.setIsDebtor(true);
             } else {
-
                 c.setBilling(pre);
-                c.setIsDebtor(false);
             }
             c.setDiag(transaction.getDiagnostic());
             customerService.update(c, c.getId());

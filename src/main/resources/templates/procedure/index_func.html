@@ -12,7 +12,6 @@
             getRequest({
                 url: "/procedures/list?limit" + limit + "&offset=" + offset,
                 success: function (data) {
-                    // var listProcedure = data['list'];
                     onLoadedProcedureList(data, getListProcedure)
 
                 },
