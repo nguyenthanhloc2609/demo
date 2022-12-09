@@ -49,14 +49,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <link rel="shortcut icon" href="assets/media/logos/favicon.ico"/>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <style>
-        .vertical-center {
-            margin-left: 25%;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-    </style>
+
 </head>
 
 <!-- end::Head -->
@@ -101,8 +94,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     Danh sách bệnh nhân
                                 </h3>
                             </div>
-                            <div class="row kt-portlet__head--right vertical-center"
-                                 style="width:70%; justify-content: right">
+                            <div class="row kt-portlet__head--right"
+                                 style="width:70%; justify-content: right;align-content: center">
                                 <input type="text" class="form-control material-input col-lg-6"
                                        placeholder="Tìm kiếm theo tên" id="name">
                                 <select class="form-control kt-select2 col-lg-2" id="cb_payment" name="cb_payment">
@@ -135,10 +128,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                                     class="text-center">Ghi chú
                                                 </th>
                                                 <th style="text-align: center; vertical-align: middle;width: 10%">
-                                                    <button type="button" class="btn btn-success  btn-circle btn-icon" data-toggle="modal"
-                                                            data-target="#kt_modal_3" data-backdrop="static"
-                                                            data-keyboard="false"><i class="flaticon2-plus"></i>
-                                                    </button>
+                                                    <a class="btn btn-success btn-circle btn-icon"
+                                                       onclick="window.location.href = '/add-customer'">
+                                                        <i aria-hidden="true" class="fa fa-plus"></i>
+                                                    </a>
                                                 </th>
                                             </tr>
                                             </thead>

@@ -79,13 +79,6 @@ License: You must have a valid license purchased only from themeforest(the above
             height: 30%;
         }
 
-        .vertical-center {
-            margin-left: 25%;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
         .twitter-typeahead {
             display: block !important;
         }
@@ -141,7 +134,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <div class="form-group row kt-portlet__head--right">
                                 <div class="col-sm-12">
                                     <div class='input-group'>
-                                        <input type="text" class="form-control" name="date" placeholder="Chọn ngày đê"
+                                        <input type="text" class="form-control" name="date" placeholder="Di chuyển đến ngày"
                                                id='kt_datepicker'/>
                                         <div class="input-group-append">
 														<span class="input-group-text">
@@ -204,10 +197,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 <th style="text-align: center; vertical-align: middle; width: 10%;"
 
                                                     class="text-center" rowspan="2">
-                                                    <button type="button" class="btn btn-success btn-circle btn-icon"
-                                                            id="btnAddTran">
-                                                        <i class="flaticon2-plus"></i>
-                                                    </button>
+                                                    <a class="btn btn-success btn-circle btn-icon" id="btnAddTran"
+                                                       onclick="window.location.href = '/add-tran'">
+                                                        <i aria-hidden="true" class="fa fa-plus"></i>
+                                                    </a>
                                                 </th>
                                             </tr>
                                             <tr>
