@@ -1,156 +1,23 @@
 <script type="text/javascript" th:inline="javascript">
     $(function () {
-        const pagination = new Pagination();
-        var list_cus = []
-        var cusId = undefined;
+        setValueForPicker();
 
-        initCustomerList()
+        function setValueForPicker() {
+            var todayDate = moment().startOf('day');
+            var YM = todayDate.format('YYYY-MM');
 
-        function initCustomerList() {
-            pagination.reset();
-            getListCustomer();
+            $('#month-input').val(YM);
+            $('#month-input').prop('max', YM)
         }
 
-        function getListCustomer() {
-            var offset = pagination.offset() || 0;
-            var limit = pagination.limit() || 5;
+        $('#export').click(function () {
+            exportExcel()
+        });
 
-            getRequest({
-                url: "/customers/list?limit=" + limit + "&offset=" + offset,
-                success: function (data) {
-                    onLoadedCustomersList(data, getListCustomer)
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
-        }
-
-        function onLoadedCustomersList(data, func) {
-            var paginData = data['pagination'] || {};
-            pagination.render('list-pagination', func, {
-                count: data['count'],
-                limit: paginData['limit'],
-                total: paginData['total'],
-                offset: paginData['offset']
-            });
-            list_cus = data['list'] || [];
-            var html = '';
-
-            for (var i = 1; i <= list_cus.length; i++) {
-                var item = list_cus[i - 1];
-                var countNumber = Number.parseInt(paginData['offset'] * paginData['limit']) + i;
-                html += '<tr>'
-                    + '<td class="text-left">' + countNumber + '</td>'
-                    + '<td>' + item.name + '</td>'
-                    + '<td>' + item.billing + '</td>'
-                    + '<td>' + item.note + '</td>'
-                    + '<td>' + '<div style="text-align: center; vertical-align: middle;">' +
-                    '<button type="button" data-toggle="modal" class="btn btn-circle btn-icon edit-cus"' +
-                    ' href="#kt_modal_3" data-index="' + (i - 1) + '"><i class="flaticon-edit"></i></button>' +
-                    '<button type="button" class="btn btn-circle btn-icon delete-cus" data-index="' + (i - 1) + '" ' +
-                    '  ><i class="flaticon-delete"></i></button></div>'
-                    + '</td>'
-                    + '</tr>';
-            }
-            $('#tbody-list').html(html);
-        }
-
-        document.getElementById("searchCus").addEventListener("click", initSearchCustomer);
-
-        document.getElementById("saveCustomer").addEventListener("click", createCustomer);
-
-        $(document).on("click", ".edit-cus", editCustomer);
-
-        function createCustomer() {
-            var name = $('#cusName').val().trim();
-            var billing = $('#cusBilling').val().trim();
-            var note = $('#cusNote').val().trim();
-            var isDebtor = billing.includes('N') ? true : false;
-
-            let body = {
-                name,
-                billing,
-                isDebtor,
-                note
-            }
-            if (!cusId) {
-                //createCustomer
-                postRequest({
-                    url: "/customers",
-                    data: body,
-                    success: (data) => {
-                        // console.log(data);
-                        window.location = "/customer";
-                    },
-                    error: (e) => {
-                        console.log(e);
-                        var error = e['error'];
-                        if (error != null) {
-                            let content = JSON.parse(error);
-                            $("#error-log").html(content['message'] + ".<br/>")
-                        } else
-                            $("#error-log").html("Lỗi hệ thống!<br/>")
-
-                    }
-                })
-            } else {
-                //edit customer
-                body.id = cusId;
-                putRequest({
-                    url: '/customers/' + cusId,
-                    data: body,
-                    success: function (data) {
-                        window.location = "/customer";
-                        $('#kt_modal_3').modal('hide');
-                    },
-                    error: function (e) {
-                        console.log(e);
-                        $('#kt_modal_3').modal('hide');
-                        var error = e['error'];
-                        if (error != null) {
-                            let content = JSON.parse(error);
-                            $("#error-log").html(content['message'] + ".<br/>")
-                        } else
-                            $("#error-log").html("Lỗi hệ thống!<br/>")
-
-                    }
-                });
-            }
-
-        }
-
-        function initSearchCustomer(){
-            pagination.reset();
-            searchCustomer();
-        }
-
-        function searchCustomer() {
-            var name = $('#name').val();
-            var type = $("#cb_payment").val();
-
-            var offset = pagination.offset() || 0;
-            var limit = pagination.limit() || 5;
-
-            getRequest({
-                url: "/customers/search?limit=" + limit + "&offset=" + offset + "&name=" + name + "&type=" + type,
-                success: function (data) {
-                    onLoadedCustomersList(data, searchCustomer)
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
-        }
-
-        function editCustomer() {
-            var index = $(this).data('index');
-            var customer = list_cus[index];
-            console.log('editTransaction', customer)
-            cusId = customer.id;
-            $('#cusName').val(customer.name)
-            $('#cusBilling').val(customer.billing);
-            $('#cusNote').val(customer.note);
+        function exportExcel() {
+            var month = $('#month-input').val().split('-');
+            var date = '01/' + month[1] + '/' + month[0];
+            window.location = "/dashboard/excel?date=" + date;
         }
     });
 </script>
