@@ -52,6 +52,13 @@ var KTTypeahead = function () {
 
             $('#note1').val(datum.note);
             $('#diagnostic').val(datum.diag);
+            var money = datum.money;
+            if (!datum.money)
+                money = 0;
+            if (money < 0)
+                $('#money-info').attr('data-original-title', 'Bệnh nhân còn đang nợ ' + money);
+            else
+                $('#money-info').attr('data-original-title', 'Số tiền còn lại của bệnh nhân: ' + money);
 
             console.log(datum);
         });

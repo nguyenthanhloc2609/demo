@@ -1,15 +1,10 @@
 <script type="text/javascript" th:inline="javascript">
     $(function () {
-        var list_pro = []
-        var proId = undefined;
-        initProcedureList();
-
         var elem = document.getElementById("cusMoney");
 
         elem.addEventListener("keydown", function (event) {
             var key = event.which;
-            console.log('keydown', key)
-            if (key < 48 || (key > 57 && key < 96) || key > 105) event.preventDefault();
+            if (key != 8 && key < 48 || (key > 57 && key < 96) || key > 105) event.preventDefault();
         });
 
         elem.addEventListener("keyup", function (event) {
@@ -20,7 +15,6 @@
             while ((caret - 3) > -1) {
                 caret -= 3;
                 value = value.split('');
-                console.log(value)
                 value.splice(caret + 1, 0, ".");
 
                 value = value.join('');
@@ -28,211 +22,55 @@
             this.value = value;
         });
 
+        $('#btnAddCus').click(function () {
+            createCustomer();
+        })
+
         function createCustomer() {
-            var name = $('#cusName').val().trim();
+            var fullName = $('#cusName').val().trim();
+            var name = $('#cusNick').val().trim();
+            var phone = $('#cusPhone').val().trim();
+            var address = $('#cusAddr').val().trim();
             var billing = $('#cusBilling').val().trim();
             var note = $('#cusNote').val().trim();
-            var isDebtor = billing.includes('N') ? true : false;
+            var money = $('#cusMoney').val().trim();
+            money = Number(money.replace('.', ''));
 
             let body = {
+                fullName,
                 name,
                 billing,
-                isDebtor,
-                note
+                note,
+                phone,
+                address,
+                money
             }
-            if (!cusId) {
-                //createCustomer
-                postRequest({
-                    url: "/customers",
-                    data: body,
-                    success: (data) => {
-                        // console.log(data);
+            postRequest({
+                url: "/customers",
+                data: body,
+                success: (data) => {
+                    // console.log(data);
+                    Swal.fire({
+                        title: 'Thêm mới khách hàng thành công',
+                        icon: 'info',
+                        confirmButtonText: 'OK',
+                    }).then((result) => {
                         window.location = "/customer";
-                    },
-                    error: (e) => {
-                        console.log(e);
-                        var error = e['error'];
-                        if (error != null) {
-                            let content = JSON.parse(error);
-                            $("#error-log").html(content['message'] + ".<br/>")
-                        } else
-                            $("#error-log").html("Lỗi hệ thống!<br/>")
-
-                    }
-                })
-            } else {
-                //edit customer
-                body.id = cusId;
-                putRequest({
-                    url: '/customers/' + cusId,
-                    data: body,
-                    success: function (data) {
-                        window.location = "/customer";
-                        $('#kt_modal_3').modal('hide');
-                    },
-                    error: function (e) {
-                        console.log(e);
-                        $('#kt_modal_3').modal('hide');
-                        var error = e['error'];
-                        if (error != null) {
-                            let content = JSON.parse(error);
-                            $("#error-log").html(content['message'] + ".<br/>")
-                        } else
-                            $("#error-log").html("Lỗi hệ thống!<br/>")
-
-                    }
-                });
-            }
-
-        }
-
-        function getListProcedure() {
-
-            console.log("getListProcedure")
-            getRequest({
-                url: "/procedure/list?limit=999999&offset=0",
-                success: function (data) {
-                    // var listProcedure = data['list'];
-                    onLoadedProcedureList(data, getListProcedure)
-
+                    });
                 },
-                error: function (e) {
+                error: (e) => {
                     console.log(e);
+                    var error = e['error'];
+                    if (error != null) {
+                        let content = JSON.parse(error);
+                        $("#error-log").html(content['message'] + ".<br/>")
+                    } else
+                        $("#error-log").html("Lỗi hệ thống!<br/>")
+
                 }
-            });
-        }
+            })
 
 
-        function initProcedureList() {
-            getListProcedure();
-        }
-
-        function onLoadedProcedureList(data, func) {
-            var paginData = data['pagination'] || {};
-            pagination.render('list-pagination', func, {
-                count: data['count'],
-                limit: paginData['limit'],
-                total: paginData['total'],
-                offset: paginData['offset']
-            });
-            list_pro = data['list'] || [];
-            console.log(list_pro)
-            var html = '';
-
-            for (var i = 1; i <= list_pro.length; i++) {
-                var item = list_pro[i - 1];
-                var countNumber = Number.parseInt(paginData['offset'] * paginData['limit']) + i;
-                html += '<tr>'
-                    + '<td class="text-left">' + countNumber + '</td>'
-                    + '<td>' + item.name + '</td>'
-                    + '<td>' + item.billing + '</td>'
-                    + '<td>' + item.note + '</td>'
-                    + '<td>' + '<div style="text-align: center; vertical-align: middle;">' +
-                    '<button type="button" data-toggle="modal" class="btn btn-circle btn-icon edit-cus"' +
-                    ' href="#kt_modal_3" data-index="' + (i - 1) + '"><i class="flaticon-edit"></i></button>' +
-                    '<button type="button" class="btn btn-circle btn-icon delete-cus" data-index="' + (i - 1) + '" ' +
-                    '  ><i class="flaticon-delete"></i></button></div>'
-                    + '</td>'
-                    + '</tr>';
-            }
-            $('#tbody-list').html(html);
-        }
-
-        // document.getElementById("searchCus").addEventListener("click", initSearchCustomer);
-
-        // document.getElementById("savePro").addEventListener("click", createProcedure);
-
-        // $(document).on("click", ".edit-cus", editCustomer);
-
-        function createProcedure() {
-            var name = $('#cusName').val().trim();
-            var billing = $('#cusBilling').val().trim();
-            var note = $('#cusNote').val().trim();
-            var isDebtor = billing.includes('N') ? true : false;
-
-            let body = {
-                name,
-                billing,
-                isDebtor,
-                note
-            }
-            if (!proId) {
-                //createProcedure
-                postRequest({
-                    url: "/customers",
-                    data: body,
-                    success: (data) => {
-                        // console.log(data);
-                        window.location = "/customer";
-                    },
-                    error: (e) => {
-                        console.log(e);
-                        var error = e['error'];
-                        if (error != null) {
-                            let content = JSON.parse(error);
-                            $("#error-log").html(content['message'] + ".<br/>")
-                        } else
-                            $("#error-log").html("Lỗi hệ thống!<br/>")
-
-                    }
-                })
-            } else {
-                //edit customer
-                body.id = proId;
-                putRequest({
-                    url: '/customers/' + proId,
-                    data: body,
-                    success: function (data) {
-                        window.location = "/customer";
-                        $('#kt_modal_3').modal('hide');
-                    },
-                    error: function (e) {
-                        console.log(e);
-                        $('#kt_modal_3').modal('hide');
-                        var error = e['error'];
-                        if (error != null) {
-                            let content = JSON.parse(error);
-                            $("#error-log").html(content['message'] + ".<br/>")
-                        } else
-                            $("#error-log").html("Lỗi hệ thống!<br/>")
-
-                    }
-                });
-            }
-
-        }
-
-        function initSearchCustomer() {
-            pagination.reset();
-            searchCustomer();
-        }
-
-        function searchCustomer() {
-            var name = $('#name').val();
-            var type = $("#cb_payment").val();
-
-            var offset = pagination.offset() || 0;
-            var limit = pagination.limit() || 5;
-
-            getRequest({
-                url: "/customers/search?limit=" + limit + "&offset=" + offset + "&name=" + name + "&type=" + type,
-                success: function (data) {
-                    onLoadedCustomersList(data, searchCustomer)
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
-        }
-
-        function editCustomer() {
-            var index = $(this).data('index');
-            var customer = list_pro[index];
-            console.log('editTransaction', customer)
-            proId = customer.id;
-            $('#cusName').val(customer.name)
-            $('#cusBilling').val(customer.billing);
-            $('#cusNote').val(customer.note);
         }
     });
 </script>

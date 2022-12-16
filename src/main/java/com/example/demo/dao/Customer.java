@@ -22,7 +22,7 @@ public class Customer {
     String phone;
     String address;
     String diag;
-    Integer money;
+    Integer money = 0;
 
     public Customer(String name, String billing) {
         this.name = name;

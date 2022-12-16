@@ -2,13 +2,15 @@
     $(function () {
         var listProcedure = []
         var proQuantity = [];
+        var current_date = window.localStorage.getItem("date")
+        var expProcMoney, expMecMoney;
 
         getListProcedure()
 
         function getListProcedure() {
             console.log("getListProcedure")
             getRequest({
-                url: "/procedure/list?limit=99999&offset=0",
+                url: "/procedures/list?limit=99999&offset=0",
                 success: function (data) {
                     listProcedure = data['list'];
                     var html = '';
@@ -34,21 +36,110 @@
             });
         }
 
+        function saveMecValue() {
+            expMecMoney = 0;
+            var mecStr = [];
+            var numThang, numLo, priceThang, priceLo;
+            numThang = $('#numThang').val();
+            numLo = $('#numLo').val();
+            priceThang = $('#priceThang').val();
+            priceLo = $('#priceLo').val();
+
+            if (numThang > 0) {
+                mecStr.push(numThang + ' Thang')
+                expMecMoney += numThang * priceThang;
+            }
+            if (numLo > 0) {
+                mecStr.push(numLo + ' Lọ')
+                expMecMoney =+ numLo * priceLo;
+            }
+            $('#medicine').val(mecStr.join(' + '));
+            $('#kt_modal_1').modal('hide');
+        }
+
         function saveProValue() {
+            expProcMoney = 0;
             const listqua = document.getElementsByName('quantity');
             proQuantity = Array.from(listqua).map(item => item.valueAsNumber);
             var pros = [];
             proQuantity.forEach((value, index, array) => {
-                if (value === 1){
+                if (value === 1) {
                     pros.push(listProcedure[index].code)
-                } else if(value > 1){
-                    pros.push(value+''+listProcedure[index].code)
+                } else if (value > 1) {
+                    pros.push(value + '' + listProcedure[index].code)
                 }
+                expProcMoney += value * listProcedure[index].price;
             })
             $('#cusPros').val(pros.join(' + '));
             $('#kt_select2_modal').modal('hide');
         }
 
         document.getElementById("selectPro").addEventListener("click", saveProValue);
+        document.getElementById("selectMec").addEventListener("click", saveMecValue);
+
+        $('#btnAddTran').click(
+            createTransaction
+        )
+
+        function createTransaction() {
+            var customerName = $('#cusName').val().trim();
+            var listProcedure = $('#cusPros').val();
+            var diagnostic = $('#diagnostic').val().trim();
+            var proceMoney = $('#moneyPro').val() ? $('#moneyPro').val().trim() : 0;
+            var medicine = $('#medicine').val().trim();
+            var medicineMoney = $('#moneyMec').val() ? $('#moneyMec').val().trim() : 0;
+            var pay = $('#pay').val().trim();
+            var prepaid = pay.includes("/") ? pay : '';
+            var debt = pay.includes("N") ? pay : '';
+            var note = $('#note1').val().trim();
+            var date = current_date;
+
+            let body = {
+                customerName,
+                listProcedure,
+                expProcMoney,
+                diagnostic,
+                proceMoney,
+                medicine,
+                medicineMoney,
+                prepaid,
+                debt,
+                note,
+                date
+            }
+            //createTransaction
+            postRequest({
+                url: "/transaction",
+                data: body,
+                success: (data) => {
+                    var checked = $('#cb_tran').is(":checked")
+                    if (checked) {
+                        $('#cusName').val('');
+                        $('#cusPros').val('');
+                        $('#diagnostic').val('');
+                        $('#moneyPro').val('');
+                        $('#medicine').val('');
+                        $('#moneyMec').val('');
+                        $('#pay').val('');
+                        $('#note1').val('');
+                    } else {
+                        window.location.href = '/tran-a-day'
+                    }
+
+                },
+                error: (e) => {
+                    console.log(e);
+                    var error = e['error'];
+                    if (error != null) {
+                        let content = JSON.parse(error);
+                        $("#error-log").html(content['message'] + ".<br/>")
+                    } else
+                        $("#error-log").html("Lỗi hệ thống!<br/>")
+
+                }
+            })
+
+
+        }
     });
 </script>

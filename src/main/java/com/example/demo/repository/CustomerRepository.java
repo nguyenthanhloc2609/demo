@@ -17,4 +17,6 @@ public interface CustomerRepository extends MongoRepository<Customer, String> {
 
     @Query("{'name':{'$regex':'?0','$options':'i'}, 'isDebtor':{'$eq':?1}}")
     Page<Customer> searchCustomer(String name, Boolean isDebtor, Pageable pageable);
+
+    Customer findByName(String name);
 }

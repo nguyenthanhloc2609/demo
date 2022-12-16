@@ -16,9 +16,11 @@ public class Transaction {
 
     String customerName;
     String listProcedure;
+    Integer expProcMoney;
     String diagnostic;
     Integer proceMoney;
     String medicine;
+    Integer expMedicineMoney;
     Integer medicineMoney;
     String prepaid;
     String debt;
