@@ -7,31 +7,6 @@
 
         getListProcedure()
 
-        var elems = Array.from(document.getElementsByClassName("money-input"));
-
-
-        elems.forEach(elem => {
-            elem.addEventListener("keydown", function (event) {
-                var key = event.which;
-                if (key != 8 && key < 48 || (key > 57 && key < 96) || key > 105) event.preventDefault();
-            });
-            elem.addEventListener("keyup", function (event) {
-                var value = this.value.replace(/\./g, "");
-                this.dataset.currentValue = parseInt(value);
-                var caret = value.length - 1;
-
-                while ((caret - 3) > -1) {
-                    caret -= 3;
-                    value = value.split('');
-                    value.splice(caret + 1, 0, ".");
-
-                    value = value.join('');
-                }
-                this.value = value;
-            });
-        })
-
-
         function getListProcedure() {
             console.log("getListProcedure")
             getRequest({
@@ -99,6 +74,17 @@
             $('#kt_select2_modal').modal('hide');
         }
 
+        function resetModalValue(){
+            const listqua = document.getElementsByName('quantity');
+            Array.from(listqua).forEach(item => item.value = 0);
+
+            $('#numThang').val(0)
+            $('#numLo').val(0)
+            $('#priceThang').val(0)
+            $('#priceLo').val(0)
+
+        }
+
         document.getElementById("selectPro").addEventListener("click", saveProValue);
         document.getElementById("selectMec").addEventListener("click", saveMecValue);
 
@@ -110,9 +96,11 @@
             var customerName = $('#cusName').val().trim();
             var listProcedure = $('#cusPros').val();
             var diagnostic = $('#diagnostic').val().trim();
-            var proceMoney = $('#moneyPro').val() ? $('#moneyPro').val().trim() : 0;
+            var money = $('#moneyPro').val() || '0';
+            var proceMoney = Number(money.replaceAll('.', ''));
             var medicine = $('#medicine').val().trim();
-            var medicineMoney = $('#moneyMec').val() ? $('#moneyMec').val().trim() : 0;
+            money = $('#moneyMec').val() || '0';
+            var medicineMoney = Number(money.replaceAll('.', ''));
             var pay = $('#pay').val().trim();
             var prepaid = pay.includes("/") ? pay : '';
             var debt = pay.includes("N") ? pay : '';
@@ -148,6 +136,7 @@
                         $('#moneyMec').val('');
                         $('#pay').val('');
                         $('#note1').val('');
+                        resetModalValue();
                     } else {
                         window.location.href = '/tran-a-day'
                     }

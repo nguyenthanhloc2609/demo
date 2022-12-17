@@ -112,7 +112,8 @@ public class TransactionServiceImpl implements ITransactionService {
 
             // update Customer: money + bill
             Customer cus = customerRepository.findByName(tran.getCustomerName());
-            Integer money = cus.getMoney() -(tran.getProceMoney() + tran.getMedicineMoney() - tran.getExpProcMoney() - tran.getExpMedicineMoney());
+            Integer money = cus.getMoney() -(tran.getProceMoney() + tran.getMedicineMoney() - 
+            tran.getExpProcMoney() - tran.getExpMedicineMoney());
             String pre = tran.getPrepaid();
             String post = tran.getDebt();
             Integer num, total;
@@ -127,7 +128,11 @@ public class TransactionServiceImpl implements ITransactionService {
                     cus.setBilling((num - 1) + "/" + total);
                 else {
                     if (tran.getProceMoney() == 0) {
-
+                        //tra truoc
+                        cus.setBilling((num - 1) + "/" + total);
+                    } else {
+                        //theo buoi
+                        cus.setBilling((num - 1) + "/" + (total - 1));
                     }
                 }
             }

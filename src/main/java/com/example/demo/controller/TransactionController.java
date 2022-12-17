@@ -45,8 +45,12 @@ public class TransactionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getTransactionById(Integer month) {
-        return null;
+    public ResponseEntity<?> getTransactionById(@PathVariable String id) {
+        Transaction tran = transactionService.retrieve(id);
+        if (tran != null)
+            return ResponseEntity.ok(tran);
+        else
+            return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
