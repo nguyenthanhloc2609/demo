@@ -1,21 +1,30 @@
 <script type="text/javascript" th:inline="javascript">
     $(function () {
-        createChart()
 
-        function createChart () {
-            console.log('profitShare')
+        statisticCustomer();
 
-            var randomScalingFactor = function() {
-                return Math.round(Math.random() * 100);
-            };
+        function statisticCustomer() {
+            getRequest({
+                url: "dashboard/statistic/customer",
+                success: function (data) {
+                    console.log(data);
+                    var cusData = [data.prepaid, data.postpaid, data.turn]
+                    createChart(cusData)
+                    $("#cusTotal").text(data.total)
+                },
+                error: function (e) {
+                }
+            });
+        }
+
+        
+        function createChart (cusData) {
 
             var config = {
                 type: 'doughnut',
                 data: {
                     datasets: [{
-                        data: [
-                            65, 30, 35
-                        ]
+                        data: cusData
                         ,
                         backgroundColor: [
                             "#34bfa3",
@@ -24,9 +33,9 @@
                         ]
                     }],
                     labels: [
-                        'Angular',
-                        'CSS',
-                        'HTML'
+                        'Còn dư tiền',
+                        'Nợ',
+                        'Thanh toán xong'
                     ]
                 },
                 options: {

@@ -19,4 +19,10 @@ public interface CustomerRepository extends MongoRepository<Customer, String> {
     Page<Customer> searchCustomer(String name, Boolean isDebtor, Pageable pageable);
 
     Customer findByName(String name);
+
+    Long countAllByMoneyGreaterThan(Integer value);
+    
+    Long countAllByMoneyLessThan(Integer value);
+    
+    Long countAllByMoneyEquals(Integer value);
 }

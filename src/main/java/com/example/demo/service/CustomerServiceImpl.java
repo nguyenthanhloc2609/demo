@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dao.Customer;
 import com.example.demo.dao.Transaction;
 import com.example.demo.dto.PagingDTO;
+import com.example.demo.dto.StatisticCustomerDTO;
 import com.example.demo.dto.Pagination;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.TransactionRepository;
@@ -112,5 +113,16 @@ public class CustomerServiceImpl implements ICustomerService {
 
         trans.forEach(tran -> tran.setCustomerName(update));
         transactionRepository.saveAll(trans);
+    }
+
+    @Override
+    public StatisticCustomerDTO statisticCustomer() {
+        StatisticCustomerDTO dto = StatisticCustomerDTO.builder()
+                .total(customerRepository.count())
+                .prepaid(customerRepository.countAllByMoneyGreaterThan(0))
+                .postpaid(customerRepository.countAllByMoneyLessThan(0))
+                .turn(customerRepository.countAllByMoneyEquals(0))
+                .build();
+        return dto;
     }
 }

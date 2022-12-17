@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.demo.dto.StatisticCustomerDTO;
+import com.example.demo.service.ICustomerService;
 import com.example.demo.service.IFinanceService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class DashboardController {
 
     @Autowired
     IFinanceService financeService;
+
+    @Autowired
+    ICustomerService customerService;
 
     @GetMapping("/finance/date")
     public ResponseEntity<?> getFinanceOnDate(@RequestParam String date) {
@@ -50,5 +55,11 @@ public class DashboardController {
         } else
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 
+    }
+
+    @GetMapping("statistic/customer")
+    public ResponseEntity<?> statisticCustomer(){
+        StatisticCustomerDTO statisticCustomerDTO = customerService.statisticCustomer();
+        return ResponseEntity.ok(statisticCustomerDTO);
     }
 }
