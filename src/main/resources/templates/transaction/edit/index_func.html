@@ -1,14 +1,17 @@
 <script type="text/javascript" th:inline="javascript">
     $(function () {
+        var id = /*[[${tranId}]]*/ {};
         var listProcedure = []
         var proQuantity = [];
+        var current_date = window.localStorage.getItem("date")
+        var expProcMoney = 0, expMedicineMoney = 0;
 
         getListProcedure()
 
         function getListProcedure() {
             console.log("getListProcedure")
             getRequest({
-                url: "/procedure/list?limit=99999&offset=0",
+                url: "/procedures/list?limit=99999&offset=0",
                 success: function (data) {
                     listProcedure = data['list'];
                     var html = '';
@@ -26,6 +29,7 @@
                             + '</tr>';
                     }
                     $('#tbody-pro').html(html);
+                    getTransaction();
 
                 },
                 error: function (e) {
@@ -34,21 +38,184 @@
             });
         }
 
+        function saveMecValue() {
+            expMedicineMoney = 0;
+            var mecStr = [];
+            var numThang, numLo, priceThang, priceLo;
+            numThang = $('#numThang').val();
+            numLo = $('#numLo').val();
+            priceThang = $('#priceThang').val();
+            priceLo = $('#priceLo').val();
+
+            if (numThang > 0) {
+                mecStr.push(numThang + ' Thang')
+                expMedicineMoney += numThang * priceThang;
+            }
+            if (numLo > 0) {
+                mecStr.push(numLo + ' Lọ')
+                expMedicineMoney = + numLo * priceLo;
+            }
+            $('#medicine').val(mecStr.join(' + '));
+            $('#kt_modal_1').modal('hide');
+        }
+
         function saveProValue() {
+            expProcMoney = 0;
             const listqua = document.getElementsByName('quantity');
             proQuantity = Array.from(listqua).map(item => item.valueAsNumber);
             var pros = [];
             proQuantity.forEach((value, index, array) => {
-                if (value === 1){
+                if (value === 1) {
                     pros.push(listProcedure[index].code)
-                } else if(value > 1){
-                    pros.push(value+''+listProcedure[index].code)
+                } else if (value > 1) {
+                    pros.push(value + '' + listProcedure[index].code)
                 }
+                expProcMoney += value * listProcedure[index].price;
             })
             $('#cusPros').val(pros.join(' + '));
             $('#kt_select2_modal').modal('hide');
         }
 
+        function resetModalValue() {
+            const listqua = document.getElementsByName('quantity');
+            Array.from(listqua).forEach(item => item.value = 0);
+
+            $('#numThang').val(0)
+            $('#numLo').val(0)
+            $('#priceThang').val(0)
+            $('#priceLo').val(0)
+
+        }
+
         document.getElementById("selectPro").addEventListener("click", saveProValue);
+        document.getElementById("selectMec").addEventListener("click", saveMecValue);
+
+        $('#btnAddTran').click(
+            createTransaction
+        )
+
+        function getTransaction() {
+            console.log('getTransaction ', id);
+            getRequest({
+                url: '/transaction/' + id,
+                success: function (data) {
+                    console.log(data);
+                    $('#cusName').val(data.customerName)
+                    $('#diagnostic').val(data.diagnostic)
+                    $('#cusPros').val(data.listProcedure)
+                    $('#medicine').val(data.medicine)
+                    $('#moneyPro').val(data.proceMoney)
+                    $('#moneyMec').val(data.medicineMoney)
+                    var pay = data.prepaid || data.debt
+                    $('#pay').val(pay)
+                    $('#note1').val(data.note)
+
+                    //update procedure modal
+                    var pros = data.listProcedure.split(" + ");
+                    var proItems = Array.from(document.getElementsByName('quantity'));
+                    for (let i = 0; i < listProcedure.length; i++) {
+                        for (let j = 0; j < pros.length; j++) {
+                            var number = 0, code, k;
+                            for (k = 0; k < pros[j].length; k++) {
+                                if (pros[j].charAt(k) > '0' && pros[j].charAt(k) < 9) {
+                                    number = number * 10 + Number(pros[j].charAt(k));
+                                } else {
+                                    break;
+                                }
+                            }
+                            if (number === 0)
+                                number = 1;
+                            code = pros[j].substring(k);
+
+                            if (code === listProcedure[i].code) {
+                                proItems[i].value = number;
+                                break;
+                            }
+                        }
+                    }
+
+                    //update medicine modal
+                    var mecInfo = data.medicine.split(" + ");
+                    if (mecInfo[0]) {
+                        var thang = mecInfo[0].split(" ");
+                        $('#numThang').val(Number(thang[0]))
+                    }
+                    if (mecInfo[1]) {
+                        var lo = mecInfo[1].split(" ");
+                        $('#numLo').val(Number(lo[0]))
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+
+
+                }
+            });
+        }
+
+        function createTransaction() {
+            var customerName = $('#cusName').val().trim();
+            var listProcedure = $('#cusPros').val();
+            var diagnostic = $('#diagnostic').val().trim();
+            var money = $('#moneyPro').val() || '0';
+            var proceMoney = Number(money.replaceAll('.', ''));
+            var medicine = $('#medicine').val().trim();
+            money = $('#moneyMec').val() || '0';
+            var medicineMoney = Number(money.replaceAll('.', ''));
+            var pay = $('#pay').val().trim();
+            var prepaid = pay.includes("/") ? pay : '';
+            var debt = pay.includes("N") ? pay : '';
+            var note = $('#note1').val().trim();
+            var date = current_date;
+
+            let body = {
+                customerName,
+                listProcedure,
+                expProcMoney,
+                diagnostic,
+                proceMoney,
+                medicine,
+                expMedicineMoney,
+                medicineMoney,
+                prepaid,
+                debt,
+                note,
+                date
+            }
+            //createTransaction
+            postRequest({
+                url: "/transaction",
+                data: body,
+                success: (data) => {
+                    var checked = $('#cb_tran').is(":checked")
+                    if (checked) {
+                        $('#cusName').val('');
+                        $('#cusPros').val('');
+                        $('#diagnostic').val('');
+                        $('#moneyPro').val('');
+                        $('#medicine').val('');
+                        $('#moneyMec').val('');
+                        $('#pay').val('');
+                        $('#note1').val('');
+                        resetModalValue();
+                    } else {
+                        window.location.href = '/tran-a-day'
+                    }
+
+                },
+                error: (e) => {
+                    console.log(e);
+                    var error = e['error'];
+                    if (error != null) {
+                        let content = JSON.parse(error);
+                        $("#error-log").html(content['message'] + ".<br/>")
+                    } else
+                        $("#error-log").html("Lỗi hệ thống!<br/>")
+
+                }
+            })
+
+
+        }
     });
 </script>

@@ -20,6 +20,12 @@ public class HomeController {
         return "transaction/index";
     }
 
+    @RequestMapping(value = "/tran/{id}", method = RequestMethod.GET)
+    public String editTransaction(Model model, @PathVariable String id) {
+        model.addAttribute("tranId", id);
+        return "transaction/edit/index";
+    }
+
     @RequestMapping(value = "/tran-a-day", method = RequestMethod.GET)
     public String tranADay(Model model) {
         return "transaction/tran-a-day";

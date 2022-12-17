@@ -2,7 +2,7 @@
     $(function () {
         const pagination = new Pagination();
         var current_date = window.localStorage.getItem("date")
-        if (!current_date){
+        if (!current_date) {
             var todayDate = moment().startOf('day');
             current_date = todayDate.format('DD/MM/YYYY');
             window.localStorage.setItem("date", current_date);
@@ -204,16 +204,7 @@
             var tran = list_tran[index];
             console.log('editTransaction', tran)
             tranId = tran.id;
-            $('#cusName').val(tran.customerName)
-            $("#cusName").prop('disabled', true);
-            $('#kt_select2_3_modal').val(tran.listProcedure.split(' + '));
-            $('#diagnostic').val(tran.diagnostic);
-            $('#moneyPro').val(tran.proceMoney || 0);
-            $('#medicine').val(tran.medicine);
-            $('#moneyMec').val(tran.medicineMoney || 0);
-            $('#pay').val(tran.prepaid || tran.debt);
-
-            $('#note1').val(tran.note);
+            window.location = "/tran/" + tranId
         }
 
         function editSpend() {
