@@ -91,7 +91,7 @@
         document.getElementById("selectMec").addEventListener("click", saveMecValue);
 
         $('#btnAddTran').click(
-            createTransaction
+            editTransaction
         )
 
         function getTransaction() {
@@ -153,7 +153,7 @@
             });
         }
 
-        function createTransaction() {
+        function editTransaction() {
             var customerName = $('#cusName').val().trim();
             var listProcedure = $('#cusPros').val();
             var diagnostic = $('#diagnostic').val().trim();
@@ -169,6 +169,7 @@
             var date = current_date;
 
             let body = {
+                id,
                 customerName,
                 listProcedure,
                 expProcMoney,
@@ -183,25 +184,11 @@
                 date
             }
             //createTransaction
-            postRequest({
-                url: "/transaction",
+            putRequest({
+                url: "/transaction/" + id,
                 data: body,
                 success: (data) => {
-                    var checked = $('#cb_tran').is(":checked")
-                    if (checked) {
-                        $('#cusName').val('');
-                        $('#cusPros').val('');
-                        $('#diagnostic').val('');
-                        $('#moneyPro').val('');
-                        $('#medicine').val('');
-                        $('#moneyMec').val('');
-                        $('#pay').val('');
-                        $('#note1').val('');
-                        resetModalValue();
-                    } else {
-                        window.location.href = '/tran-a-day'
-                    }
-
+                    window.location.href = '/tran-a-day'
                 },
                 error: (e) => {
                     console.log(e);
