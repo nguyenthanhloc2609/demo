@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class HomeController {
     @RequestMapping(value = "/clinic", method = RequestMethod.GET)
     public String home(Model model) {
-        return "index";
+        return "dashboard/index";
     }
 
     @RequestMapping(value = "/tran", method = RequestMethod.GET)

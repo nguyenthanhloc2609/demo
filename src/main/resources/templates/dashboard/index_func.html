@@ -1,0 +1,71 @@
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        createChart()
+
+        function createChart () {
+            console.log('profitShare')
+
+            var randomScalingFactor = function() {
+                return Math.round(Math.random() * 100);
+            };
+
+            var config = {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [
+                            65, 30, 35
+                        ]
+                        ,
+                        backgroundColor: [
+                            "#34bfa3",
+                            "#fd3995",
+                            "#5d78ff"
+                        ]
+                    }],
+                    labels: [
+                        'Angular',
+                        'CSS',
+                        'HTML'
+                    ]
+                },
+                options: {
+                    cutoutPercentage: 75,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false,
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                        text: 'Technology'
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    },
+                    tooltips: {
+                        enabled: true,
+                        intersect: false,
+                        mode: 'nearest',
+                        bodySpacing: 5,
+                        yPadding: 10,
+                        xPadding: 10,
+                        caretPadding: 0,
+                        displayColors: false,
+                        backgroundColor: "#5d78ff",
+                        titleFontColor: '#ffffff',
+                        cornerRadius: 4,
+                        footerSpacing: 0,
+                        titleSpacing: 0
+                    }
+                }
+            };
+
+            var ctx = KTUtil.getByID('chart_customer').getContext('2d');
+            var myDoughnut = new Chart(ctx, config);
+        }
+    });
+</script>
+
