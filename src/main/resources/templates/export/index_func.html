@@ -1,6 +1,7 @@
 <script type="text/javascript" th:inline="javascript">
     $(function () {
         setValueForPicker();
+        importExcel();
 
         function setValueForPicker() {
             var todayDate = moment().startOf('day');
@@ -13,6 +14,46 @@
         $('#export').click(function () {
             exportExcel()
         });
+
+        function importFile(){
+            var count = 0;
+            var addedFilesHash = {};
+            var myDropzone = new Dropzone("#importExcel", {
+                paramName: "file", // The name that will be used to transfer the file
+                addRemoveLinks: true,
+                maxFilesize: 5, // MB
+                parallelUploads: 5,
+                uploadMultiple: true,
+                acceptedFiles: "text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                maxFiles: 10,
+                init: function() {
+                    this.on("removedfile", function (file) {
+                        // delete from our dict removed file
+                        delete addedFilesHash[file];
+                    });
+                },
+                accept: function(file, done) {
+                    var _id = count++;
+                    file._id = _id;
+                    addedFilesHash[_id] = done;
+                }
+            });
+        }
+
+        function importExcel () {
+            // file type validation
+            $('#importExcel').dropzone({
+                url: "/dashboard/import", // Set the url for your upload script location
+
+                paramName: "file",
+                // The name that will be used to transfer the file
+                maxFiles: 10,
+                maxFilesize: 20, // MB
+                addRemoveLinks: true,
+                // uploadMultiple:true,
+                acceptedFiles: "text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            });
+        }
 
         function exportExcel() {
             var month = $('#month-input').val().split('-');
