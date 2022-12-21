@@ -2,11 +2,14 @@ package com.example.demo.service;
 
 import com.example.demo.dao.Customer;
 import com.example.demo.dao.Finance;
+import com.example.demo.dao.Spend;
 import com.example.demo.dao.Transaction;
 import com.example.demo.dto.Pagination;
 import com.example.demo.dto.PagingDTO;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.TransactionRepository;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
@@ -16,7 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -209,15 +214,90 @@ public class TransactionServiceImpl implements ITransactionService {
                         File tmpFile = File.createTempFile(filename[0], "." + filename[1]);
                         file.transferTo(tmpFile);
                         System.out.println(tmpFile.getAbsoluteFile());
-                        String strMonth = filename[0].substring(4);
-                        Integer year = Integer.parseInt(strMonth.substring(strMonth.length() - 4));
-                        Integer month = Integer.parseInt(strMonth.substring(0, strMonth.length() - 4));
+
+                        InputStream inp = new FileInputStream(tmpFile);
+                        Workbook wb = WorkbookFactory.create(inp);
+                        Integer numSheet = wb.getNumberOfSheets();
+                        List<Transaction> trans = new ArrayList<>();
+                        List<Spend> spends = new ArrayList<>();
+                        List<Finance> finances = new ArrayList<>();
+                        for (int i = 0; i < numSheet; i++) {
+                            Sheet sheet = wb.getSheetAt(i);
+                            int r = 0;
+                            Row row = sheet.getRow(r);
+                            Cell cell = row.getCell(3);
+                            String val = cell.getStringCellValue();
+                            String date = val.substring(24);
+                            r = 4;
+                            Finance fin = new Finance(date);
+                            boolean addTran = true;
+                            while (true) {
+                                row = sheet.getRow(r);
+                                if (row.getCell(1).getStringCellValue().equalsIgnoreCase("Tổng chi"))
+                                    break;
+                                if (addTran) {
+                                    fin.setCountTran(1);
+                                    Transaction tran = Transaction.builder().build();
+                                    String cusName = row.getCell(2).getStringCellValue();
+
+                                    String diag = row.getCell(3).getStringCellValue();
+                                    if (diag != null && diag.length() > 0) {
+                                        if (cusName != null && cusName.length() > 0) {
+                                            tran.setCustomerName(cusName);
+                                            if (customerRepository.countAllByName(cusName) == 0) {
+                                                Customer cus = new Customer();
+                                                cus.setName(cusName);
+                                                cus.setFullName(cusName);
+                                                cus.setDiag(diag);
+                                                customerRepository.save(cus);
+                                            }
+                                        } else
+                                            tran.setCustomerName(sheet.getRow(r - 1).getCell(2).getStringCellValue());
+                                        tran.setDiagnostic(diag);
+                                        tran.setListProcedure(row.getCell(4).getStringCellValue());
+                                        tran.setMedicine(row.getCell(5).getStringCellValue());
+                                        int procMoney, mecMoney;
+                                        procMoney = Integer.parseInt(row.getCell(6).getStringCellValue().replaceAll("\\.", ""));
+                                        mecMoney = Integer.parseInt(row.getCell(7).getStringCellValue().replaceAll("\\.", ""));
+                                        tran.setProceMoney(procMoney);
+                                        tran.setMedicineMoney(mecMoney);
+                                        tran.setPrepaid(row.getCell(8).getStringCellValue());
+                                        tran.setDebt(row.getCell(9).getStringCellValue());
+                                        tran.setNote(row.getCell(10).getStringCellValue());
+                                        fin.setIncome((long) procMoney + mecMoney);
+                                        trans.add(tran);
+                                    }
+
+                                    if (row.getCell(3).getStringCellValue().equalsIgnoreCase("diễn giải chi")) {
+                                        addTran = false;
+                                        continue;
+                                    }
+                                } else {
+                                    fin.setCountSpend(1);
+                                    Spend spend = new Spend();
+                                    spend.setDate(date);
+                                    spend.setName(row.getCell(2).getStringCellValue());
+                                    spend.setDetail(row.getCell(3).getStringCellValue());
+                                    int money = Integer.parseInt(row.getCell(4).getStringCellValue().replaceAll("\\.", ""));
+                                    spend.setMoney(money);
+                                    fin.setSpend((long) money);
+                                }
+
+                                r++;
+                            }
+                            finances.add(fin);
+                        }
+                        //write tran, spend, fin to db
 
 
+                        wb.close();
+                        inp.close();
                         tmpFile.deleteOnExit();
                     } catch (IOException e) {
                         e.printStackTrace();
 
+                    } catch (InvalidFormatException e) {
+                        e.printStackTrace();
                     }
                 }
             });
