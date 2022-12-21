@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +12,7 @@ import com.example.demo.dto.StatisticCustomerDTO;
 import com.example.demo.service.ICustomerService;
 import com.example.demo.service.IFinanceService;
 
+import com.example.demo.service.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @RestController
 @RequestMapping("/dashboard")
@@ -30,13 +33,17 @@ public class DashboardController {
     @Autowired
     ICustomerService customerService;
 
+    @Autowired
+    ITransactionService transactionService;
+
     @GetMapping("/finance/date")
     public ResponseEntity<?> getFinanceOnDate(@RequestParam String date) {
         return ResponseEntity.ok(financeService.getFinanceOnDay(date));
     }
 
-    @PostMapping("/import")
-    public ResponseEntity<?> importExcel(@RequestParam("file") MultipartFile file) {
+    @PostMapping(value = ("/import"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> importExcel(MultipartHttpServletRequest request) {
+        transactionService.importTransactionFromFile(request);
         return ResponseEntity.ok().build();
     }
 
@@ -62,7 +69,7 @@ public class DashboardController {
     }
 
     @GetMapping("statistic/customer")
-    public ResponseEntity<?> statisticCustomer(){
+    public ResponseEntity<?> statisticCustomer() {
         StatisticCustomerDTO statisticCustomerDTO = customerService.statisticCustomer();
         return ResponseEntity.ok(statisticCustomerDTO);
     }

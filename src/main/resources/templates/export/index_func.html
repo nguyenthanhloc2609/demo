@@ -14,44 +14,79 @@
         $('#export').click(function () {
             exportExcel()
         });
-
-        function importFile(){
-            var count = 0;
-            var addedFilesHash = {};
-            var myDropzone = new Dropzone("#importExcel", {
-                paramName: "file", // The name that will be used to transfer the file
-                addRemoveLinks: true,
-                maxFilesize: 5, // MB
-                parallelUploads: 5,
-                uploadMultiple: true,
-                acceptedFiles: "text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                maxFiles: 10,
-                init: function() {
-                    this.on("removedfile", function (file) {
-                        // delete from our dict removed file
-                        delete addedFilesHash[file];
-                    });
-                },
-                accept: function(file, done) {
-                    var _id = count++;
-                    file._id = _id;
-                    addedFilesHash[_id] = done;
+        Dropzone.prototype.isFileExist = function(file) {
+            var i;
+            if(this.files.length > 0) {
+                for(i = 0; i < this.files.length; i++) {
+                    if(this.files[i].name === file.name
+                        && this.files[i].size === file.size)
+                    {
+                        return true;
+                    }
                 }
-            });
-        }
+            }
+            return false;
+        };
+
+        Dropzone.prototype.addFile = function(file) {
+            if (this.options.preventDuplicates && this.isFileExist(file)) {
+                alert(this.options.dictDuplicateFile);
+                return;
+            }
+            file.upload = {
+                uuid: Dropzone.uuidv4(),
+                progress: 0,
+                // Setting the total upload size to file.size for the beginning
+                // It's actual different than the size to be transmitted.
+                total: file.size,
+                bytesSent: 0,
+                filename: this._renameFile(file) // Not setting chunking information here, because the acutal data — and
+                // thus the chunks — might change if `options.transformFile` is set
+                // and does something to the data.
+
+            };
+            this.files.push(file);
+            file.status = Dropzone.ADDED;
+            this.emit("addedfile", file);
+            this._enqueueThumbnail(file);
+            return this.accept(file, (function(_this) {
+                return function(error) {
+                    if (error) {
+                        file.accepted = false;
+                        _this._errorProcessing([file], error);
+                    } else {
+                        file.accepted = true;
+                        if (_this.options.autoQueue) {
+                            _this.enqueueFile(file);
+                        }
+                    }
+                    return _this._updateMaxFilesReachedClass();
+                };
+            })(this));
+        };
 
         function importExcel () {
             // file type validation
             $('#importExcel').dropzone({
                 url: "/dashboard/import", // Set the url for your upload script location
-
+                autoProcessQueue: false,
+                dictDuplicateFile: "File đã được thêm vào",
+                preventDuplicates: true,
                 paramName: "file",
+                parallelUploads: 5,
                 // The name that will be used to transfer the file
                 maxFiles: 10,
-                maxFilesize: 20, // MB
+                maxFilesize: 10, // MB
                 addRemoveLinks: true,
-                // uploadMultiple:true,
-                acceptedFiles: "text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                uploadMultiple:true,
+                acceptedFiles: "text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                init: function (e) {
+                    var myDropzone = this;
+
+                    $('#btn_upload').on("click", function() {
+                        myDropzone.processQueue(); // Tell Dropzone to process all queued files.
+                    });
+                }
             });
         }
 

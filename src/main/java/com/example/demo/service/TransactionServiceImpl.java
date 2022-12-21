@@ -12,7 +12,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @Service
@@ -87,9 +97,9 @@ public class TransactionServiceImpl implements ITransactionService {
                 // update customer: money
                 Integer money = cus.getMoney()
                         + (transaction.getProceMoney() + transaction.getMedicineMoney()
-                                - transaction.getExpMedicineMoney() - transaction.getExpProcMoney())
+                        - transaction.getExpMedicineMoney() - transaction.getExpProcMoney())
                         - (tran.getProceMoney() + tran.getMedicineMoney() - tran.getExpMedicineMoney()
-                                - tran.getExpProcMoney());
+                        - tran.getExpProcMoney());
                 cus.setMoney(money);
                 // }
 
@@ -180,6 +190,40 @@ public class TransactionServiceImpl implements ITransactionService {
 
         return PagingDTO.<Transaction>builder().pagination(pagination).list(trans.getContent())
                 .count(trans.getNumberOfElements()).build();
+    }
+
+    @Override
+    public void importTransactionFromFile(MultipartHttpServletRequest request) {
+        Iterator<String> itr = request.getFileNames();
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        List<Future<?>> futures = new ArrayList<Future<?>>();
+
+        while (itr.hasNext()) {
+            Future<?> f = executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    String uploadedFile = itr.next();
+                    MultipartFile file = request.getFile(uploadedFile);
+                    try {
+                        String[] filename = file.getOriginalFilename().split("\\.");
+                        File tmpFile = File.createTempFile(filename[0], "." + filename[1]);
+                        file.transferTo(tmpFile);
+                        System.out.println(tmpFile.getAbsoluteFile());
+                        String strMonth = filename[0].substring(4);
+                        Integer year = Integer.parseInt(strMonth.substring(strMonth.length() - 4));
+                        Integer month = Integer.parseInt(strMonth.substring(0, strMonth.length() - 4));
+
+
+                        tmpFile.deleteOnExit();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+
+                    }
+                }
+            });
+
+        }
+        executorService.shutdown();
     }
 
     private void createCustomer(Transaction transaction) {
