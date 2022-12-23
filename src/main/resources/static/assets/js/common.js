@@ -154,9 +154,9 @@ function getRequest(options) {
 //     return globalMd.render(text || '');
 // }
 //
-// function numberWithCommas(x) {
-//     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-// }
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".");
+}
 //
 // function formatDate(date) {
 //     var dd = date.getDate();

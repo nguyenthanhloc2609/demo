@@ -46,7 +46,7 @@
                     + '<td class="text-left">' + countNumber + '</td>'
                     + '<td>' + item.name + '</td>'
                     + '<td>' + item.code + '</td>'
-                    + '<td>' + price + '</td>'
+                    + '<td>' + numberWithCommas(price) + '</td>'
                     + '<td>' + '<div style="text-align: center; vertical-align: middle;">' +
                     '<button type="button" data-toggle="modal" class="btn btn-circle btn-icon edit-pro"' +
                     ' href="#kt_modal_3" data-index="' + (i - 1) + '"><i class="flaticon-edit"></i></div>'
@@ -65,13 +65,15 @@
         function createProcedure() {
             var name = $('#proName').val().trim();
             var code = $('#proCode').val().trim();
-            var price = $('#proMoney').val() || 0;
+            var strprice = $('#proMoney').val() || 0;
+            var price = Number(strprice.replaceAll('.', ''))
 
             let body = {
                 name,
                 code,
                 price
             }
+            console.log(body)
             if (!proId) {
                 //createProcedure
                 postRequest({
@@ -149,7 +151,8 @@
             $('#proName').val(pro.name)
             $('#proName').prop('readonly', true)
             $('#proCode').val(pro.code);
-            $('#proMoney').val(pro.price) || 0;
+
+            $('#proMoney').val(numberWithCommas(pro.price));
             var his = '';
             pro.histories.forEach(element => {
                 var obj = JSON.parse(element);
