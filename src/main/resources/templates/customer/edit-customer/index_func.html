@@ -27,11 +27,6 @@
             this.value = value;
         });
 
-        function formatMoney(money) {
-            const thousands = /\B(?=(\d{3})+(?!\d))/g;
-            return money.toString().replace(thousands, ".")
-        }
-
         function getCustomer() {
             getRequest({
                 url: '/customers/' + id,

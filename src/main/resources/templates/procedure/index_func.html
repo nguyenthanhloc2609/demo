@@ -46,7 +46,7 @@
                     + '<td class="text-left">' + countNumber + '</td>'
                     + '<td>' + item.name + '</td>'
                     + '<td>' + item.code + '</td>'
-                    + '<td>' + numberWithCommas(price) + '</td>'
+                    + '<td>' + formatMoney(price) + '</td>'
                     + '<td>' + '<div style="text-align: center; vertical-align: middle;">' +
                     '<button type="button" data-toggle="modal" class="btn btn-circle btn-icon edit-pro"' +
                     ' href="#kt_modal_3" data-index="' + (i - 1) + '"><i class="flaticon-edit"></i></div>'
@@ -152,7 +152,7 @@
             $('#proName').prop('readonly', true)
             $('#proCode').val(pro.code);
 
-            $('#proMoney').val(numberWithCommas(pro.price));
+            $('#proMoney').val(formatMoney(pro.price));
             var his = '';
             pro.histories.forEach(element => {
                 var obj = JSON.parse(element);
