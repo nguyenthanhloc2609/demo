@@ -98,35 +98,35 @@ function getRequest(options) {
 //     });
 // }
 //
-// function deleteRequest(options) {
-//     var header = 'X-CSRF-TOKEN';
-//     var token = $("meta[name='_csrf']").attr('content');
-//     $.ajax({
-//         type: "DELETE",
-//         contentType: "application/json",
-//         beforeSend: function (xhr) {
-//             xhr.setRequestHeader(header, token);
-//             if (options['start']) {
-//                 options['start']();
-//             }
-//         },
-//         async: options['async'],
-//         url: options['url'],
-//         timeout: options['timeout'] || 60000,
-//         success: options['success'],
-//         error: function (e) {
-//             var msg = e.responseJSON || {message: e.statusText, description: ''};
-//             msg['httpStatus'] = e.status;
-//             options['error'](msg);
-//         },
-//         complete: options['end'],
-//         statusCode: {
-//             401: function () {
-//                 window.location.reload();
-//             }
-//         }
-//     });
-// }
+function deleteRequest(options) {
+    var header = 'X-CSRF-TOKEN';
+    var token = $("meta[name='_csrf']").attr('content');
+    $.ajax({
+        type: "DELETE",
+        contentType: "application/json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(header, token);
+            if (options['start']) {
+                options['start']();
+            }
+        },
+        async: options['async'],
+        url: options['url'],
+        timeout: options['timeout'] || 60000,
+        success: options['success'],
+        error: function (e) {
+            var msg = e.responseJSON || {message: e.statusText, description: ''};
+            msg['httpStatus'] = e.status;
+            options['error'](msg);
+        },
+        complete: options['end'],
+        statusCode: {
+            401: function () {
+                window.location.reload();
+            }
+        }
+    });
+}
 //
 // function showSuccessToast(msg) {
 //     notification.raise("Thông báo", msg || '', "success", 1000);
