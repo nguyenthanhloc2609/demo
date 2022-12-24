@@ -40,11 +40,12 @@
             for (var i = 1; i <= list_cus.length; i++) {
                 var item = list_cus[i - 1];
                 var countNumber = Number.parseInt(paginData['offset'] * paginData['limit']) + i;
+                var note = item.note || ""
                 html += '<tr>'
                     + '<td class="text-left">' + countNumber + '</td>'
                     + '<td>' + item.name + '</td>'
                     + '<td>' + item.billing + '</td>'
-                    + '<td>' + item.note + '</td>'
+                    + '<td>' + note + '</td>'
                     + '<td>' + '<div style="text-align: center; vertical-align: middle;">' +
                     '<button type="button" data-toggle="modal" class="btn btn-circle btn-icon edit-cus"' +
                     ' data-index="' + (i - 1) + '"><i class="flaticon-edit"></i></button>' +
@@ -59,64 +60,6 @@
         document.getElementById("searchCus").addEventListener("click", initSearchCustomer);
 
         $(document).on("click", ".edit-cus", editCustomer);
-
-        // function createCustomer() {
-        //     var name = $('#cusName').val().trim();
-        //     var billing = $('#cusBilling').val().trim();
-        //     var note = $('#cusNote').val().trim();
-        //     var isDebtor = billing.includes('N') ? true : false;
-
-        //     let body = {
-        //         name,
-        //         billing,
-        //         isDebtor,
-        //         note
-        //     }
-        //     if (!cusId) {
-        //         //createCustomer
-        //         postRequest({
-        //             url: "/customers",
-        //             data: body,
-        //             success: (data) => {
-        //                 // console.log(data);
-        //                 window.location = "/customer";
-        //             },
-        //             error: (e) => {
-        //                 console.log(e);
-        //                 var error = e['error'];
-        //                 if (error != null) {
-        //                     let content = JSON.parse(error);
-        //                     $("#error-log").html(content['message'] + ".<br/>")
-        //                 } else
-        //                     $("#error-log").html("Lỗi hệ thống!<br/>")
-
-        //             }
-        //         })
-        //     } else {
-        //         //edit customer
-        //         body.id = cusId;
-        //         putRequest({
-        //             url: '/customers/' + cusId,
-        //             data: body,
-        //             success: function (data) {
-        //                 window.location = "/customer";
-        //                 $('#kt_modal_3').modal('hide');
-        //             },
-        //             error: function (e) {
-        //                 console.log(e);
-        //                 $('#kt_modal_3').modal('hide');
-        //                 var error = e['error'];
-        //                 if (error != null) {
-        //                     let content = JSON.parse(error);
-        //                     $("#error-log").html(content['message'] + ".<br/>")
-        //                 } else
-        //                     $("#error-log").html("Lỗi hệ thống!<br/>")
-
-        //             }
-        //         });
-        //     }
-
-        // }
 
         function initSearchCustomer(){
             pagination.reset();

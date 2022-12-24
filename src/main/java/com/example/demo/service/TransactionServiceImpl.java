@@ -24,12 +24,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -241,9 +245,17 @@ public class TransactionServiceImpl implements ITransactionService {
                                 Cell cell = row.getCell(3);
                                 String val = cell.getStringCellValue();
                                 String date = val.substring(24);
+                                if (date.length() != 10) {
+                                    String tmp[] = date.split("/");
+                                    Date tmpDate = new Date(Integer.parseInt(tmp[2]) - 1900,
+                                            Integer.parseInt(tmp[1]) - 1,
+                                            Integer.parseInt(tmp[0]));
+                                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                    date = sdf.format(tmpDate);
+                                }
                                 Finance fin;
                                 fin = financeRepository.getFinanceByDate(date);
-                                if (fin == null) {
+                                if (fin == null || fin.getCountSpend() == 0 || fin.getCountTran() == 0) {
                                     r = 4;
                                     fin = new Finance(date);
                                     boolean addTran = true;
@@ -261,8 +273,6 @@ public class TransactionServiceImpl implements ITransactionService {
                                                 continue;
                                             }
 
-                                            fin.setCountTran(1);
-                                            Transaction tran = Transaction.builder().build();
                                             String cusName = row.getCell(2).getStringCellValue();
 
                                             String diag = row.getCell(3).getStringCellValue();
@@ -270,7 +280,8 @@ public class TransactionServiceImpl implements ITransactionService {
                                                 if (cusName == null || cusName.length() == 0) {
                                                     cusName = sheet.getRow(r - 1).getCell(2).getStringCellValue();
                                                 }
-
+                                                Transaction tran = Transaction.builder().build();
+                                                tran.setDate(date);
                                                 tran.setCustomerName(cusName);
                                                 if (!names.contains(cusName.toLowerCase())) {
                                                     Customer cus = new Customer();
@@ -289,19 +300,19 @@ public class TransactionServiceImpl implements ITransactionService {
                                                 String strProcMoney;
                                                 if (row.getCell(6).getCellTypeEnum() == CellType.NUMERIC) {
                                                     strProcMoney = String.valueOf(row.getCell(6).getNumericCellValue())
-                                                            .replaceAll("\\.", "");
+                                                            .split("\\.")[0];
                                                 } else {
-                                                    strProcMoney = row.getCell(6).getStringCellValue().replaceAll("\\.",
-                                                            "");
+                                                    strProcMoney = row.getCell(6).getStringCellValue()
+                                                            .replaceAll("\\.", "").replaceAll(",", "");
                                                 }
 
                                                 String strMecMoney;
                                                 if (row.getCell(7).getCellTypeEnum() == CellType.NUMERIC) {
                                                     strMecMoney = String.valueOf(row.getCell(7).getNumericCellValue())
-                                                            .replaceAll("\\.", "");
+                                                            .split("\\.")[0];
                                                 } else {
-                                                    strMecMoney = row.getCell(7).getStringCellValue().replaceAll("\\.",
-                                                            "");
+                                                    strMecMoney = row.getCell(7).getStringCellValue()
+                                                            .replaceAll("\\.", "").replaceAll(",", "");
                                                 }
                                                 procMoney = Integer
                                                         .parseInt(strProcMoney.length() > 0 ? strProcMoney : "0");
@@ -309,13 +320,20 @@ public class TransactionServiceImpl implements ITransactionService {
                                                         .parseInt(strMecMoney.length() > 0 ? strMecMoney : "0");
                                                 tran.setProceMoney(procMoney);
                                                 tran.setMedicineMoney(mecMoney);
-                                                if (row.getCell(8).getCellTypeEnum().compareTo(CellType.NUMERIC) == 0)
-                                                    tran.setPrepaid(
-                                                            String.valueOf(row.getCell(8).getNumericCellValue()));
+                                                if (row.getCell(8).getCellTypeEnum().compareTo(CellType.NUMERIC) == 0) {
+                                                    CellStyle style = row.getCell(8).getCellStyle();
+                                                    Logger.getLogger(TransactionServiceImpl.class.getName()).log(
+                                                            Level.INFO, "Data format: " + style.getDataFormatString());
+                                                    row.getCell(8).setCellType(CellType.STRING);
+                                                }
+                                                tran.setPrepaid(row.getCell(8).getStringCellValue());
                                                 tran.setDebt(row.getCell(9).getStringCellValue());
                                                 tran.setNote(row.getCell(10).getStringCellValue());
                                                 fin.setIncome((long) procMoney + mecMoney);
                                                 trans.add(tran);
+                                                // Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO,
+                                                // tran.toString());
+                                                fin.setCountTran(1);
                                             }
 
                                         } else {
@@ -323,12 +341,12 @@ public class TransactionServiceImpl implements ITransactionService {
                                                 fin.setCountSpend(1);
                                                 Spend spend = new Spend();
                                                 spend.setDate(date);
+                                                spend.setNote("");
                                                 spend.setName(row.getCell(2).getStringCellValue());
                                                 spend.setDetail(row.getCell(3).getStringCellValue());
                                                 int money = Integer
-                                                        .parseInt(String.valueOf(
-                                                                row.getCell(4).getNumericCellValue())
-                                                                .replaceAll("\\.", ""));
+                                                        .parseInt(String.valueOf(row.getCell(4).getNumericCellValue())
+                                                                .split("\\.")[0]);
                                                 spend.setMoney(money);
                                                 fin.setSpend((long) money);
                                                 spends.add(spend);
