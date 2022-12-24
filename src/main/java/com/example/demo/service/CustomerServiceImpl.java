@@ -53,18 +53,18 @@ public class CustomerServiceImpl implements ICustomerService {
         Pageable pageable = PageRequest.of(offset, limit);
         Page<Customer> list = customerRepository.findAll(pageable);
 
-        //remove duplicate customer
+        // remove duplicate customer
 
         // List<Customer> cus = list.getContent();
         // Map<String, Boolean> check = new HashMap<>();
         // cus.forEach(c -> {
-        //     if (check.containsKey(c.getName())) {
-        //         Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO,
-        //                 "Delete duplicate customer: " + c.getName() + " with id: " + c.getId());
-        //         customerRepository.delete(c);
-        //     } else {
-        //         check.put(c.getName(), true);
-        //     }
+        // if (check.containsKey(c.getName())) {
+        // Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO,
+        // "Delete duplicate customer: " + c.getName() + " with id: " + c.getId());
+        // customerRepository.delete(c);
+        // } else {
+        // check.put(c.getName(), true);
+        // }
         // });
         Pagination pagination = new Pagination();
         pagination.setTotal(customerRepository.count());
@@ -81,6 +81,11 @@ public class CustomerServiceImpl implements ICustomerService {
             if (cus != null) {
                 if (!cus.getName().equals(customer.getName()))
                     updateCustomerName(cus.getName(), customer.getName());
+                    Customer exist = customerRepository.findByName(customer.getName());
+                if (exist != null){
+                    Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO, "Delete customer: "+cus.getName());
+                    customerRepository.delete(exist);
+                }
 
                 return customerRepository.save(customer);
             }
