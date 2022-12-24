@@ -227,6 +227,7 @@ public class TransactionServiceImpl implements ITransactionService {
                 executorService.execute(new Runnable() {
                     @Override
                     public void run() {
+                        int r = 0, i = 0;
                         try {
                             InputStream inp = new FileInputStream(tmpFile);
                             Workbook wb = WorkbookFactory.create(inp);
@@ -238,9 +239,9 @@ public class TransactionServiceImpl implements ITransactionService {
                             List<Customer> existCus = customerRepository.findAll();
                             List<String> names = existCus.stream().map(cus -> cus.getName().toLowerCase())
                                     .collect(Collectors.toList());
-                            for (int i = 0; i < numSheet - 1; i++) {
+                            for (i = 0; i < numSheet - 1; i++) {
                                 Sheet sheet = wb.getSheetAt(i);
-                                int r = 0;
+                                r = 0;
                                 Row row = sheet.getRow(r);
                                 Cell cell = row.getCell(3);
                                 String val = cell.getStringCellValue();
@@ -284,13 +285,17 @@ public class TransactionServiceImpl implements ITransactionService {
                                                 tran.setDate(date);
                                                 tran.setCustomerName(cusName);
                                                 if (!names.contains(cusName.toLowerCase())) {
+                                                    Logger.getLogger(TransactionServiceImpl.class.getName()).log(
+                                                            Level.INFO, "create new Customer: " + cusName);
                                                     Customer cus = new Customer();
                                                     cus.setName(cusName);
                                                     cus.setFullName(cusName);
                                                     cus.setDiag(diag);
                                                     cus.setBilling("");
                                                     cus.setNote("");
+                                                    cus.setMoney(0);
                                                     newCus.add(cus);
+                                                    names.add(cusName.toLowerCase());
                                                 }
 
                                                 tran.setDiagnostic(diag);
@@ -323,13 +328,16 @@ public class TransactionServiceImpl implements ITransactionService {
                                                 if (row.getCell(8).getCellTypeEnum().compareTo(CellType.NUMERIC) == 0) {
                                                     CellStyle style = row.getCell(8).getCellStyle();
                                                     Logger.getLogger(TransactionServiceImpl.class.getName()).log(
-                                                            Level.INFO, "Data format: " + style.getDataFormatString());
+                                                            Level.INFO, "Data format: " + style.getDataFormatString()
+                                                                    + " in " + date);
                                                     row.getCell(8).setCellType(CellType.STRING);
                                                 }
                                                 tran.setPrepaid(row.getCell(8).getStringCellValue());
                                                 tran.setDebt(row.getCell(9).getStringCellValue());
                                                 tran.setNote(row.getCell(10).getStringCellValue());
                                                 fin.setIncome((long) procMoney + mecMoney);
+                                                tran.setExpMedicineMoney(0);
+                                                tran.setExpProcMoney(0);
                                                 trans.add(tran);
                                                 // Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO,
                                                 // tran.toString());
@@ -369,11 +377,10 @@ public class TransactionServiceImpl implements ITransactionService {
                             wb.close();
                             inp.close();
                             tmpFile.deleteOnExit();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-
-                        } catch (InvalidFormatException e) {
-                            e.printStackTrace();
+                        } catch (Exception e) {
+                            Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.SEVERE,
+                                    "At sheet: " + (i + 1) + ", row: " + (r + 1));
+                            Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO, e.getMessage());
                         }
                     }
                 });
