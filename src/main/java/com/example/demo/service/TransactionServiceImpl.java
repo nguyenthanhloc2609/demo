@@ -24,9 +24,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Date;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -331,6 +333,7 @@ public class TransactionServiceImpl implements ITransactionService {
                                                             Level.INFO, "Data format: " + style.getDataFormatString()
                                                                     + " in " + date);
                                                     row.getCell(8).setCellType(CellType.STRING);
+
                                                 }
                                                 tran.setPrepaid(row.getCell(8).getStringCellValue());
                                                 tran.setDebt(row.getCell(9).getStringCellValue());
