@@ -8,7 +8,10 @@ import com.example.demo.dto.Pagination;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.TransactionRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +52,20 @@ public class CustomerServiceImpl implements ICustomerService {
     public PagingDTO<Customer> findAll(Integer limit, Integer offset) {
         Pageable pageable = PageRequest.of(offset, limit);
         Page<Customer> list = customerRepository.findAll(pageable);
+
+        //remove duplicate customer
+
+        // List<Customer> cus = list.getContent();
+        // Map<String, Boolean> check = new HashMap<>();
+        // cus.forEach(c -> {
+        //     if (check.containsKey(c.getName())) {
+        //         Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO,
+        //                 "Delete duplicate customer: " + c.getName() + " with id: " + c.getId());
+        //         customerRepository.delete(c);
+        //     } else {
+        //         check.put(c.getName(), true);
+        //     }
+        // });
         Pagination pagination = new Pagination();
         pagination.setTotal(customerRepository.count());
         pagination.setLimit(limit);

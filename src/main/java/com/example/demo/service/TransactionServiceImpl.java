@@ -67,6 +67,7 @@ public class TransactionServiceImpl implements ITransactionService {
             cus = new Customer();
             cus.setName(transaction.getCustomerName());
             cus.setFullName(transaction.getCustomerName());
+            cus.setNote("");
         }
 
         Integer money = cus.getMoney() + (transaction.getProceMoney() + transaction.getMedicineMoney())
@@ -110,9 +111,9 @@ public class TransactionServiceImpl implements ITransactionService {
                 // update customer: money
                 Integer money = cus.getMoney()
                         + (transaction.getProceMoney() + transaction.getMedicineMoney()
-                        - transaction.getExpMedicineMoney() - transaction.getExpProcMoney())
+                                - transaction.getExpMedicineMoney() - transaction.getExpProcMoney())
                         - (tran.getProceMoney() + tran.getMedicineMoney() - tran.getExpMedicineMoney()
-                        - tran.getExpProcMoney());
+                                - tran.getExpProcMoney());
                 cus.setMoney(money);
                 // }
 
@@ -231,7 +232,8 @@ public class TransactionServiceImpl implements ITransactionService {
                             List<Finance> finances = new ArrayList<>();
                             List<Customer> newCus = new ArrayList<>();
                             List<Customer> existCus = customerRepository.findAll();
-                            List<String> names = existCus.stream().map(cus -> cus.getName().toLowerCase()).collect(Collectors.toList());
+                            List<String> names = existCus.stream().map(cus -> cus.getName().toLowerCase())
+                                    .collect(Collectors.toList());
                             for (int i = 0; i < numSheet - 1; i++) {
                                 Sheet sheet = wb.getSheetAt(i);
                                 int r = 0;
@@ -265,35 +267,51 @@ public class TransactionServiceImpl implements ITransactionService {
 
                                             String diag = row.getCell(3).getStringCellValue();
                                             if (diag != null && diag.length() > 0) {
-                                                if (cusName != null && cusName.length() > 0) {
-                                                    tran.setCustomerName(cusName);
-                                                    if (!names.contains(cusName.toLowerCase())) {
-                                                        Customer cus = new Customer();
-                                                        cus.setName(cusName);
-                                                        cus.setFullName(cusName);
-                                                        cus.setDiag(diag);
-                                                        cus.setBilling("");
-                                                        cus.setNote("");
-                                                        newCus.add(cus);
-                                                    }
-                                                } else
-                                                    tran.setCustomerName(
-                                                            sheet.getRow(r - 1).getCell(2).getStringCellValue());
+                                                if (cusName == null || cusName.length() == 0) {
+                                                    cusName = sheet.getRow(r - 1).getCell(2).getStringCellValue();
+                                                }
+
+                                                tran.setCustomerName(cusName);
+                                                if (!names.contains(cusName.toLowerCase())) {
+                                                    Customer cus = new Customer();
+                                                    cus.setName(cusName);
+                                                    cus.setFullName(cusName);
+                                                    cus.setDiag(diag);
+                                                    cus.setBilling("");
+                                                    cus.setNote("");
+                                                    newCus.add(cus);
+                                                }
+
                                                 tran.setDiagnostic(diag);
                                                 tran.setListProcedure(row.getCell(4).getStringCellValue());
                                                 tran.setMedicine(row.getCell(5).getStringCellValue());
                                                 int procMoney, mecMoney;
-                                                String strProcMoney = String.valueOf(row.getCell(6).getNumericCellValue())
-                                                        .replaceAll("\\.", "");
-                                                String strMecMoney = String.valueOf(row.getCell(7).getNumericCellValue())
-                                                        .replaceAll("\\.", "");
+                                                String strProcMoney;
+                                                if (row.getCell(6).getCellTypeEnum() == CellType.NUMERIC) {
+                                                    strProcMoney = String.valueOf(row.getCell(6).getNumericCellValue())
+                                                            .replaceAll("\\.", "");
+                                                } else {
+                                                    strProcMoney = row.getCell(6).getStringCellValue().replaceAll("\\.",
+                                                            "");
+                                                }
+
+                                                String strMecMoney;
+                                                if (row.getCell(7).getCellTypeEnum() == CellType.NUMERIC) {
+                                                    strMecMoney = String.valueOf(row.getCell(7).getNumericCellValue())
+                                                            .replaceAll("\\.", "");
+                                                } else {
+                                                    strMecMoney = row.getCell(7).getStringCellValue().replaceAll("\\.",
+                                                            "");
+                                                }
                                                 procMoney = Integer
                                                         .parseInt(strProcMoney.length() > 0 ? strProcMoney : "0");
-                                                mecMoney = Integer.parseInt(strMecMoney.length() > 0 ? strMecMoney : "0");
+                                                mecMoney = Integer
+                                                        .parseInt(strMecMoney.length() > 0 ? strMecMoney : "0");
                                                 tran.setProceMoney(procMoney);
                                                 tran.setMedicineMoney(mecMoney);
                                                 if (row.getCell(8).getCellTypeEnum().compareTo(CellType.NUMERIC) == 0)
-                                                    tran.setPrepaid(String.valueOf(row.getCell(8).getNumericCellValue()));
+                                                    tran.setPrepaid(
+                                                            String.valueOf(row.getCell(8).getNumericCellValue()));
                                                 tran.setDebt(row.getCell(9).getStringCellValue());
                                                 tran.setNote(row.getCell(10).getStringCellValue());
                                                 fin.setIncome((long) procMoney + mecMoney);
@@ -309,7 +327,8 @@ public class TransactionServiceImpl implements ITransactionService {
                                                 spend.setDetail(row.getCell(3).getStringCellValue());
                                                 int money = Integer
                                                         .parseInt(String.valueOf(
-                                                                row.getCell(4).getNumericCellValue()).replaceAll("\\.", ""));
+                                                                row.getCell(4).getNumericCellValue())
+                                                                .replaceAll("\\.", ""));
                                                 spend.setMoney(money);
                                                 fin.setSpend((long) money);
                                                 spends.add(spend);
