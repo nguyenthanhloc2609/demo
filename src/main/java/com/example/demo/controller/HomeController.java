@@ -61,4 +61,9 @@ public class HomeController {
     public String exportExcel(Model model) {
         return "export/index";
     }
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String test(Model model) {
+        return "metronic/custom/pages/user/login-3";
+    }
 }
