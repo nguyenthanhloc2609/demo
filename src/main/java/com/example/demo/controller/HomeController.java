@@ -7,10 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class HomeController {
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String home(Model model) {
         return "dashboard/index";
     }
@@ -64,6 +65,17 @@ public class HomeController {
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String test(Model model) {
-        return "metronic/custom/pages/user/login-3";
+        return "metronic/custom/apps/user/profile-1/change-password";
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView login(Model model) {
+        return new ModelAndView("redirect:/home");
+        // return "login/index";
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public String user(Model model) {
+        return "change-password/index";
     }
 }
