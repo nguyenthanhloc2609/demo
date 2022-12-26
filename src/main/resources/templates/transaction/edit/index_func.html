@@ -44,8 +44,10 @@
             var numThang, numLo, priceThang, priceLo;
             numThang = $('#numThang').val();
             numLo = $('#numLo').val();
-            priceThang = $('#priceThang').val();
-            priceLo = $('#priceLo').val();
+            var strPrice = $('#priceThang').val();
+            priceThang = Number(strPrice.replaceAll('.', ''));
+            strPrice = $('#priceLo').val();
+            priceLo = Number(strPrice.replaceAll('.', ''));
 
             if (numThang > 0) {
                 mecStr.push(numThang + ' Thang')
@@ -53,7 +55,7 @@
             }
             if (numLo > 0) {
                 mecStr.push(numLo + ' Lọ')
-                expMedicineMoney = + numLo * priceLo;
+                expMedicineMoney += numLo * priceLo;
             }
             $('#medicine').val(mecStr.join(' + '));
             $('#kt_modal_1').modal('hide');
