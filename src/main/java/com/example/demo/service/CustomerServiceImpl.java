@@ -101,7 +101,27 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public Customer retrieve(String id) {
-        return customerRepository.findById(id).orElse(null);
+        Customer customer = customerRepository.findById(id).orElse(null);
+        if (customer != null) {
+            //query transaction for customer
+            List<Transaction> trans = transactionRepository.findByCustomerNameOrderByDateDesc(customer.getName());
+            int i;
+            for (i = 0; i < trans.size(); i++) {
+                if (trans.get(i).getDebt() != null && trans.get(i).getDebt().length() > 0) {
+                    customer.addHistory(trans.get(i).getDate() + " tiền thủ thuật: " + String.format("%,d", trans.get(i).getExpProcMoney()).replaceAll(",", ".")
+                            + " đã thanh toán: " + String.format("%,d", trans.get(i).getProceMoney()).replaceAll(",", "."));
+                    if (trans.get(i).getMedicineMoney() - trans.get(i).getExpMedicineMoney() < 0) {
+                        customer.addHistory(trans.get(i).getDate() + " tiền thuốc: " + String.format("%,d", trans.get(i).getExpMedicineMoney()).replaceAll(",", ".")
+                                + " đã thanh toán: " + String.format("%,d", trans.get(i).getMedicineMoney()).replaceAll(",", "."));
+                    }
+                } else
+                    break;
+            }
+            if (i < trans.size() - 1)
+                customer.addHistory(trans.get(i).getDate() + " thanh toán thủ thuật: " + String.format("%,d", trans.get(i).getProceMoney()).replaceAll(",", ".")
+                        + " thanh toán tiền thuốc: " + String.format("%,d", trans.get(i).getMedicineMoney()).replaceAll(",", "."));
+        }
+        return customer;
     }
 
     @Override
@@ -132,7 +152,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     public void updateCustomerName(String name, String update) {
-        List<Transaction> trans = transactionRepository.findByCustomerName(name);
+        List<Transaction> trans = transactionRepository.findByCustomerNameOrderByDateDesc(name);
 
         trans.forEach(tran -> tran.setCustomerName(update));
         transactionRepository.saveAll(trans);
