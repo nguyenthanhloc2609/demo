@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public Customer create(Customer customer) {
-        long count = customerRepository.countAllByName(customer.getName());
+        long count = customerRepository.countAllByName(customer.getName().trim());
         if (count == 0)
             return customerRepository.save(customer);
         else {
@@ -79,14 +79,15 @@ public class CustomerServiceImpl implements ICustomerService {
         if (id.equals(customer.getId())) {
             Customer cus = customerRepository.findById(id).orElse(null);
             if (cus != null) {
-                if (!cus.getName().equals(customer.getName()))
+                if (!cus.getName().equals(customer.getName().trim()))
                     updateCustomerName(cus.getName(), customer.getName());
-                    Customer exist = customerRepository.findByName(customer.getName());
-                if (exist != null){
-                    Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO, "Delete customer: "+cus.getName());
+                Customer exist = customerRepository.findByName(customer.getName().trim());
+                if (exist != null) {
+                    Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO, "Delete customer: " + cus.getName());
+                    customer.setMoney(customer.getMoney() + exist.getMoney());
                     customerRepository.delete(exist);
                 }
-
+                Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO, "Update customer: " + customer);
                 return customerRepository.save(customer);
             }
         }
@@ -100,7 +101,27 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public Customer retrieve(String id) {
-        return customerRepository.findById(id).orElse(null);
+        Customer customer = customerRepository.findById(id).orElse(null);
+        if (customer != null && customer.getMoney() < 0) {
+            //lịch sử nợ của bệnh nhân
+            List<Transaction> trans = transactionRepository.findByCustomerNameOrderByDateDesc(customer.getName());
+            int i;
+            for (i = 0; i < trans.size(); i++) {
+                if (trans.get(i).getDebt() != null && trans.get(i).getDebt().length() > 0) {
+                    customer.addHistory(trans.get(i).getDate() + " tiền thủ thuật: " + String.format("%,d", trans.get(i).getExpProcMoney()).replaceAll(",", ".")
+                            + " đã thanh toán: " + String.format("%,d", trans.get(i).getProceMoney()).replaceAll(",", "."));
+                    if (trans.get(i).getMedicineMoney() - trans.get(i).getExpMedicineMoney() < 0) {
+                        customer.addHistory(trans.get(i).getDate() + " tiền thuốc: " + String.format("%,d", trans.get(i).getExpMedicineMoney()).replaceAll(",", ".")
+                                + " đã thanh toán: " + String.format("%,d", trans.get(i).getMedicineMoney()).replaceAll(",", "."));
+                    }
+                } else
+                    break;
+            }
+            if (i < trans.size() - 1)
+                customer.addHistory(trans.get(i).getDate() + " thanh toán thủ thuật: " + String.format("%,d", trans.get(i).getProceMoney()).replaceAll(",", ".")
+                        + " thanh toán tiền thuốc: " + String.format("%,d", trans.get(i).getMedicineMoney()).replaceAll(",", "."));
+        }
+        return customer;
     }
 
     @Override
@@ -131,7 +152,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     public void updateCustomerName(String name, String update) {
-        List<Transaction> trans = transactionRepository.findByCustomerName(name);
+        List<Transaction> trans = transactionRepository.findByCustomerNameOrderByDateDesc(name);
 
         trans.forEach(tran -> tran.setCustomerName(update));
         transactionRepository.saveAll(trans);

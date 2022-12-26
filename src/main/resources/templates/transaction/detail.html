@@ -142,7 +142,8 @@
 
         function createSpend() {
             var name = $('#spend_name').val().trim();
-            var money = $('#spend_money').val().trim();
+            var spendMoney = $('#spend_money').val().trim();
+            var money = Number(spendMoney.replaceAll('.', ''));
             var detail = $('#spend_detail').val().trim();
             var note = $('#spend_note').val().trim();
             var date = current_date;

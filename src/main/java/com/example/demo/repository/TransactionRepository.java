@@ -17,5 +17,5 @@ public interface TransactionRepository extends MongoRepository<Transaction, Stri
     // List<Transaction> findTransactionInMonth(String month);
     List<Transaction> getTransactionByDateEndingWithOrderByDateAsc(String date);
 
-    List<Transaction> findByCustomerName(String customerName);
+    List<Transaction> findByCustomerNameOrderByDateDesc(String customerName);
 }
