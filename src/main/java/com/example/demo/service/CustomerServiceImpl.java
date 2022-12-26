@@ -102,8 +102,8 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     public Customer retrieve(String id) {
         Customer customer = customerRepository.findById(id).orElse(null);
-        if (customer != null) {
-            //query transaction for customer
+        if (customer != null && customer.getMoney() < 0) {
+            //lịch sử nợ của bệnh nhân
             List<Transaction> trans = transactionRepository.findByCustomerNameOrderByDateDesc(customer.getName());
             int i;
             for (i = 0; i < trans.size(); i++) {
