@@ -81,11 +81,17 @@ public class CustomerServiceImpl implements ICustomerService {
             if (cus != null) {
                 if (!cus.getName().equals(customer.getName().trim()))
                     updateCustomerName(cus.getName(), customer.getName());
-                Customer exist = customerRepository.findByName(customer.getName().trim());
+                List<Customer> exist = customerRepository.findByName(customer.getName().trim());
                 if (exist != null) {
-                    Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO, "Delete customer: " + cus.getName());
-                    customer.setMoney(customer.getMoney() + exist.getMoney());
-                    customerRepository.delete(exist);
+                    for (Customer c : exist) {
+                        if (!c.getId().equals(id)) {
+                            customer.setMoney(c.getMoney() + customer.getMoney());
+                        }
+                    }
+                    Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO,
+                            "Delete customer: " + cus.getName());
+
+                    customerRepository.deleteAll(exist);
                 }
                 Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO, "Update customer: " + customer);
                 return customerRepository.save(customer);
@@ -103,23 +109,29 @@ public class CustomerServiceImpl implements ICustomerService {
     public Customer retrieve(String id) {
         Customer customer = customerRepository.findById(id).orElse(null);
         if (customer != null && customer.getMoney() < 0) {
-            //lịch sử nợ của bệnh nhân
+            // lịch sử nợ của bệnh nhân
             List<Transaction> trans = transactionRepository.findByCustomerNameOrderByDateDesc(customer.getName());
             int i;
             for (i = 0; i < trans.size(); i++) {
                 if (trans.get(i).getDebt() != null && trans.get(i).getDebt().length() > 0) {
-                    customer.addHistory(trans.get(i).getDate() + " tiền thủ thuật: " + String.format("%,d", trans.get(i).getExpProcMoney()).replaceAll(",", ".")
-                            + " đã thanh toán: " + String.format("%,d", trans.get(i).getProceMoney()).replaceAll(",", "."));
+                    customer.addHistory(trans.get(i).getDate() + " tiền thủ thuật: "
+                            + String.format("%,d", trans.get(i).getExpProcMoney()).replaceAll(",", ".")
+                            + " đã thanh toán: "
+                            + String.format("%,d", trans.get(i).getProceMoney()).replaceAll(",", "."));
                     if (trans.get(i).getMedicineMoney() - trans.get(i).getExpMedicineMoney() < 0) {
-                        customer.addHistory(trans.get(i).getDate() + " tiền thuốc: " + String.format("%,d", trans.get(i).getExpMedicineMoney()).replaceAll(",", ".")
-                                + " đã thanh toán: " + String.format("%,d", trans.get(i).getMedicineMoney()).replaceAll(",", "."));
+                        customer.addHistory(trans.get(i).getDate() + " tiền thuốc: "
+                                + String.format("%,d", trans.get(i).getExpMedicineMoney()).replaceAll(",", ".")
+                                + " đã thanh toán: "
+                                + String.format("%,d", trans.get(i).getMedicineMoney()).replaceAll(",", "."));
                     }
                 } else
                     break;
             }
             if (i < trans.size() - 1)
-                customer.addHistory(trans.get(i).getDate() + " thanh toán thủ thuật: " + String.format("%,d", trans.get(i).getProceMoney()).replaceAll(",", ".")
-                        + " thanh toán tiền thuốc: " + String.format("%,d", trans.get(i).getMedicineMoney()).replaceAll(",", "."));
+                customer.addHistory(trans.get(i).getDate() + " thanh toán thủ thuật: "
+                        + String.format("%,d", trans.get(i).getProceMoney()).replaceAll(",", ".")
+                        + " thanh toán tiền thuốc: "
+                        + String.format("%,d", trans.get(i).getMedicineMoney()).replaceAll(",", "."));
         }
         return customer;
     }
@@ -137,9 +149,11 @@ public class CustomerServiceImpl implements ICustomerService {
         Page<Customer> list;
         if (type == 0) {
             list = customerRepository.findByNameLike(name, pageable);
-        } else {
-            list = customerRepository.searchCustomer(name, type == 2, pageable);
+        } else if (type == 1) {
+            list = customerRepository.searchCustomerPre(name, 0, pageable);
 
+        } else {
+            list = customerRepository.searchCustomerDebt(name, 0, pageable);
         }
 
         Pagination pagination = new Pagination();

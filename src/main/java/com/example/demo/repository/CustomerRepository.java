@@ -15,10 +15,13 @@ public interface CustomerRepository extends MongoRepository<Customer, String> {
 
     Long countAllByName(String name);
 
-    @Query("{'name':{'$regex':'?0','$options':'i'}, 'isDebtor':{'$eq':?1}}")
-    Page<Customer> searchCustomer(String name, Boolean isDebtor, Pageable pageable);
+    @Query("{'name':{'$regex':'?0','$options':'i'}, 'money':{'$gt':?1}}")
+    Page<Customer> searchCustomerPre(String name, Integer money, Pageable pageable);
 
-    Customer findByName(String name);
+    @Query("{'name':{'$regex':'?0','$options':'i'}, 'money':{'$lt':?1}}")
+    Page<Customer> searchCustomerDebt(String name, Integer money, Pageable pageable);
+
+    List<Customer> findByName(String name);
 
     Long countAllByMoneyGreaterThan(Integer value);
     

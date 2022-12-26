@@ -66,13 +66,16 @@ public class TransactionServiceImpl implements ITransactionService {
         financeService.update(finance, finance.getId());
 
         // update Customer: money + bill
-        Customer cus = customerRepository.findByName(transaction.getCustomerName().trim());
-        if (cus == null) {
+        List<Customer> customers = customerRepository.findByName(transaction.getCustomerName().trim());
+        Customer cus;
+        if (customers.size() == 0) {
             cus = new Customer();
             cus.setName(transaction.getCustomerName().trim());
             cus.setFullName(transaction.getCustomerName().trim());
             cus.setNote("");
+            customers.add(cus);
         }
+        cus = customers.get(0);
 
         Integer money = cus.getMoney() + (transaction.getProceMoney() + transaction.getMedicineMoney())
                 - (transaction.getExpMedicineMoney() + transaction.getExpProcMoney());
@@ -102,8 +105,10 @@ public class TransactionServiceImpl implements ITransactionService {
     public Transaction update(Transaction transaction, String id) {
         if (transaction.getId().equals(id)) {
             Transaction tran = transactionRepository.findById(id).orElse(null);
-            Customer cus = customerRepository.findByName(tran.getCustomerName().trim());
+            List<Customer> customers = customerRepository.findByName(transaction.getCustomerName().trim());
+            Customer cus;
             if (tran != null) {
+                cus = customers.get(0);
                 // update Finance
                 // if ((tran.getProceMoney() != transaction.getProceMoney())
                 // || (tran.getMedicineMoney() != transaction.getMedicineMoney())) {
@@ -147,7 +152,8 @@ public class TransactionServiceImpl implements ITransactionService {
         transactionRepository.findById(id).ifPresent(tran -> {
 
             // update Customer: money + bill
-            Customer cus = customerRepository.findByName(tran.getCustomerName().trim());
+            List<Customer> customers = customerRepository.findByName(tran.getCustomerName().trim());
+            Customer cus = customers.get(0);
             Integer money = cus.getMoney() - (tran.getProceMoney() + tran.getMedicineMoney() -
                     tran.getExpProcMoney() - tran.getExpMedicineMoney());
             String pre = tran.getPrepaid();

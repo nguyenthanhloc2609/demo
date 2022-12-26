@@ -103,7 +103,7 @@
                     + '<td>' + note + '</td>'
                     + '<td>' + '<div style="text-align: center; vertical-align: middle;">' +
                     '<button type="button" data-toggle="modal" class="btn btn-circle btn-icon edit-spend" style="margin-right: 0.5rem;"' +
-                    ' href="#kt_select2_modal" data-index="' + (i - 1) + '"><i class="flaticon-edit"></i></button>' +
+                    ' href="#kt_modal_3" data-index="' + (i - 1) + '"><i class="flaticon-edit"></i></button>' +
                     '<button type="button" class="btn btn-circle btn-icon delete-spend" data-index="' + (i - 1) + '" style="margin-left: 0.5rem"' +
                     '  ><i class="flaticon-delete"></i></button></div>' + '</td>'
                     + '</tr>';
@@ -215,7 +215,7 @@
             console.log('editSpend', spend)
             spendId = spend.id;
             $('#spend_name').val(spend.name);
-            $('#spend_money').val(spend.money);
+            $('#spend_money').val(formatMoney(spend.money));
             $('#spend_detail').val(spend.detail);
             $('#spend_note').val(spend.note || '');
         }
