@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public Customer create(Customer customer) {
-        long count = customerRepository.countAllByName(customer.getName());
+        long count = customerRepository.countAllByName(customer.getName().trim());
         if (count == 0)
             return customerRepository.save(customer);
         else {
@@ -79,9 +79,9 @@ public class CustomerServiceImpl implements ICustomerService {
         if (id.equals(customer.getId())) {
             Customer cus = customerRepository.findById(id).orElse(null);
             if (cus != null) {
-                if (!cus.getName().equals(customer.getName()))
+                if (!cus.getName().equals(customer.getName().trim()))
                     updateCustomerName(cus.getName(), customer.getName());
-                    Customer exist = customerRepository.findByName(customer.getName());
+                    Customer exist = customerRepository.findByName(customer.getName().trim());
                 if (exist != null){
                     Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO, "Delete customer: "+cus.getName());
                     customerRepository.delete(exist);

@@ -47,9 +47,6 @@ public class TransactionServiceImpl implements ITransactionService {
     CustomerRepository customerRepository;
 
     @Autowired
-    ICustomerService customerService;
-
-    @Autowired
     IFinanceService financeService;
 
     @Autowired
@@ -65,14 +62,15 @@ public class TransactionServiceImpl implements ITransactionService {
         Finance finance = financeService.getFinanceOnDay(transaction.getDate());
         finance.setIncome((long) transaction.getProceMoney() + transaction.getMedicineMoney());
         finance.setCountTran(1);
+        Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO, "Update Finance: " + finance.toString());
         financeService.update(finance, finance.getId());
 
         // update Customer: money + bill
-        Customer cus = customerRepository.findByName(transaction.getCustomerName());
+        Customer cus = customerRepository.findByName(transaction.getCustomerName().trim());
         if (cus == null) {
             cus = new Customer();
-            cus.setName(transaction.getCustomerName());
-            cus.setFullName(transaction.getCustomerName());
+            cus.setName(transaction.getCustomerName().trim());
+            cus.setFullName(transaction.getCustomerName().trim());
             cus.setNote("");
         }
 
@@ -87,7 +85,7 @@ public class TransactionServiceImpl implements ITransactionService {
         }
         cus.setDiag(transaction.getDiagnostic());
         cus.setMoney(money);
-
+        Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO, "Update Customer: " + cus.toString());
         customerRepository.save(cus);
 
         return transactionRepository.save(transaction);
@@ -104,7 +102,7 @@ public class TransactionServiceImpl implements ITransactionService {
     public Transaction update(Transaction transaction, String id) {
         if (transaction.getId().equals(id)) {
             Transaction tran = transactionRepository.findById(id).orElse(null);
-            Customer cus = customerRepository.findByName(tran.getCustomerName());
+            Customer cus = customerRepository.findByName(tran.getCustomerName().trim());
             if (tran != null) {
                 // update Finance
                 // if ((tran.getProceMoney() != transaction.getProceMoney())
@@ -112,14 +110,15 @@ public class TransactionServiceImpl implements ITransactionService {
                 Finance finance = financeService.getFinanceOnDay(transaction.getDate());
                 finance.setIncome((long) (transaction.getMedicineMoney() + transaction.getProceMoney()
                         - tran.getProceMoney() - tran.getMedicineMoney()));
+                Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO, "Update Finance: " + finance.toString());
                 financeService.update(finance, finance.getId());
 
                 // update customer: money
                 Integer money = cus.getMoney()
                         + (transaction.getProceMoney() + transaction.getMedicineMoney()
-                                - transaction.getExpMedicineMoney() - transaction.getExpProcMoney())
+                        - transaction.getExpMedicineMoney() - transaction.getExpProcMoney())
                         - (tran.getProceMoney() + tran.getMedicineMoney() - tran.getExpMedicineMoney()
-                                - tran.getExpProcMoney());
+                        - tran.getExpProcMoney());
                 cus.setMoney(money);
                 // }
 
@@ -131,6 +130,7 @@ public class TransactionServiceImpl implements ITransactionService {
                     cus.setBilling(pre);
                 }
                 cus.setDiag(transaction.getDiagnostic());
+                Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO, "Update Customer: " + cus.toString());
                 customerRepository.save(cus);
 
                 return transactionRepository.save(transaction);
@@ -147,7 +147,7 @@ public class TransactionServiceImpl implements ITransactionService {
         transactionRepository.findById(id).ifPresent(tran -> {
 
             // update Customer: money + bill
-            Customer cus = customerRepository.findByName(tran.getCustomerName());
+            Customer cus = customerRepository.findByName(tran.getCustomerName().trim());
             Integer money = cus.getMoney() - (tran.getProceMoney() + tran.getMedicineMoney() -
                     tran.getExpProcMoney() - tran.getExpMedicineMoney());
             String pre = tran.getPrepaid();
@@ -174,13 +174,14 @@ public class TransactionServiceImpl implements ITransactionService {
             }
             cus.setDiag(tran.getDiagnostic());
             cus.setMoney(money);
-
+            Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO, "Update Customer: " + cus.toString());
             customerRepository.save(cus);
 
             // update Finance
             Finance finance = financeService.getFinanceOnDay(tran.getDate());
             finance.setIncome((0L - tran.getMedicineMoney() - tran.getProceMoney()));
             finance.setCountTran(-1);
+            Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO, "Update Finance: " + finance.toString());
             financeService.update(finance, finance.getId());
 
             transactionRepository.delete(tran);
@@ -394,34 +395,6 @@ public class TransactionServiceImpl implements ITransactionService {
 
         }
         executorService.shutdown();
-    }
-
-    private void createCustomer(Transaction transaction) {
-        List<Customer> customers = customerRepository.findAll();
-        List<String> cusName = customers.stream().map(Customer::getName).collect(Collectors.toList());
-        String pre = transaction.getPrepaid();
-        String post = transaction.getDebt();
-        Customer c;
-        if (!cusName.contains(transaction.getCustomerName())) {
-
-            if (post != null && post.length() > 0) {
-                c = new Customer(transaction.getCustomerName(), post);
-            } else {
-                c = new Customer(transaction.getCustomerName(), pre);
-            }
-            c.setDiag(transaction.getDiagnostic());
-            customerRepository.save(c);
-        } else {
-            c = customers.get(cusName.indexOf(transaction.getCustomerName()));
-            // update thong tin benh nhan
-            if (post != null && post.length() > 0) {
-                c.setBilling(post);
-            } else {
-                c.setBilling(pre);
-            }
-            c.setDiag(transaction.getDiagnostic());
-            customerService.update(c, c.getId());
-        }
     }
 
 }
