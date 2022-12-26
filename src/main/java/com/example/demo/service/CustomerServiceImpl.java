@@ -81,12 +81,13 @@ public class CustomerServiceImpl implements ICustomerService {
             if (cus != null) {
                 if (!cus.getName().equals(customer.getName().trim()))
                     updateCustomerName(cus.getName(), customer.getName());
-                    Customer exist = customerRepository.findByName(customer.getName().trim());
-                if (exist != null){
-                    Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO, "Delete customer: "+cus.getName());
+                Customer exist = customerRepository.findByName(customer.getName().trim());
+                if (exist != null) {
+                    Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO, "Delete customer: " + cus.getName());
+                    customer.setMoney(customer.getMoney() + exist.getMoney());
                     customerRepository.delete(exist);
                 }
-
+                Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO, "Update customer: " + customer);
                 return customerRepository.save(customer);
             }
         }
