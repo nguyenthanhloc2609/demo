@@ -56,6 +56,7 @@
                 expMedicineMoney += numLo * priceLo;
             }
             $('#medicine').val(mecStr.join(' + '));
+            $('#expMedicineMoney').val(formatMoney(expMedicineMoney));
             $('#kt_modal_1').modal('hide');
         }
 
@@ -74,6 +75,7 @@
             })
             console.log(expProcMoney);
             $('#cusPros').val(pros.join(' + '));
+            $('#expProcMoney').val(formatMoney(expProcMoney));
             $('#kt_select2_modal').modal('hide');
         }
 
