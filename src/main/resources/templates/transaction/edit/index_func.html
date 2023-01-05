@@ -54,10 +54,12 @@
                 expMedicineMoney += numThang * priceThang;
             }
             if (numLo > 0) {
-                mecStr.push(numLo + ' Lọ')
+                var unit = $('#unitLo').val();
+                mecStr.push(numLo + ' ' + unit)
                 expMedicineMoney += numLo * priceLo;
             }
             $('#medicine').val(mecStr.join(' + '));
+            $('#expMedicineMoney').val(formatMoney(expMedicineMoney));
             $('#kt_modal_1').modal('hide');
         }
 
@@ -77,6 +79,7 @@
             console.log(expProcMoney);
             $('#cusPros').val(pros.join(' + '));
             $('#kt_select2_modal').modal('hide');
+            $('#expProcMoney').val(formatMoney(expProcMoney));
         }
 
         function resetModalValue() {
@@ -87,6 +90,7 @@
             $('#numLo').val(0)
             $('#priceThang').val(0)
             $('#priceLo').val(0)
+            $('#unitLo').val('')
 
         }
 
@@ -112,7 +116,8 @@
                     var pay = data.prepaid || data.debt
                     $('#pay').val(pay)
                     $('#note1').val(data.note)
-
+                    $('#expMedicineMoney').val(formatMoney(data.expMedicineMoney));
+                    $('#expProcMoney').val(formatMoney(data.expProcMoney));
                     //update procedure modal
                     var pros = data.listProcedure.split(" + ");
                     var proItems = Array.from(document.getElementsByName('quantity'));

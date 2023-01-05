@@ -52,7 +52,8 @@
                 expMedicineMoney += numThang * priceThang;
             }
             if (numLo > 0) {
-                mecStr.push(numLo + ' Lọ')
+                var unit = $('#unitLo').val();
+                mecStr.push(numLo + ' ' + unit)
                 expMedicineMoney += numLo * priceLo;
             }
             $('#medicine').val(mecStr.join(' + '));
@@ -87,6 +88,7 @@
             $('#numLo').val(0)
             $('#priceThang').val(0)
             $('#priceLo').val(0)
+            $('#unitLo').val('')
 
         }
 
@@ -141,6 +143,8 @@
                         $('#moneyMec').val('');
                         $('#pay').val('');
                         $('#note1').val('');
+                        $('#expProcMoney').val('');
+                        $('#expMedicineMoney').val('');
                         resetModalValue();
                     } else {
                         window.location.href = '/tran-a-day'
