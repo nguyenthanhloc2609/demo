@@ -8,6 +8,7 @@ import com.example.demo.dto.Pagination;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.TransactionRepository;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,8 +80,10 @@ public class CustomerServiceImpl implements ICustomerService {
         if (id.equals(customer.getId())) {
             Customer cus = customerRepository.findById(id).orElse(null);
             if (cus != null) {
-                if (!cus.getName().equals(customer.getName().trim()))
+                if (!cus.getName().equals(customer.getName().trim())){
                     updateCustomerName(cus.getName(), customer.getName());
+                }
+                
                 List<Customer> exist = customerRepository.findByName(customer.getName().trim());
                 if (exist != null) {
                     for (Customer c : exist) {
@@ -93,6 +96,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
                     customerRepository.deleteAll(exist);
                 }
+                customer.setLastModifDate(new Date());
                 Logger.getLogger(CustomerServiceImpl.class.getName()).log(Level.INFO, "Update customer: " + customer);
                 return customerRepository.save(customer);
             }

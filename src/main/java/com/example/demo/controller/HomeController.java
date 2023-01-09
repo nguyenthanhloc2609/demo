@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import javax.websocket.server.PathParam;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,17 +64,23 @@ public class HomeController {
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String test(Model model) {
-        return "metronic/custom/apps/user/profile-1/change-password";
+        return "metronic/index";
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView login(Model model) {
         return new ModelAndView("redirect:/home");
         // return "login/index";
+        // return "metronic/custom/pages/user/login-1";
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public String user(Model model) {
-        return "change-password/index";
+    @RequestMapping(value = "/user/change-password", method = RequestMethod.GET)
+    public String changePassword(Model model) {
+        return "user/change-password/index";
+    }
+
+    @RequestMapping(value = "/user/new-user", method = RequestMethod.GET)
+    public String newUser(Model model) {
+        return "user/new-user/index";
     }
 }

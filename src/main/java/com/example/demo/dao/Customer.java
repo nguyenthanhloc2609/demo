@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -26,6 +27,7 @@ public class Customer {
     String address;
     String diag;
     Integer money = 0;
+    Date lastModifDate;
     List<String> history = new ArrayList<>();
 
     public Customer(String name, String billing) {

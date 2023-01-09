@@ -93,75 +93,89 @@ var KTLoginGeneral = function() {
             }
 
             btn.addClass('kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light').attr('disabled', true);
+            var body = {};
+            body.email = $('#email').val();
+            body.password = $('#password').val();
 
-            form.ajaxSubmit({
-                url: '',
-                success: function(response, status, xhr, $form) {
-                	// similate 2s delay
-                	setTimeout(function() {
-	                    btn.removeClass('kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light').attr('disabled', false);
-	                    showErrorMsg(form, 'danger', 'Incorrect username or password. Please try again.');
-                    }, 2000);
-                }
-            });
-        });
-    }
+            console.log(body);
 
-    var handleSignUpFormSubmit = function() {
-        $('#kt_login_signup_submit').click(function(e) {
-            e.preventDefault();
+            postRequest({
+                url: "/login",
+                data: body,
+                success: (data) => {
+                    console.log(data);
+                    //save token
 
-            var btn = $(this);
-            var form = $(this).closest('form');
-
-            form.validate({
-                rules: {
-                    fullname: {
-                        required: true
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    password: {
-                        required: true
-                    },
-                    rpassword: {
-                        required: true
-                    },
-                    agree: {
-                        required: true
+                    //redirect to home
+                    window.location.href = '/home'
+                },
+                error: (e) => {
+                    console.log(e);
+                    if(e.httpStatus === 400){
+                        btn.removeClass('kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light').attr('disabled', false);
+                        showErrorMsg(form, 'danger', e.message);
                     }
+
                 }
-            });
-
-            if (!form.valid()) {
-                return;
-            }
-
-            btn.addClass('kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light').attr('disabled', true);
-
-            form.ajaxSubmit({
-                url: '',
-                success: function(response, status, xhr, $form) {
-                	// similate 2s delay
-                	setTimeout(function() {
-	                    btn.removeClass('kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light').attr('disabled', false);
-	                    form.clearForm();
-	                    form.validate().resetForm();
-
-	                    // display signup form
-	                    displaySignInForm();
-	                    var signInForm = login.find('.kt-login__signin form');
-	                    signInForm.clearForm();
-	                    signInForm.validate().resetForm();
-
-	                    showErrorMsg(signInForm, 'success', 'Thank you. To complete your registration please check your email.');
-	                }, 2000);
-                }
-            });
+            })
         });
     }
+
+    // var handleSignUpFormSubmit = function() {
+    //     $('#kt_login_signup_submit').click(function(e) {
+    //         e.preventDefault();
+
+    //         var btn = $(this);
+    //         var form = $(this).closest('form');
+
+    //         form.validate({
+    //             rules: {
+    //                 fullname: {
+    //                     required: true
+    //                 },
+    //                 email: {
+    //                     required: true,
+    //                     email: true
+    //                 },
+    //                 password: {
+    //                     required: true
+    //                 },
+    //                 rpassword: {
+    //                     required: true
+    //                 },
+    //                 agree: {
+    //                     required: true
+    //                 }
+    //             }
+    //         });
+
+    //         if (!form.valid()) {
+    //             return;
+    //         }
+
+    //         btn.addClass('kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light').attr('disabled', true);
+
+    //         form.ajaxSubmit({
+    //             url: '',
+    //             success: function(response, status, xhr, $form) {
+    //             	// similate 2s delay
+    //             	setTimeout(function() {
+	//                     btn.removeClass('kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light').attr('disabled', false);
+	//                     form.clearForm();
+	//                     form.validate().resetForm();
+
+	//                     // display signup form
+	//                     displaySignInForm();
+	//                     var signInForm = login.find('.kt-login__signin form');
+	//                     signInForm.clearForm();
+	//                     signInForm.validate().resetForm();
+
+	//                     showErrorMsg(signInForm, 'success', 'Thank you. To complete your registration please check your email.');
+	//                 }, 2000);
+    //             }
+    //         });
+    //     });
+    // }
 
     var handleForgotFormSubmit = function() {
         $('#kt_login_forgot_submit').click(function(e) {
@@ -213,7 +227,7 @@ var KTLoginGeneral = function() {
         init: function() {
             handleFormSwitch();
             handleSignInFormSubmit();
-            handleSignUpFormSubmit();
+            // handleSignUpFormSubmit();
             handleForgotFormSubmit();
         }
     };

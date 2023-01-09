@@ -62,7 +62,8 @@ public class TransactionServiceImpl implements ITransactionService {
         Finance finance = financeService.getFinanceOnDay(transaction.getDate());
         finance.setIncome((long) transaction.getProceMoney() + transaction.getMedicineMoney());
         finance.setCountTran(1);
-        Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO, "Update Finance: " + finance.toString());
+        Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO,
+                "Update Finance: " + finance.toString());
         financeService.update(finance, finance.getId());
 
         // update Customer: money + bill
@@ -73,6 +74,7 @@ public class TransactionServiceImpl implements ITransactionService {
             cus.setName(transaction.getCustomerName().trim());
             cus.setFullName(transaction.getCustomerName().trim());
             cus.setNote("");
+            cus.setLastModifDate(new Date());
             customers.add(cus);
         }
         cus = customers.get(0);
@@ -115,15 +117,16 @@ public class TransactionServiceImpl implements ITransactionService {
                 Finance finance = financeService.getFinanceOnDay(transaction.getDate());
                 finance.setIncome((long) (transaction.getMedicineMoney() + transaction.getProceMoney()
                         - tran.getProceMoney() - tran.getMedicineMoney()));
-                Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO, "Update Finance: " + finance.toString());
+                Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO,
+                        "Update Finance: " + finance.toString());
                 financeService.update(finance, finance.getId());
 
                 // update customer: money
                 Integer money = cus.getMoney()
                         + (transaction.getProceMoney() + transaction.getMedicineMoney()
-                        - transaction.getExpMedicineMoney() - transaction.getExpProcMoney())
+                                - transaction.getExpMedicineMoney() - transaction.getExpProcMoney())
                         - (tran.getProceMoney() + tran.getMedicineMoney() - tran.getExpMedicineMoney()
-                        - tran.getExpProcMoney());
+                                - tran.getExpProcMoney());
                 cus.setMoney(money);
                 // }
 
@@ -135,7 +138,8 @@ public class TransactionServiceImpl implements ITransactionService {
                     cus.setBilling(pre);
                 }
                 cus.setDiag(transaction.getDiagnostic());
-                Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO, "Update Customer: " + cus.toString());
+                Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO,
+                        "Update Customer: " + cus.toString());
                 customerRepository.save(cus);
 
                 return transactionRepository.save(transaction);
@@ -162,7 +166,7 @@ public class TransactionServiceImpl implements ITransactionService {
             if (post != null && post.length() > 0) {
                 num = Integer.parseInt(post.substring(1));
                 cus.setBilling("N" + (num - 1));
-            } else {
+            } else if (pre != null && pre.length() > 0) {
                 String[] tmp = pre.split("/");
                 num = Integer.parseInt(tmp[0]);
                 total = Integer.parseInt(tmp[1]);
@@ -180,14 +184,16 @@ public class TransactionServiceImpl implements ITransactionService {
             }
             cus.setDiag(tran.getDiagnostic());
             cus.setMoney(money);
-            Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO, "Update Customer: " + cus.toString());
+            Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO,
+                    "Update Customer: " + cus.toString());
             customerRepository.save(cus);
 
             // update Finance
             Finance finance = financeService.getFinanceOnDay(tran.getDate());
             finance.setIncome((0L - tran.getMedicineMoney() - tran.getProceMoney()));
             finance.setCountTran(-1);
-            Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO, "Update Finance: " + finance.toString());
+            Logger.getLogger(TransactionServiceImpl.class.getName()).log(Level.INFO,
+                    "Update Finance: " + finance.toString());
             financeService.update(finance, finance.getId());
 
             transactionRepository.delete(tran);
