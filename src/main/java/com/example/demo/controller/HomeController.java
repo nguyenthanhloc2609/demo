@@ -68,7 +68,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView login(Model model) {
+    public ModelAndView begin(Model model) {
         return new ModelAndView("redirect:/home");
         // return "login/index";
         // return "metronic/custom/pages/user/login-1";
@@ -82,5 +82,11 @@ public class HomeController {
     @RequestMapping(value = "/user/new-user", method = RequestMethod.GET)
     public String newUser(Model model) {
         return "user/new-user/index";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login(Model model) {
+        return "login/index";
+        // return "metronic/custom/pages/user/login-1";
     }
 }
