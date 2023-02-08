@@ -6,8 +6,7 @@ var KTTypeahead = function () {
         var bloodhound = new Bloodhound({
             datumTokenizer: function (d) { return Bloodhound.tokenizers.whitespace(d.name) },
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            // `states` is an array of state names defined in "The Basics"
-            // local: states
+
             remote: {
                 url: "customers/name?name=%QUERY",
                 filter: function (data) {

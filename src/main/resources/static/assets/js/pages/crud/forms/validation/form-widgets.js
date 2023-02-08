@@ -3,19 +3,23 @@
 var KTFormWidgets = function () {
     // Private functions
     var validator;
-
+    var dateString = window.localStorage.getItem("date");
+    var dateParts = dateString.split("/");
+    var selectDate = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+    console.log(selectDate)
     var initWidgets = function () {
         // datepicker
         $('#kt_datepicker').datepicker({
             todayHighlight: true,
             autoclose: true,
+            todayBtn: true,
             format: 'dd/mm/yyyy',
             templates: {
                 leftArrow: '<i class="la la-angle-left"></i>',
                 rightArrow: '<i class="la la-angle-right"></i>'
             }
         });
-
+        $('#kt_datepicker').datepicker('setDate', selectDate);
         $('#kt_datepicker').change(function (event) {
             // console.log(event.target.value)
             window.location = '/tran-a-day'
