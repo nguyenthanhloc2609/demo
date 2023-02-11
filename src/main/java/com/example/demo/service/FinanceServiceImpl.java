@@ -36,6 +36,8 @@ import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -432,15 +434,16 @@ public class FinanceServiceImpl implements IFinanceService {
         RegionUtil.setBorderRight(BorderStyle.THIN, region, sheet);
     }
 
-    private CellStyle createStyle(Workbook workbook, Integer type) {
-        CellStyle style = workbook.createCellStyle();
+    private XSSFCellStyle createStyle(Workbook workbook, Integer type) {
+        XSSFCellStyle style = (XSSFCellStyle)workbook.createCellStyle();
         Font headerFont = workbook.createFont();
         if (type == 1) {
             headerFont.setBold(true);
             headerFont.setFontHeightInPoints((short) 14);
         } else if (type == 2) {
             headerFont.setBold(true);
-            style.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE1.getIndex());
+            XSSFColor myColor = new XSSFColor(new java.awt.Color(0, 130, 230));
+            style.setFillForegroundColor(myColor);
             style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             headerFont.setFontHeightInPoints((short) 12);
             style.setBorderTop(BorderStyle.THIN);
